@@ -2,12 +2,19 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <router-view></router-view>
+
+    <!-- 底部播放条 -->
+    <AudioBar></AudioBar>
   </div>
 </template>
 
 <script>
+import AudioBar from './components/AudioBar.vue'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    'AudioBar': AudioBar
+  }
 }
 </script>
 
