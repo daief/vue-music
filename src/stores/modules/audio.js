@@ -7,7 +7,15 @@ const audio = {
 		// 当前播放时间
 		currentTime: 0,
 		// 总时长
-		duration: 0		
+		duration: 0,
+		// 当前播放的music
+		music: {
+			id: 0,
+			url: 'http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3',
+			name: '僕らの手には何もないけど、',
+			singer: 'RAM WIRE',
+			img: 'http://p1.music.126.net/62e9h4tIcDEPzWyE7Z0w3w==/7818627186002039.jpg?param=130y130'
+		}
 	},
 	// 改变状态
 	mutations: {
@@ -46,6 +54,10 @@ const audio = {
 				state.isPlaying = true
 				state.player.play()	
 			}
+		},
+		// 设置music
+		setMusic(state, obj) {
+			state.music = obj
 		}
 	},
 	// 提交mutations
@@ -77,6 +89,10 @@ const audio = {
 		// 转换播放状态
 		togglePlay({commit}) {
 			commit('togglePlay')
+		},
+		// 设置music
+		setMusic({commit}, obj) {
+			commit('setMusic')
 		}
 	},
 	getters: {
@@ -87,7 +103,9 @@ const audio = {
 		// 获取currentTime
 		CurrentTime: state => state.currentTime,
 		// 获取duration
-		Duration: state => state.duration
+		Duration: state => state.duration,
+		// 获取music
+		Music: state => state.music
 	}
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<div @mouseleave.stop.prevent="pointUp" @mouseup.stop.prevent="pointUp" @mousemove.stop.prevent="pointMove($event)" class="audio-bar">
-		<audio :src="mp3Url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
+		<audio :src="$store.getters.Music.url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
 			@ended="musicEnded"ref="audio"></audio>
 		<div class="bar-content">
 			<div class="control-div">
@@ -9,12 +9,12 @@
 				<div @click="" class="change-ctrl next-style"></div>
 			</div>
 			<div class="music-img">
-				
+				<img :src="$store.getters.Music.img" alt="">
 			</div>
 			<div class="center-div">
 				<div class="song-info">
-					<a href="">歌曲名</a>
-					<a href="">歌手名</a>
+					<a href="">{{$store.getters.Music.name}}</a>
+					<a href="">{{$store.getters.Music.singer}}</a>
 				</div>
 				<div class="time-info">
 					<div class="spiner" ref="spiner" @click="pointClick($event)">
@@ -27,17 +27,28 @@
 					</div>
 				</div>
 			</div>
+			<div class="volume-ctrl">
+				<div class="volume-ctrl-btn" @click="toggleIsShowVolume"></div>
+				<div class="volume-spiner" v-show="isShowVolume" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
+					<div class="volume-current" :style="volumeCurrentStyle"></div>
+					<span class="point":style="volumePointStyle" @mousedown.stop.prevent="vPointDown" @mousemove.stop.prevent="vPointMove($event)" @mouseup.stop.prevent="vPointUp"></span>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
 	var pointCanDrag = false
+	var volumePointCanDrag = false
+	var volumeDragY = 0
 	export default {
 		name: 'AudioBar',
 		data () {
 			return {
-				mp3Url: "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3"
+				// 0~1
+				volume: 0.75,
+				isShowVolume: false
 			}
 		},
 		computed: {
@@ -56,6 +67,17 @@
 				tmp = tmp > 100 ? 100 : tmp
 				return {
 					left: tmp + '%'
+				}
+			},
+			volumeCurrentStyle () {
+				return {
+					height: (92 * this.volume) + 'px'
+				}
+			},
+			volumePointStyle () {
+				// 6 ~ 98
+				return {
+					top: (98 - (98 -6) * this.volume ) + 'px'
 				}
 			}
 		},
@@ -83,7 +105,7 @@
 			pointDown(){
 				pointCanDrag = true
 			},
-			pointMove(){
+			pointMove(event){
 				if (pointCanDrag) {
 					let e = event || window.event
 					let mouseX = e.pageX
@@ -108,6 +130,32 @@
 				tmp = tmp < 0? 0: tmp
 				this.$store.dispatch('setCurrentTime', this.$store.getters.Duration * tmp)
 				this.$store.getters.Player.currentTime = this.$store.getters.CurrentTime
+			},
+			// 音量
+			vPointDown(event){
+				let e = event || window.event
+				volumePointCanDrag = true
+				volumeDragY = e.pageY
+			},
+			vPointMove(event){
+				if (volumePointCanDrag) {
+					let e = event || window.event
+					let mouseY = e.pageY
+					let diffY = mouseY - volumeDragY
+					var tmp = diffY / 92
+					tmp = this.volume - tmp
+					tmp = tmp > 1? 1: tmp
+					tmp = tmp < 0? 0: tmp
+					this.volume = tmp
+					this.$store.getters.Player.volume = this.volume
+					volumeDragY = mouseY
+				}
+			},
+			vPointUp(){
+				volumePointCanDrag = false
+			},
+			toggleIsShowVolume () {
+				this.isShowVolume = !this.isShowVolume
 			}
 		},
 		mounted () {
@@ -187,6 +235,11 @@
 	.music-img {
 		height: 36px;
 		width: 36px;
+	}
+	.music-img img {
+		height: 36px;
+		width: 36px;
+		border-radius: 5px;
 		border: solid 1px; 
 	}
 	.center-div {
@@ -237,6 +290,7 @@
 		width: 50%;
 		background-color: rgb(199,12,12); 
 	}
+	/*进度滑块*/
 	.point {
 		position: absolute;
 		left: 100%;
@@ -269,6 +323,7 @@
 		background-color: rgb(199,12,12);
 	}
 	/* 垂直居中要在span外层div设置font-size */
+	/*进度时间*/
 	.time-text {
 		margin-left: 10px;
 	    font-size: 12px;
@@ -283,4 +338,58 @@
 		color: rgb(100,100,100); 
 	}
 	.song-time:first-child{ color: rgb(141,141,141); }
+	/*音量*/
+	.volume-ctrl {
+		height: 25px;
+		width: 25px;
+		position: relative;
+	}
+	.volume-ctrl-btn {
+		width: 25px;
+		height: 25px;
+		cursor: pointer;
+		background: url(../assets/playbar.png) no-repeat;
+		background-position: -2px -248px;
+	}
+	.volume-ctrl-btn:hover {
+	    background-position: -31px -248px;
+	}
+	.volume-spiner {
+		position: relative;
+		width: 32px;
+		height: 113px;
+		top: -150px;
+		left: -3.5px;
+		background: url(../assets/playbar.png) no-repeat;
+		background-position: 0 -503px;
+	}
+	/*音量div长度92*/
+	.volume-current {
+		position: absolute;
+		left: 14px;
+		width: 4px;
+		bottom: 11px;
+		height: 92px;
+		border-radius: 2px;
+		background-color: rgb(199,12,12);
+	}
+	/*top: (98)px~(6)*/
+	.volume-spiner .point {
+		position: absolute;
+		left: 50%;
+		top: 6px;
+		cursor: pointer;
+	}
+	.volume-spiner .point:before {
+		width: 12px;
+		height: 12px;
+		left:-6px;
+	}
+	.volume-spiner .point:after {
+		width: 4px;
+		height: 4px;
+		top: 4px;
+        left: -2px;
+	}
+	
 </style>
