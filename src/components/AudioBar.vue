@@ -1,16 +1,33 @@
 <template>
-	<div @mouseleave.stop.prevent="pointUp" @mouseup.stop.prevent="pointUp" @mousemove.stop.prevent="pointMove($event)" style="background:grey;">
+	<div @mouseleave.stop.prevent="pointUp" @mouseup.stop.prevent="pointUp" @mousemove.stop.prevent="pointMove($event)" class="audio-bar">
 		<audio :src="mp3Url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
 			@ended="musicEnded"ref="audio"></audio>
-		<div @click="togglePlay">{{showText}}</div>
-		<div>{{ formatSecondTime(currentTime) }}</div>
-		<div>{{ formatSecondTime(duration) }}</div>
-		<div class="spiner" ref="spiner">
-			<div class="duration" :style=""></div>
-			<div class="current" :style="currenStyle"></div>
-			<span class="point" :style="pointStyle" @mousedown.stop.prevent="pointDown" @mousemove.stop.prevent="pointMove($event)" @mouseup.stop.prevent="pointUp" ></span>
+		<div class="bar-content">
+			<div class="control-div">
+				<div @click="" class="change-ctrl pre-style"></div>
+				<div @click="togglePlay" class="play-ctrl" :class="playCtrlShowStyle"></div>
+				<div @click="" class="change-ctrl next-style"></div>
+			</div>
+			<div class="music-img">
+				
+			</div>
+			<div class="center-div">
+				<div class="song-info">
+					<a href="">歌曲名</a>
+					<a href="">歌手名</a>
+				</div>
+				<div class="time-info">
+					<div class="spiner" ref="spiner" @click="pointClick($event)">
+						<div class="duration" :style=""></div>
+						<div class="current" :style="currenStyle"></div>
+						<span class="point" :style="pointStyle" @mousedown.stop.prevent="pointDown" @mousemove.stop.prevent="pointMove($event)" @mouseup.stop.prevent="pointUp" ></span>
+					</div>
+					<div class="time-text">
+						<span class="song-time">{{ formatSecondTime(currentTime) }}</span><span class="song-time">&nbsp;/&nbsp;</span><span class="song-time">{{ formatSecondTime(duration) }}</span>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div style="height:100px;"></div>
 	</div>
 </template>
 
@@ -20,7 +37,7 @@
 		name: 'AudioBar',
 		data () {
 			return {
-				player: {},
+				player: null,
 				mp3Url: "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3",
 				isPlaying: false,
 				currentTime: 0,
@@ -28,17 +45,21 @@
 			}
 		},
 		computed: {
-			showText () {
-				return this.isPlaying ? 'Pause' : 'Play'
+			playCtrlShowStyle () {
+				return this.isPlaying ? 'pause-style' : 'play-style'
 			},
 			currenStyle () {
+				var tmp = 100 * this.currentTime / this.duration;
+				tmp = tmp > 100 ? 100 : tmp
 				return {
-					width: 100 * this.currentTime / this.duration + '%'
+					width: tmp + '%'
 				}
 			},
 			pointStyle () {
+				var tmp = 100 * this.currentTime / this.duration;
+				tmp = tmp > 100 ? 100 : tmp
 				return {
-					left: 100 * this.currentTime / this.duration + '%'
+					left: tmp + '%'
 				}
 			}
 		},
@@ -62,7 +83,8 @@
 			},
 			musicTimeUpdate(){
 				if (!pointCanDrag)
-					this.currentTime = this.player.currentTime
+					this.currentTime = this.player.currentTime > this.duration?
+						this.duration: this.player.currentTime
 			},
 			musicEnded(){
 				this.isPlaying = false
@@ -80,7 +102,6 @@
 					let e = event || window.event
 					let mouseX = e.pageX
 					let offsetLeft = this.$refs.spiner.offsetLeft
-					console.log(mouseX + ',' + offsetLeft)
 					var tmp = (mouseX - offsetLeft) / this.$refs.spiner.offsetWidth
 					tmp = tmp > 1? 1: tmp
 					tmp = tmp < 0? 0: tmp
@@ -91,6 +112,16 @@
 				if(pointCanDrag)
 					this.player.currentTime = this.currentTime
 				pointCanDrag = false
+			},
+			pointClick(event){
+				let e = event || window.event
+				let mouseX = e.pageX
+				let offsetLeft = this.$refs.spiner.offsetLeft
+				var tmp = (mouseX - offsetLeft) / this.$refs.spiner.offsetWidth
+				tmp = tmp > 1? 1: tmp
+				tmp = tmp < 0? 0: tmp
+				this.currentTime = this.duration * tmp
+				this.player.currentTime = this.currentTime
 			}
 		},
 		mounted () {
@@ -106,13 +137,108 @@
 </script>
 
 <style scoped>
-
-	.spiner {
+	.audio-bar {
+		position: fixed;
+		bottom: 0;
+		height: 53px;
+		width: 100%;
+		padding-top: 10px;
+		zoom: 1;
+		/*border: solid 1px black;*/
+		/*background-color: rgba(0,0,0,0.5);*/
+		/*background-attachment: fixed;*/
+		background-position: 0 5px;
+		background: url(../assets/playbar.png) repeat-x;
+	}
+	.bar-content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		/*padding-top: 7px;
+		padding-bottom: 7px;*/
+	}
+	.control-div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 136px;
+	}
+	.change-ctrl {
+		height: 28px;
+		width: 28px;
+		cursor: pointer;
+		background: url(../assets/playbar.png) no-repeat;
+		margin-left: 8px;
+		margin-right: 8px;
+	}
+	.pre-style {
+	    background-position: 0 -130px;
+	}
+	.pre-style:hover {
+		background-position: -30px -130px;
+	}
+	.next-style {
+	    background-position: -80px -130px;
+	}
+	.next-style:hover {
+		background-position: -110px -130px;
+	}
+	.play-ctrl {
+		height: 36px;
+		width: 36px;
+		cursor: pointer;
+		background: url(../assets/playbar.png) no-repeat;
+	}
+	.play-style {
+		background-position: 0px -204px;
+	}
+	.play-style:hover {
+		background-position: -40px -204px;
+	}
+	.pause-style {
+		background-position: 0 -165px;
+	}
+	.pause-style:hover {
+		background-position: -40px -165px;
+	}
+	.music-img {
+		height: 36px;
+		width: 36px;
+		border: solid 1px; 
+	}
+	.center-div {
 		width: 40%;
+		margin-left: 20px;
+		margin-right: 10px;
+	}
+	.song-info {
+		height: 20px;
+		font-size: 12px;
+	}
+	.song-info a {
+		text-decoration: none;
+	}
+	.song-info a:hover {
+		text-decoration: underline;
+	}
+	.song-info a:first-child {
+		color: rgb(211,211,211);
+		margin-right: 15px;
+	}
+	.song-info a:last-child {
+		color: rgb(120,120,120);
+	}
+	.time-info {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 20px;
+	}
+	.spiner {
+		/*width: 100%;*/
+		flex-grow: 1;
 		height: 6px;
 		position: relative;
-		/*padding-left: 8px;
-		padding-right: 8px;*/
 		margin: 0 auto 0 auto;
 	}
 	.duration, 
@@ -158,4 +284,19 @@
 		border-radius: 50%;
 		background-color: rgb(199,12,12);
 	}
+	/* 垂直居中要在span外层div设置font-size */
+	.time-text {
+		margin-left: 10px;
+	    font-size: 12px;
+		height: 20px;
+	}
+	.song-time {
+		display:inline-block;
+		vertical-align: middle;
+		font-size: 12px;
+		height: 20px;
+		line-height: 20px;
+		color: rgb(100,100,100); 
+	}
+	.song-time:first-child{ color: rgb(141,141,141); }
 </style>
