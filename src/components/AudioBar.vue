@@ -23,7 +23,7 @@
 						<span class="point" :style="pointStyle" @mousedown.stop.prevent="pointDown" @mousemove.stop.prevent="pointMove($event)" @mouseup.stop.prevent="pointUp" ></span>
 					</div>
 					<div class="time-text">
-						<span class="song-time">{{ formatSecondTime(currentTime) }}</span><span class="song-time">&nbsp;/&nbsp;</span><span class="song-time">{{ formatSecondTime(duration) }}</span>
+						<span class="song-time">{{ formatSecondTime($store.getters.CurrentTime) }}</span><span class="song-time">&nbsp;/&nbsp;</span><span class="song-time">{{ formatSecondTime($store.getters.Duration) }}</span>
 					</div>
 				</div>
 			</div>
@@ -37,26 +37,22 @@
 		name: 'AudioBar',
 		data () {
 			return {
-				player: null,
-				mp3Url: "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3",
-				isPlaying: false,
-				currentTime: 0,
-				duration: 0
+				mp3Url: "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3"
 			}
 		},
 		computed: {
 			playCtrlShowStyle () {
-				return this.isPlaying ? 'pause-style' : 'play-style'
+				return this.$store.getters.IsPlaying ? 'pause-style' : 'play-style'
 			},
 			currenStyle () {
-				var tmp = 100 * this.currentTime / this.duration;
+				var tmp = 100 * this.$store.getters.CurrentTime / this.$store.getters.Duration
 				tmp = tmp > 100 ? 100 : tmp
 				return {
 					width: tmp + '%'
 				}
 			},
 			pointStyle () {
-				var tmp = 100 * this.currentTime / this.duration;
+				var tmp = 100 * this.$store.getters.CurrentTime / this.$store.getters.Duration
 				tmp = tmp > 100 ? 100 : tmp
 				return {
 					left: tmp + '%'
@@ -64,30 +60,20 @@
 			}
 		},
 		methods: {
-			play () {
-				this.isPlaying = true
-				this.player.play()
-			},
-			pause() {
-				this.isPlaying = false
-				this.player.pause()
-			},
 			togglePlay() {
-				if (this.isPlaying)
-					this.pause()
-				else
-					this.play()
+				this.$store.dispatch('togglePlay')
 			},
 			musicMetadata () {
-				this.duration = this.player.duration
+				this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
 			},
 			musicTimeUpdate(){
 				if (!pointCanDrag)
-					this.currentTime = this.player.currentTime > this.duration?
-						this.duration: this.player.currentTime
+					this.$store.getters.CurrentTime > this.$store.getters.Duration?
+						this.$store.dispatch('setCurrentTime', this.$store.getters.Duration): 
+						this.$store.dispatch('setCurrentTime', this.$store.getters.Player.currentTime)
 			},
 			musicEnded(){
-				this.isPlaying = false
+				this.$store.dispatch('setIsPlaying', false)
 			},
 			formatSecondTime(second){
 				let min = Number.parseInt(second / 60)
@@ -105,12 +91,12 @@
 					var tmp = (mouseX - offsetLeft) / this.$refs.spiner.offsetWidth
 					tmp = tmp > 1? 1: tmp
 					tmp = tmp < 0? 0: tmp
-					this.currentTime = this.duration * tmp
+					this.$store.dispatch('setCurrentTime', this.$store.getters.Duration * tmp)
 				}
 			},
 			pointUp(){
 				if(pointCanDrag)
-					this.player.currentTime = this.currentTime
+					this.$store.getters.Player.currentTime = this.$store.getters.CurrentTime
 				pointCanDrag = false
 			},
 			pointClick(event){
@@ -120,18 +106,15 @@
 				var tmp = (mouseX - offsetLeft) / this.$refs.spiner.offsetWidth
 				tmp = tmp > 1? 1: tmp
 				tmp = tmp < 0? 0: tmp
-				this.currentTime = this.duration * tmp
-				this.player.currentTime = this.currentTime
+				this.$store.dispatch('setCurrentTime', this.$store.getters.Duration * tmp)
+				this.$store.getters.Player.currentTime = this.$store.getters.CurrentTime
 			}
 		},
 		mounted () {
-			// this.player = document.querySelector('audio')
-			this.player = this.$refs.audio
+			this.$store.dispatch('setPlayer', this.$refs.audio)
 		},
 		watch: {
-			currentTime (curVal,oldVal) {
-// 　　　　　　　　console.log(curVal,oldVal)
-　　　　　　}	
+
 		}
 	}
 </script>
@@ -220,6 +203,7 @@
 	}
 	.song-info a:hover {
 		text-decoration: underline;
+		cursor: pointer;
 	}
 	.song-info a:first-child {
 		color: rgb(211,211,211);
