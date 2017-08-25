@@ -15,7 +15,9 @@ const audio = {
 			name: '僕らの手には何もないけど、',
 			singer: 'RAM WIRE',
 			img: 'http://p1.music.126.net/62e9h4tIcDEPzWyE7Z0w3w==/7818627186002039.jpg?param=130y130'
-		}
+		},
+		// 音量是否show
+		isShowVolume: false
 	},
 	// 改变状态
 	mutations: {
@@ -58,6 +60,10 @@ const audio = {
 		// 设置music
 		setMusic(state, obj) {
 			state.music = obj
+		},
+		// 设置音量是否show
+		setIsShowVolume(state, obj) {
+			state.isShowVolume = obj
 		}
 	},
 	// 提交mutations
@@ -92,7 +98,11 @@ const audio = {
 		},
 		// 设置music
 		setMusic({commit}, obj) {
-			commit('setMusic')
+			commit('setMusic', obj)
+		},
+		// 设置音量是否show
+		setIsShowVolume({commit}, obj) {
+			commit('setIsShowVolume', obj)
 		}
 	},
 	getters: {
@@ -105,7 +115,9 @@ const audio = {
 		// 获取duration
 		Duration: state => state.duration,
 		// 获取music
-		Music: state => state.music
+		Music: state => state.music,
+		// 获取isShowVolume
+		IsShowVolume: state => state.isShowVolume
 	}
 }
 

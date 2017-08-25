@@ -1,7 +1,10 @@
 <template>
-  <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <router-view></router-view>
+  <div id="app" @click="hideSomething">
+    <div @click="hideSomething">
+      <!-- <img src="./assets/logo.png"> -->
+      <router-view></router-view>
+    </div>
+    
 
     <!-- 底部播放条 -->
     <AudioBar></AudioBar>
@@ -14,6 +17,11 @@ export default {
   name: 'app',
   components: {
     'AudioBar': AudioBar
+  },
+  methods: {
+    hideSomething() {
+      this.$store.dispatch('setIsShowVolume', false)
+    }
   }
 }
 </script>

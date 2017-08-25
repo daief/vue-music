@@ -3,21 +3,24 @@
 		<audio :src="$store.getters.Music.url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
 			@ended="musicEnded"ref="audio"></audio>
 		<div class="bar-content">
+			<!-- 播放、上下首按钮 -->
 			<div class="control-div">
-				<div @click="" class="change-ctrl pre-style"></div>
-				<div @click="togglePlay" class="play-ctrl" :class="playCtrlShowStyle"></div>
-				<div @click="" class="change-ctrl next-style"></div>
+				<div @click.stop.prevent="" class="change-ctrl pre-style"></div>
+				<div @click.stop.prevent="togglePlay" class="play-ctrl" :class="playCtrlShowStyle"></div>
+				<div @click.stop.prevent="" class="change-ctrl next-style"></div>
 			</div>
+			<!-- 歌曲图片 -->
 			<div class="music-img">
 				<img :src="$store.getters.Music.img" alt="">
 			</div>
+			<!-- 歌曲信息、进度条 -->
 			<div class="center-div">
 				<div class="song-info">
 					<a href="">{{$store.getters.Music.name}}</a>
 					<a href="">{{$store.getters.Music.singer}}</a>
 				</div>
 				<div class="time-info">
-					<div class="spiner" ref="spiner" @click="pointClick($event)">
+					<div class="spiner" ref="spiner" @click.stop.prevent="pointClick($event)">
 						<div class="duration" :style=""></div>
 						<div class="current" :style="currenStyle"></div>
 						<span class="point" :style="pointStyle" @mousedown.stop.prevent="pointDown" @mousemove.stop.prevent="pointMove($event)" @mouseup.stop.prevent="pointUp" ></span>
@@ -27,12 +30,17 @@
 					</div>
 				</div>
 			</div>
+			<!-- 音量控制 -->
 			<div class="volume-ctrl">
-				<div class="volume-ctrl-btn" @click="toggleIsShowVolume"></div>
-				<div class="volume-spiner" v-show="isShowVolume" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
+				<div class="volume-ctrl-btn" @click.stop.prevent="toggleIsShowVolume"></div>
+				<div class="volume-spiner" v-show="$store.getters.IsShowVolume" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
 					<div class="volume-current" :style="volumeCurrentStyle"></div>
-					<span class="point":style="volumePointStyle" @mousedown.stop.prevent="vPointDown" @mousemove.stop.prevent="vPointMove($event)" @mouseup.stop.prevent="vPointUp"></span>
+					<span class="point" :style="volumePointStyle" @mousedown.stop.prevent="vPointDown" @mousemove.stop.prevent="vPointMove($event)" @mouseup.stop.prevent="vPointUp"></span>
 				</div>
+			</div>
+			<!-- 播放模式 -->
+			<div class="loop-ctrl">
+				<div class="loop-ctrl-btn" :class="loopStyle" @click.stop.prevent="toggleLoopType"></div>
 			</div>
 		</div>
 	</div>
@@ -48,7 +56,8 @@
 			return {
 				// 0~1
 				volume: 0.75,
-				isShowVolume: false
+				// 1循环 2单曲 3随机
+				loopType: 1
 			}
 		},
 		computed: {
@@ -78,6 +87,16 @@
 				// 6 ~ 98
 				return {
 					top: (98 - (98 -6) * this.volume ) + 'px'
+				}
+			},
+			loopStyle () {
+				switch(this.loopType) {
+					case 1:
+						return 'loop-circle'
+					case 2:
+						return 'loop-one'
+					case 3:
+						return 'loop-random'
 				}
 			}
 		},
@@ -155,7 +174,11 @@
 				volumePointCanDrag = false
 			},
 			toggleIsShowVolume () {
-				this.isShowVolume = !this.isShowVolume
+				this.$store.dispatch('setIsShowVolume', !this.$store.getters.IsShowVolume)
+			},
+			// change loop type
+			toggleLoopType () {
+				this.loopType = ++this.loopType % 3 + 1
 			}
 		},
 		mounted () {
@@ -391,5 +414,38 @@
 		top: 4px;
         left: -2px;
 	}
-	
+	/*播放模式*/
+	.loop-ctrl {
+		height: 25px;
+		width: 25px;
+		position: relative;
+	}
+	.loop-ctrl-btn {
+		width: 25px;
+		height: 25px;
+		cursor: pointer;
+		background: url(../assets/playbar.png) no-repeat;
+		background-position: -3px -344px;
+	}
+	/*循环模式*/
+	.loop-circle {
+		background-position: -3px -344px;
+	}
+	.loop-circle:hover {
+	    background-position: -33px -344px;
+	}
+	/*单曲模式*/
+	.loop-one {
+		background-position: -66px -344px;
+	}
+	.loop-one:hover {
+	    background-position: -93px -344px;
+	}
+	/*随机模式*/
+	.loop-random {
+		background-position: -66px -248px;
+	}
+	.loop-random:hover {
+	    background-position: -93px -248px;
+	}
 </style>
