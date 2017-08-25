@@ -10,14 +10,18 @@ const audio = {
 		duration: 0,
 		// 当前播放的music
 		music: {
-			id: 0,
-			url: 'http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3',
-			name: '僕らの手には何もないけど、',
-			singer: 'RAM WIRE',
-			img: 'http://p1.music.126.net/62e9h4tIcDEPzWyE7Z0w3w==/7818627186002039.jpg?param=130y130'
-		},
+            "id": 0,
+            "url": "",
+            "name": "",
+            "singers": [],
+            "img": ""
+        },
+        // playList
+        playList: [],
 		// 音量是否show
-		isShowVolume: false
+		isShowVolume: false,
+		// 列表索引
+		playIndex: 0
 	},
 	// 改变状态
 	mutations: {
@@ -64,6 +68,14 @@ const audio = {
 		// 设置音量是否show
 		setIsShowVolume(state, obj) {
 			state.isShowVolume = obj
+		},
+		// 设置playList
+		setPlayList(state, obj) {
+			state.playList = obj
+		},
+		// 设置索引
+		setPlayIndex(state, obj) {
+			state.playIndex = obj
 		}
 	},
 	// 提交mutations
@@ -103,6 +115,14 @@ const audio = {
 		// 设置音量是否show
 		setIsShowVolume({commit}, obj) {
 			commit('setIsShowVolume', obj)
+		},
+		// 设置playList
+		setPlayList({commit}, obj) {
+			commit('setPlayList', obj)
+		},
+		// 设置索引
+		setPlayIndex({commit}, obj) {
+			commit('setPlayIndex', obj)
 		}
 	},
 	getters: {
@@ -117,7 +137,11 @@ const audio = {
 		// 获取music
 		Music: state => state.music,
 		// 获取isShowVolume
-		IsShowVolume: state => state.isShowVolume
+		IsShowVolume: state => state.isShowVolume,
+		// 获取playList
+		PlayList: state => state.playList,
+		// 获取索引
+		PlayIndex: state => state.playIndex
 	}
 }
 

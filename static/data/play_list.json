@@ -1,0 +1,41 @@
+{
+    "list": [
+        {
+            "id": 1,
+            "url": "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3",
+            "name": "僕らの手には何もないけど、",
+            "singers": [
+                "RAM WIRE"
+            ],
+            "img": "http://p1.music.126.net/62e9h4tIcDEPzWyE7Z0w3w==/7818627186002039.jpg?param=130y130"
+        },
+        {
+            "id": 2,
+            "url": "http://link.hhtjim.com/163/459717294.mp3",
+            "name": "不安なガレーのうた",
+            "singers": [
+                "夕月椿"
+            ],
+            "img": "http://p3.music.126.net/szADTzjHolUwl2ZQ2IYqbw==/18623527953049095.jpg?param=130y130"
+        },
+        {
+            "id": 3,
+            "url": "http://link.hhtjim.com/163/475279824.mp3",
+            "name": "ねんねこのワルツ",
+            "singers": [
+                "にゃーろんず"
+            ],
+            "img": "http://p3.music.126.net/REew81ERsagxHHm_n0qaBQ==/19021551160635759.jpg?param=130y130"
+        },
+        {
+            "id": 4,
+            "url": "http://m10.music.126.net/20170825142349/333c210658a56c9437963758b684a7c4/ymusic/6ebd/f166/ac71/5243b1b1223abe3862c59c98eb8c2ac7.mp3",
+            "name": "ともだち",
+            "singers": [
+                "悠木碧",
+                "福原香織"
+            ],
+            "img": "http://p3.music.126.net/tFCAUCM8A--SmcuD6wDmuA==/6663040465272665.jpg?param=130y130"
+        }
+    ]
+}

@@ -5,19 +5,19 @@
 		<div class="bar-content">
 			<!-- 播放、上下首按钮 -->
 			<div class="control-div">
-				<div @click.stop.prevent="" class="change-ctrl pre-style"></div>
+				<div @click.stop.prevent="preMusic" class="change-ctrl pre-style"></div>
 				<div @click.stop.prevent="togglePlay" class="play-ctrl" :class="playCtrlShowStyle"></div>
-				<div @click.stop.prevent="" class="change-ctrl next-style"></div>
+				<div @click.stop.prevent="nextMusic" class="change-ctrl next-style"></div>
 			</div>
 			<!-- 歌曲图片 -->
 			<div class="music-img">
 				<img :src="$store.getters.Music.img" alt="">
 			</div>
-			<!-- 歌曲信息、进度条 -->
+			<!-- 歌名、歌手、进度条 -->
 			<div class="center-div">
 				<div class="song-info">
-					<a href="">{{$store.getters.Music.name}}</a>
-					<a href="">{{$store.getters.Music.singer}}</a>
+					<a href="#">{{$store.getters.Music.name}}</a>
+					<a href="#" v-for="(singer, index) in $store.getters.Music.singers">{{singer}}<span v-if="index != $store.getters.Music.singers.length - 1">/</span></a>
 				</div>
 				<div class="time-info">
 					<div class="spiner" ref="spiner" @click.stop.prevent="pointClick($event)">
@@ -33,7 +33,7 @@
 			<!-- 音量控制 -->
 			<div class="volume-ctrl">
 				<div class="volume-ctrl-btn" @click.stop.prevent="toggleIsShowVolume"></div>
-				<div class="volume-spiner" v-show="$store.getters.IsShowVolume" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
+				<div class="volume-spiner" v-show="$store.getters.IsShowVolume" @click.stop.prevent="" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
 					<div class="volume-current" :style="volumeCurrentStyle"></div>
 					<span class="point" :style="volumePointStyle" @mousedown.stop.prevent="vPointDown" @mousemove.stop.prevent="vPointMove($event)" @mouseup.stop.prevent="vPointUp"></span>
 				</div>
@@ -101,20 +101,66 @@
 			}
 		},
 		methods: {
+			preMusic(){
+				let listLength = this.$store.getters.PlayList.length
+				let index = this.$store.getters.PlayIndex + listLength
+				this.$store.dispatch('setPlayIndex', --index % listLength)
+				this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+				this.$store.getters.Player.currentTime = 0
+			},
 			togglePlay() {
 				this.$store.dispatch('togglePlay')
 			},
+			nextMusic() {
+				// 单曲的时候，邻近下一曲
+				if (this.loopType == 2) {
+					let listLength = this.$store.getters.PlayList.length
+					let index = this.$store.getters.PlayIndex
+					this.$store.dispatch('setPlayIndex', (++index) % listLength)
+					this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+					this.$store.getters.Player.currentTime = 0
+				}
+				else {
+					this.musicEnded()
+				}
+			},
 			musicMetadata () {
 				this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
+				this.$store.dispatch('play')
 			},
 			musicTimeUpdate(){
 				if (!pointCanDrag)
-					this.$store.getters.CurrentTime > this.$store.getters.Duration?
+					this.$store.getters.Player.currentTime > this.$store.getters.Duration?
 						this.$store.dispatch('setCurrentTime', this.$store.getters.Duration): 
 						this.$store.dispatch('setCurrentTime', this.$store.getters.Player.currentTime)
 			},
 			musicEnded(){
-				this.$store.dispatch('setIsPlaying', false)
+				this.$store.dispatch('pause')
+				let listLength = this.$store.getters.PlayList.length
+				
+				// 循环
+				if (this.loopType == 1) {
+					let index = this.$store.getters.PlayIndex
+					this.$store.dispatch('setPlayIndex', (++index) % listLength)
+				}
+				// 单曲，不重新加载
+				if (this.loopType == 2) {
+					this.$store.dispatch('play')
+					return
+				}
+				// 随机
+				if (this.loopType == 3) {
+					let random = Number.parseInt(Math.random() * listLength)
+					// 随机到自己，不重新加载
+					if (random == this.$store.getters.PlayIndex) {
+						this.$store.dispatch('play')
+					}
+					this.$store.dispatch('setPlayIndex', random)
+				}
+				this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+				this.$store.getters.Player.currentTime = 0
+				// 更换之后不能马上play，在loadmetadata里play
+				// this.$store.dispatch('play')
 			},
 			formatSecondTime(second){
 				let min = Number.parseInt(second / 60)
@@ -181,11 +227,14 @@
 				this.loopType = ++this.loopType % 3 + 1
 			}
 		},
+		beforeCreate () { 
+			
+		},
 		mounted () {
 			this.$store.dispatch('setPlayer', this.$refs.audio)
 		},
 		watch: {
-
+			
 		}
 	}
 </script>
@@ -276,6 +325,7 @@
 	}
 	.song-info a {
 		text-decoration: none;
+		color: rgb(120,120,120);
 	}
 	.song-info a:hover {
 		text-decoration: underline;
@@ -284,9 +334,6 @@
 	.song-info a:first-child {
 		color: rgb(211,211,211);
 		margin-right: 15px;
-	}
-	.song-info a:last-child {
-		color: rgb(120,120,120);
 	}
 	.time-info {
 		display: flex;
