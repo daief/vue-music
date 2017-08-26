@@ -2,7 +2,7 @@
     "list": [
         {
             "id": 1,
-            "url": "http://m10.music.126.net/20170823120139/3ede01f563ea50026c31d8c441204e33/ymusic/b29c/bfdf/9abc/dca6e502ea5f603c563dc35f474fdeae.mp3",
+            "url": "http://link.hhtjim.com/163/32317208.mp3",
             "name": "僕らの手には何もないけど、",
             "singers": [
                 "RAM WIRE"
@@ -29,13 +29,31 @@
         },
         {
             "id": 4,
-            "url": "http://m10.music.126.net/20170825142349/333c210658a56c9437963758b684a7c4/ymusic/6ebd/f166/ac71/5243b1b1223abe3862c59c98eb8c2ac7.mp3",
+            "url": "http://link.hhtjim.com/163/4924000.mp3",
             "name": "ともだち",
             "singers": [
                 "悠木碧",
                 "福原香織"
             ],
             "img": "http://p3.music.126.net/tFCAUCM8A--SmcuD6wDmuA==/6663040465272665.jpg?param=130y130"
+        },
+        {
+            "id": 444548577,
+            "url": "http://link.hhtjim.com/163/444548577.mp3",
+            "name": "Silent Star",
+            "singers": [
+                "高野麻里佳"
+            ],
+            "img": "http://p3.music.126.net/iJ5Ik6aemj1tkkx4ngtnig==/18533367999280220.jpg?param=130y130"
+        },
+        {
+            "id": 433018934,
+            "url": "http://link.hhtjim.com/163/433018934.mp3",
+            "name": "神様いつかこの想い",
+            "singers": [
+                "薬師るり"
+            ],
+            "img": "http://p1.music.126.net/KZm8v6qimpNzlWx10mTdLQ==/18810444928459471.jpg?param=130y130"
         }
     ]
 }

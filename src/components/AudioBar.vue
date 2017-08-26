@@ -42,11 +42,18 @@
 			<div class="loop-ctrl">
 				<div class="loop-ctrl-btn" :class="loopStyle" @click.stop.prevent="toggleLoopType"></div>
 			</div>
+			<!-- 列表开关 -->
+			<div class="list-switch" @click.stop.prevent="toggleIsShowList">
+				{{this.$store.getters.PlayList.length}}
+				
+			</div>
 		</div>
+		<PlayList class="play-list" v-show="$store.getters.IsShowList"></PlayList>
 	</div>
 </template>
 
 <script>
+	import PlayList from './PlayList.vue'
 	var pointCanDrag = false
 	var volumePointCanDrag = false
 	var volumeDragY = 0
@@ -59,6 +66,9 @@
 				// 1循环 2单曲 3随机
 				loopType: 1
 			}
+		},
+		components: {
+			PlayList: PlayList
 		},
 		computed: {
 			playCtrlShowStyle () {
@@ -129,6 +139,9 @@
 				this.$store.dispatch('play')
 			},
 			musicTimeUpdate(){
+				// 虽然不是用于移动端，但这个判断用于在移动端获取duration
+				if (this.$store.getters.Duration == 0)	
+					this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
 				if (!pointCanDrag)
 					this.$store.getters.Player.currentTime > this.$store.getters.Duration?
 						this.$store.dispatch('setCurrentTime', this.$store.getters.Duration): 
@@ -225,6 +238,10 @@
 			// change loop type
 			toggleLoopType () {
 				this.loopType = ++this.loopType % 3 + 1
+			},
+			// toggle list show
+			toggleIsShowList() {
+				this.$store.dispatch('setIsShowList', !this.$store.getters.IsShowList)
 			}
 		},
 		beforeCreate () { 
@@ -251,7 +268,7 @@
 		/*background-color: rgba(0,0,0,0.5);*/
 		/*background-attachment: fixed;*/
 		background-position: 0 5px;
-		background: url(../assets/playbar.png) repeat-x;
+		background: url(../assets/images/playbar.png) repeat-x;
 	}
 	.bar-content {
 		display: flex;
@@ -270,7 +287,7 @@
 		height: 28px;
 		width: 28px;
 		cursor: pointer;
-		background: url(../assets/playbar.png) no-repeat;
+		background: url(../assets/images/playbar.png) no-repeat;
 		margin-left: 8px;
 		margin-right: 8px;
 	}
@@ -290,7 +307,7 @@
 		height: 36px;
 		width: 36px;
 		cursor: pointer;
-		background: url(../assets/playbar.png) no-repeat;
+		background: url(../assets/images/playbar.png) no-repeat;
 	}
 	.play-style {
 		background-position: 0px -204px;
@@ -357,7 +374,7 @@
 		background-color: rgb(83,83,83);
 	}
 	.current { 
-		width: 50%;
+		width: 100%;
 		background-color: rgb(199,12,12); 
 	}
 	/*进度滑块*/
@@ -418,7 +435,7 @@
 		width: 25px;
 		height: 25px;
 		cursor: pointer;
-		background: url(../assets/playbar.png) no-repeat;
+		background: url(../assets/images/playbar.png) no-repeat;
 		background-position: -2px -248px;
 	}
 	.volume-ctrl-btn:hover {
@@ -426,11 +443,12 @@
 	}
 	.volume-spiner {
 		position: relative;
+		z-index: 10;
 		width: 32px;
 		height: 113px;
 		top: -150px;
 		left: -3.5px;
-		background: url(../assets/playbar.png) no-repeat;
+		background: url(../assets/images/playbar.png) no-repeat;
 		background-position: 0 -503px;
 	}
 	/*音量div长度92*/
@@ -471,7 +489,7 @@
 		width: 25px;
 		height: 25px;
 		cursor: pointer;
-		background: url(../assets/playbar.png) no-repeat;
+		background: url(../assets/images/playbar.png) no-repeat;
 		background-position: -3px -344px;
 	}
 	/*循环模式*/
@@ -494,5 +512,30 @@
 	}
 	.loop-random:hover {
 	    background-position: -93px -248px;
+	}
+	/*列表开关*/
+	.list-switch {
+		width: 59px;
+		height: 25px;
+		background: url(../assets/images/playbar.png) no-repeat;
+		background-position: -42px -69px;
+		font-size: 12px;
+		line-height: 25px;
+		color: #666;
+		padding-left: 20px;
+		text-align: center;
+		cursor: pointer;
+	}
+	.list-switch:hover {
+		background-position: -42px -99px;
+	}
+	/*列表面板*/
+	.play-list {
+		position: absolute;
+		bottom: 47px;
+		left: 50%;
+		margin-left: -30em;
+
+		transition: all 0.3s;
 	}
 </style>

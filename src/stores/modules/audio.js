@@ -20,6 +20,8 @@ const audio = {
         playList: [],
 		// 音量是否show
 		isShowVolume: false,
+		// 列表是否show
+		isShowList: false,
 		// 列表索引
 		playIndex: 0
 	},
@@ -76,6 +78,10 @@ const audio = {
 		// 设置索引
 		setPlayIndex(state, obj) {
 			state.playIndex = obj
+		},
+		// 设置isShowList
+		setIsShowList(state, obj) {
+			state.isShowList = obj
 		}
 	},
 	// 提交mutations
@@ -123,6 +129,10 @@ const audio = {
 		// 设置索引
 		setPlayIndex({commit}, obj) {
 			commit('setPlayIndex', obj)
+		},
+		// 设置isShowList
+		setIsShowList({commit}, obj) {
+			commit('setIsShowList', obj)
 		}
 	},
 	getters: {
@@ -141,7 +151,9 @@ const audio = {
 		// 获取playList
 		PlayList: state => state.playList,
 		// 获取索引
-		PlayIndex: state => state.playIndex
+		PlayIndex: state => state.playIndex,
+		// 获取isShowList
+		IsShowList: state => state.isShowList
 	}
 }
 

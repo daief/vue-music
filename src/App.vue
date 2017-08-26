@@ -22,6 +22,7 @@ export default {
   methods: {
     hideSomething() {
       this.$store.dispatch('setIsShowVolume', false)
+      this.$store.dispatch('setIsShowList', false)
     }
   },
   created () {
