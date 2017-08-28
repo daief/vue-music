@@ -14,7 +14,8 @@ const audio = {
             "url": "",
             "name": "",
             "singers": [],
-            "img": ""
+            "img": "",
+            "lyric": ""
         },
         // playList
         playList: [],

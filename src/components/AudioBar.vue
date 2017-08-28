@@ -1,5 +1,5 @@
 <template>
-	<div @mouseleave.stop.prevent="pointUp" @mouseup.stop.prevent="pointUp" @mousemove.stop.prevent="pointMove($event)" class="audio-bar">
+	<div class="audio-bar">
 		<audio :src="$store.getters.Music.url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
 			@ended="musicEnded"ref="audio"></audio>
 		<div class="bar-content">
@@ -14,7 +14,10 @@
 				<img :src="$store.getters.Music.img" alt="">
 			</div>
 			<!-- 歌名、歌手、进度条 -->
-			<div class="center-div">
+			<div class="center-div"
+				 @mouseleave.stop.prevent="pointUp" 
+				 @mouseup.stop.prevent="pointUp" 
+				 @mousemove.stop.prevent="pointMove($event)">
 				<div class="song-info">
 					<a href="#">{{$store.getters.Music.name}}</a>
 					<a href="#" v-for="(singer, index) in $store.getters.Music.singers">{{singer}}<span v-if="index != $store.getters.Music.singers.length - 1">/</span></a>
@@ -33,7 +36,11 @@
 			<!-- 音量控制 -->
 			<div class="volume-ctrl">
 				<div class="volume-ctrl-btn" @click.stop.prevent="toggleIsShowVolume"></div>
-				<div class="volume-spiner" v-show="$store.getters.IsShowVolume" @click.stop.prevent="" @mouseleave.stop.prevent="vPointUp" @mouseup.stop.prevent="vPointUp" mousemove.stop.prevent="vPointMove($event)">
+				<div class="volume-spiner" v-show="$store.getters.IsShowVolume" 
+				@click.stop.prevent="" 
+				@mouseleave.stop.prevent="vPointUp"
+				@mouseup.stop.prevent="vPointUp" 
+				@mousemove.stop.prevent="vPointMove($event)">
 					<div class="volume-current" :style="volumeCurrentStyle"></div>
 					<span class="point" :style="volumePointStyle" @mousedown.stop.prevent="vPointDown" @mousemove.stop.prevent="vPointMove($event)" @mouseup.stop.prevent="vPointUp"></span>
 				</div>

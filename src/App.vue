@@ -1,11 +1,9 @@
 <template>
-  <div id="app" @click="hideSomething">
+  <div id="app" @click.self="hideSomething">
     <div @click="hideSomething">
       <!-- <img src="./assets/logo.png"> -->
       <router-view></router-view>
     </div>
-    
-
     <!-- 底部播放条 -->
     <AudioBar></AudioBar>
   </div>

@@ -1,5 +1,5 @@
 <template>
-	<div class="play-list" @click.stop.prevent="">
+	<div class="play-list" @click.stop.prevent="" @mouseup.stop.prevent="">
 		<div class="list-head">
 			<div class="head-left">
 				<div class="title-text">播放列表({{$store.getters.PlayList.length}})</div>
@@ -23,7 +23,12 @@
 						<div class="row-2">
 							{{song.name}}
 						</div>
-						<div class="row-3"></div>
+						<div class="row-3">
+							
+						</div>
+						<div class="row-4" @click.stop.prevent="">
+							<a href="#" v-for="(singer, index) in song.singers">{{singer}}<span v-if="index != song.singers.length - 1">/</span></a>
+						</div>
 					</div>
 				</div>
 				<div class="list-scroll">
@@ -31,13 +36,22 @@
 				</div>
 			</div>
 			<div class="body-right">
-				
+				<div class="no-lyric" v-show="!$store.getters.Music.lyric">暂时没有歌词</div>
+				<div class="lyric" :style="lyricContentStyle">
+					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('↵')"
+						:class="{'line-active': index == currentLyricIndex}">
+						{{line.replace(/\[(\d*):(\d*)\.(\d*)\]/, "") }}
+						<br />
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
+
 	var listCanDrag = false
 	var listDragY = 0
 	export default {
@@ -60,6 +74,28 @@
 				return {
 					top:(- this.listContentMoveData) + 'px'
 				}
+			},
+			lyricContentStyle () {
+				return {
+					top: 108 - (this.currentLyricIndex) * 32 + 'px'
+				}
+			},
+			// 歌词索引
+			currentLyricIndex () {
+				let i = 0
+				for(i = 0; i < this.$store.getters.Music.lyric.split('↵').length; i++) {
+					var line = this.$store.getters.Music.lyric.split('↵')[i]
+					if (line) {
+						let strTime = line.match(/\[(\S*)\]/)[1]
+						let second = Number(strTime.split(':')[0]) * 60 + Number(strTime.split(':')[1])
+						if (second >= this.$store.getters.CurrentTime + 0.5) {
+							break
+						}
+					} else {
+						break
+					}
+				}
+				return i - 1
 			}
 		},
 		methods: {
@@ -125,6 +161,11 @@
 				if (contentMaxMoveH > 0)
 					this.listContentMoveData = (this.listScrollMoveData / 208) * contentMaxMoveH
 			}
+		},
+		watch: {
+			// CurrentTime (n, o) {
+			// 	console.log(n)
+			// }
 		}
 	}
 </script>
@@ -143,6 +184,15 @@
 	.list-head {
 		height: 40px;
 		display: flex;
+	}
+	.list-head:after {
+		content: '';
+		position: absolute;
+		width: 960px;
+		height: 2px;
+		top: 38px;
+		z-index: 2;
+		background-color: #000;
 	}
 	.head-left {
 		flex: 1;
@@ -197,6 +247,7 @@
 		left: 50%;
 		margin-left: -3px;
 		background-color: #000;
+		z-index: 5;
 	}
 	.list-scroll .scroll {
 		position: relative;
@@ -222,10 +273,10 @@
 		cursor: pointer;
 	}
 	.list-row:hover {
-		background-color: rgb(21,21,21);
+		background-color: rgb(26,26,26);
 	}
 	.row-playing {
-		background-color: rgb(26,26,26);
+		background-color: rgb(18,18,18);
 	}
 	.row-1 {
 		margin-left: 10px;
@@ -247,10 +298,102 @@
 	    white-space: nowrap;
 	    text-overflow: ellipsis;
 	}
+	/*操作*/
 	.row-3 {
+		height: 28px;
+		width: 88px;
+	}
+	/*歌手*/
+	.row-4 {
+		width: 60px;
+		color: #9b9b9b;
+		font-size: 12px;
+		line-height: 28px;
+		overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+	}
+	.row-4:hover {
+		text-decoration: underline;
+	}
+	.row-4 a {
+		color: #9b9b9b;
+		text-decoration: none;
 	}
 	.body-right {
 		height: 248px;
 		width: 480px;
+		position: relative;
+		overflow: hidden;
+		background: radial-gradient(rgb(25,25,25) 5%, rgb(30,30,30) 40%, rgb(45,45,45) 80%);
+	}
+	/*歌词*/
+	.lyric {
+		width: 480px;
+		position: relative;
+		top: 108px;
+		transition-property: top;
+		transition-duration: .5s;
+		transition-timing-function: linear;
+	}
+	.no-lyric {
+		position: relative;
+		text-align: center;
+		color: #999;
+		font-size: 12px;
+		height: 20px;
+		line-height: 20px;
+		top: 114px;
+	}
+	.line {
+		font-size: 12px;
+	    color: #989898;
+	    word-wrap: break-word;
+	    text-align: center;
+	    line-height: 32px;
+	    height: auto !important;
+	    min-height: 32px;
+	    transition-property: color;
+		transition-duration: .7s;
+		transition-timing-function: linear;
+	}
+	.line-active {
+		color: #fff;
+    	font-size: 14px;
 	}
 </style>
+
+
+
+
+
+<!-- 比如vuex中的state是这样的，有一个userId变量和对应的getter
+export default {
+    state: {
+        userId: 1
+    },
+    getters: {
+        getUserId: state => {
+            return state.userId;
+        },
+mutations: {
+    setUserId(state, newUserId) {
+        state.userId = newUserId;
+    },
+}
+
+那么在组件中可以这样
+import {mapGetters, mapMutations, mapActions} from 'vuex';
+export default{
+    computed: {
+        ...mapGetters([
+            'getUserId'
+        ])
+    },
+    watch: {
+          // 这样就可以在任何组件调用commit('setUserId', xxx);时watch到全局state中userId的变化
+        getUserId: function(newUserId) {
+            let vm = this;
+               ......
+        }
+    } -->
