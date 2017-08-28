@@ -1,9 +1,6 @@
 const head = {
 	state: {
-		// tab: {
-		// 	name: '',
-		// 	text: '',
-		// },
+		// 一级菜单项
 		tabList: {
 			'discover': {
 				text: '发现音乐',

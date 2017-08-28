@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../stores'
-import Hello from '@/components/Hello'
+
 import SecondMenu from '@/components/SecondMenu'
+import Recommend from '@/components/discover/Recommend'
+import Toplist from '@/components/discover/Toplist'
+import Playlist from '@/components/discover/Playlist'
+import My from '@/components/my/My'
+import Friend from '@/components/friend/Friend'
+import Download from '@/components/download/Download'
 
 Vue.use(Router)
 
@@ -13,7 +19,7 @@ const router = new Router({
       path: '/discover',
       name: 'Discover',
       components: {
-      	app: Hello,
+      	app: Recommend,
       	secondMenu: SecondMenu
       }
     },
@@ -22,7 +28,7 @@ const router = new Router({
 	  path: '/discover/recommend',
 	  name: 'Recommend',
 	  components: {
-	    app: Hello,
+	    app: Recommend,
 	    secondMenu: SecondMenu
 	  }
     },
@@ -31,7 +37,7 @@ const router = new Router({
 	  path: '/discover/toplist',
 	  name: 'Toplist',
 	  components: {
-	    app: Hello,
+	    app: Toplist,
 	    secondMenu: SecondMenu
 	  }
     },
@@ -40,7 +46,7 @@ const router = new Router({
 	  path: '/discover/playlist',
 	  name: 'Playlist',
 	  components: {
-	    app: Hello,
+	    app: Playlist,
 	    secondMenu: SecondMenu
 	  }
     },
@@ -49,7 +55,7 @@ const router = new Router({
 	  path: '/my',
 	  name: 'My',
 	  components: {
-	    app: Hello
+	    app: My
 	  }
     },
     // 朋友
@@ -57,7 +63,7 @@ const router = new Router({
 	  path: '/friend',
 	  name: 'Friend',
 	  components: {
-	    app: Hello
+	    app: Friend
 	  }
     },
     // 下载
@@ -65,7 +71,7 @@ const router = new Router({
 	  path: '/download',
 	  name: 'Download',
 	  components: {
-	    app: Hello
+	    app: Download
 	  }
     },
     // 首页/默认发现/推荐
@@ -73,7 +79,7 @@ const router = new Router({
 	  path: '/',
 	  name: 'Home',
 	  components: {
-	    app: Hello,
+	    app: Recommend,
 	    secondMenu: SecondMenu
 	  }
     }

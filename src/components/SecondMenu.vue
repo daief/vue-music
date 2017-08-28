@@ -2,7 +2,8 @@
 	<div class="second">
 		<ul>
 			<li v-for="(tab,key) in secondTabList">
-				<router-link :to="{ path: '/discover/' + key}" :class="{'router-link-active':extraActiveStyle && key=='recommend'}">
+				<router-link :to="{ path: '/discover/' + key}" 
+					:class="{'router-link-active':extraActiveStyle && key == 'recommend'}">
 					{{tab}}
 	            </router-link>
 			</li>

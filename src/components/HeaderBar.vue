@@ -29,7 +29,6 @@
 		computed: {
 
 		}
-
 	}
 </script>
 
