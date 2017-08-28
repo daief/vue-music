@@ -1,8 +1,10 @@
 <template>
   <div id="app" @click.self="hideSomething">
+    <!-- 顶部菜单条 -->
+    <HeaderBar></HeaderBar>
     <div @click="hideSomething">
       <!-- <img src="./assets/logo.png"> -->
-      <router-view></router-view>
+      <router-view name="app"></router-view>
     </div>
     <!-- 底部播放条 -->
     <AudioBar></AudioBar>
@@ -12,9 +14,11 @@
 <script>
 import axios from 'axios'
 import AudioBar from './components/AudioBar.vue'
+import HeaderBar from './components/HeaderBar.vue'
 export default {
   name: 'app',
   components: {
+    'HeaderBar': HeaderBar,
     'AudioBar': AudioBar
   },
   methods: {
@@ -51,6 +55,8 @@ export default {
     margin: 0;
     padding: 0; 
     box-sizing:border-box;
+
+    user-select: text; 
   }
 /*#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

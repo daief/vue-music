@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import Audio from './modules/audio'
+import Head from './modules/head'
 
 // 使用vuex
 Vue.use(Vuex)
@@ -20,7 +21,8 @@ const store = new Vuex.Store({
     
   },
   modules: {
-  	audio: Audio
+  	audio: Audio,
+    head: Head
   }
 })
 
