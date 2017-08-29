@@ -8,9 +8,7 @@
 				<div class="page-ctrl next" @click.stop.prevent="nextWrapPage"></div>
 				<!-- 图片部分 -->
 				<div class="wrap-content">
-					<transition name="fade">
-						<img :src="imgsArray[imgIndex].url">
-					</transition>
+					<img :src="imgsArray[imgIndex].url">
 					<!-- 底部原点 -->
 					<div class="wrap-index">
 						<span class="wrap-index-point" 
@@ -100,6 +98,7 @@
 	.huge-screen {
 		width: 100%;
 		height: 336px;
+		transition: all 0.4s;
 	}
 	.wrap {
 		width: 984px;
