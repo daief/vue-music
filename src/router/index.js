@@ -13,6 +13,7 @@ import Download from '@/components/download/Download'
 Vue.use(Router)
 
 const router = new Router({
+  base: '/vue-music/',
   routes: [
   	// 发现/默认推荐
     {
