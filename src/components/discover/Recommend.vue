@@ -38,6 +38,21 @@
 							<span class="icon"></span>
 						</div>
 					</div>
+					<div class="panel-body">
+						<div class="p-b-item">
+							<div  style="position:relative;">
+								<img src="http://p1.music.126.net/72BVDE_AVAoxXAwTJnkiHQ==/18524571905077671.jpg?param=140y140" alt="">
+								<div class="button">
+									<span class="icon-headset"></span>
+									<span class="number">假装很多人</span>
+									<a href="#" class="icon-play"></a>
+								</div>
+							</div>
+							<a href="#" class="desc">
+								泡一壶稍浓的秋茶，品之
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="content-right">
@@ -199,7 +214,6 @@
 	.content-left {
 		float: left;
 		width: 730px;
-		height: 200px;
 		position: relative;
 		text-align: center;
 	}
@@ -227,6 +241,8 @@
 		width: 95%;
 		margin: auto;
 		display: inline-block;
+		margin-top: 10px;
+		margin-bottom: 10px;
 	}
 	/*版面标题*/
 	.panel-title {
@@ -275,5 +291,80 @@
 		height: 11px;
 		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
 		background-position: 0 -240px;
+	}
+
+	.panel-body {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.p-b-item {
+		width: 140px;
+		height: 200px;
+		text-align: left;
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+	.p-b-item a {
+		text-decoration: none;
+		word-wrap: break-word;
+    	word-break: break-word;
+	}
+	.p-b-item a:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
+	.p-b-item .desc {
+		font-size: 14px;
+		line-height: 1.4;
+		color: #000;
+	}
+	.p-b-item img {
+		width: 140px;
+		height: 140px;
+		border: 1px solid #cdcdcd;
+		cursor: pointer;
+	}
+	.p-b-item .button {
+		width: 140px;
+		height: 27px;
+		bottom: 5px;
+	    background: url(http://s2.music.126.net/style/web2/img/coverall.png?1e98b3d12b62277e7793e9fbf4e52428) no-repeat;
+	    background-position: 0 -537px;
+		position: absolute;
+	}
+	.button .icon-play {
+		position: absolute;
+		top: 5px;
+		right: 15px;
+		display: inline-block;
+	    width: 16px;
+    	height: 17px;
+		background: url(http://s2.music.126.net/style/web2/img/iconall.png?1f53de8c739a79763d9c1cb3053493f0) no-repeat;
+		background-position: 0 0;
+	}
+	.button .icon-play:hover {
+		background-position: 0 -60px;
+	}
+	.button .icon-headset{
+		position: absolute;
+		width: 14px;
+		height: 11px;
+		display: inline-block;
+		background: url(http://s2.music.126.net/style/web2/img/iconall.png?1f53de8c739a79763d9c1cb3053493f0) no-repeat;
+		background-position: 0 -24px;
+		margin-top: 8px;
+		margin-left: 5px;
+	}
+	.button .number{
+		position: absolute;
+		display: inline-block;
+		color: #ccc;
+		font-size: 12px;
+		line-height: 16px;
+		height: 16px;
+		margin-top: 5px;
+		margin-left: 22px;
 	}
 </style>

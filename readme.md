@@ -1,6 +1,6 @@
 # vue-music
 
-> A Vue.js project
+学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版
 
 ## Build Setup
 
