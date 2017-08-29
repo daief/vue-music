@@ -21,6 +21,29 @@
 				<div class="download"></div>
 			</div>
 		</div>
+		<div class="content">
+			<div class="content-left">
+				<div class="panel hot-panel">
+					<div class="panel-title">
+						<div class="p-t-text">热门推荐</div>
+						<!-- 小字分类 -->
+						<div class="p-t-small">
+							<a href="#">华语</a>
+							<span>|</span>
+							<a href="#">摇滚</a>
+						</div>
+						<!-- 更多 -->
+						<div class="p-t-more">
+							<span>更多</span>
+							<span class="icon"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content-right">
+				
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -93,7 +116,7 @@
 
 <style scoped>
 	.recommend {
-		margin-bottom: 50px;
+		position: relative;
 	}
 	.huge-screen {
 		width: 100%;
@@ -166,5 +189,91 @@
 		width: 254px;
 		height: 336px;
 	    background: url(../../assets/images/download.png) no-repeat 0 0;
+	}
+	/*歌单等内容*/
+	.content {
+		width: 984px;
+		margin: auto;
+		border: 1px solid #d3d3d3;
+	}
+	.content-left {
+		float: left;
+		width: 730px;
+		height: 200px;
+		position: relative;
+		text-align: center;
+	}
+	.content-left:after {
+		content: '';
+		width: 1px;
+		height: 100%;
+		position: absolute;
+		background-color: #d3d3d3;
+		right: -1px;
+		z-index: 5;
+	}
+	.content-right {
+		float: right;
+		width: 254px;
+	}
+	.content:after {
+		content: '';
+		clear: both;
+		display: block; 
+	}
+	/*一个版面*/
+	.panel {
+		position: relative;
+		width: 95%;
+		margin: auto;
+		display: inline-block;
+	}
+	/*版面标题*/
+	.panel-title {
+		width: 100%;
+		height: 35px;
+		border-bottom: 2px solid rgb(193,13,12);
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
+		background-position: -225px -153px;
+	}
+	.p-t-text {
+		margin-left: 35px;
+		font-size: 20px;
+	}
+	.p-t-small {
+		font-size: 12px;
+		line-height: 14px;
+		height: 14px;
+		margin-left: 2.5em;
+		color: #666;
+	}
+	.p-t-small a {
+		text-decoration: none;
+		color: #666;
+	}
+	.p-t-small a:hover {
+		text-decoration: underline;
+	}
+	.p-t-more {
+		position: absolute;
+		right: 0px;
+		height: 20px;
+		font-size: 12px;
+		line-height: 20px;
+		color: #666;
+		cursor: pointer;
+	}
+	.p-t-more span {
+		line-height: 20px;
+		display: inline-block;
+	}
+	.p-t-more .icon {
+		width: 12px;
+		height: 11px;
+		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
+		background-position: 0 -240px;
 	}
 </style>

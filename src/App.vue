@@ -2,7 +2,7 @@
   <div id="app" @click.self="hideSomething">
     <!-- 顶部菜单条 -->
     <HeaderBar></HeaderBar>
-    <div @click="hideSomething">
+    <div @click="hideSomething" style="margin-bottom: 55px;">
       <!-- <img src="./assets/logo.png"> -->
       <router-view name="app"></router-view>
     </div>
@@ -55,15 +55,6 @@ export default {
     margin: 0;
     padding: 0; 
     box-sizing:border-box;
-
     user-select: text; 
   }
-/*#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}*/
 </style>

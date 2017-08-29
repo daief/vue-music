@@ -271,6 +271,7 @@
 		width: 100%;
 		padding-top: 10px;
 		zoom: 1;
+		z-index: 1000;
 		/*border: solid 1px black;*/
 		/*background-color: rgba(0,0,0,0.5);*/
 		/*background-attachment: fixed;*/
