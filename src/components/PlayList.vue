@@ -193,10 +193,10 @@
 		background-color: #000;
 	}
 	.head-left {
-		flex: 1;
+		flex: 0 0 50%;
 	}
 	.head-right {
-		flex: 1;
+		flex: 0 0 50%;
 	}
 	.head-right:before {
 		content: '';
@@ -261,7 +261,7 @@
 	/*列表*/
 	.list {
 		position: relative;
-		flex: 1;
+		width: 100%;
 		top: -216px;
 	}
 	.list-row {

@@ -91,7 +91,35 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						
+						<div class="blist">
+							<div class="blist-column">
+								<div class="blist-column-top even-bg">
+									<img src="http://p4.music.126.net/DrRIg6CrgDfVLEph9SNh7w==/18696095720518497.jpg?param=100y100">
+									<div class="blist-top-right">
+										<span class="title">云音乐飙升榜</span>
+										<span class="play"></span>
+										<span class="collect"></span>
+									</div>
+								</div>
+								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
+							</div>
+							<div class="blist-column">
+								
+							</div>
+							<div class="blist-column">
+								
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -267,6 +295,7 @@
 		width: 730px;
 		position: relative;
 		text-align: center;
+		padding-bottom: 20px;
 	}
 	.content-left:after {
 		content: '';
@@ -439,5 +468,103 @@
 	    font-family: Arial, Helvetica, sans-serif;
 	    font-weight: bold;
 	    color: #202020;
+	}
+	/*榜单*/
+	.blist {
+		/*height: 200px;*/
+		margin-top: 20px;
+		position: relative;
+		width: 100%;
+		display: flex;
+		border: 1px #ccc solid;
+	}
+	.blist-column {
+		/*flex: 0 0 33.3333333%;*/
+		width: 33.33333333%
+	}
+	.blist-column:nth-child(2) {
+		border-left: 1px #ccc solid;
+		border-right: 1px #ccc solid;
+	}
+	.blist-column-top {
+		height: 120px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.blist-column-top img {
+		margin-left: 20px;
+		width: 80px;
+		height: 80px;
+	}
+	.blist-top-right {
+		margin-left: 20px;
+		height: 80px;
+		text-align: left;
+	}
+	.blist-top-right .title {
+		font-size: 14px;
+		font-weight: bold;
+		color: #333;
+    	font-family: Arial, Helvetica, sans-serif;
+		display: block;
+		overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    word-wrap: normal;
+	}
+	.blist-top-right .play,
+	.blist-top-right .collect {
+		width: 22px;
+		height: 22px;
+		display: inline-block;
+		cursor: pointer;
+		margin-top: 10px;
+		margin-right: 10px;
+		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
+	}
+	.blist-top-right .play {
+		background-position: -267px -205px;
+	}
+	.blist-top-right .play:hover {
+		background-position: -267px -235px;
+	}
+	.blist-top-right .collect {
+		background-position: -300px -205px;
+	}
+	.blist-top-right .collect:hover {
+		background-position: -300px -235px;
+	}
+	.odd-bg {
+		background-color: rgb(232,232,232);
+	}
+	.even-bg {
+		background-color: rgb(244,244,244);
+	}
+	.blist-item {
+		height: 32px;
+		font-size: 12px;
+		line-height: 32px;
+	    text-align: left;
+	    padding-left: 20px;
+	}
+	.blist-item-more {
+		padding-right: 20px;
+		text-align: right;
+	}
+	.blist-item .s-name {
+		display: inline-block;
+		height: 32px;
+		max-width: 100%;
+		overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    word-wrap: normal;
+		font-size: 12px;
+		line-height: 32px;
+		cursor: pointer;
+	}
+	.s-name:hover {
+		text-decoration: underline;
 	}
 </style>
