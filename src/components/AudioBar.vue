@@ -70,9 +70,9 @@
 		data () {
 			return {
 				// 0~1
-				volume: JSON.parse(localStorage.getItem('VUE_MUSIC')).volume || 0.75,
+				volume: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).volume) || 0.75,
 				// 1循环 2单曲 3随机
-				loopType: JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType || 1
+				loopType: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType) || 1
 			}
 		},
 		components: {
