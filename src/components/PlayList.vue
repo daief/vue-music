@@ -50,8 +50,6 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex'
-
 	var listCanDrag = false
 	var listDragY = 0
 	export default {

@@ -1,13 +1,16 @@
 <template>
-  <div id="app" @click.self="hideSomething">
+  <div id="app" @click.self="hideSomething" ref="app">
     <!-- 顶部菜单条 -->
     <HeaderBar></HeaderBar>
     <div @click="hideSomething" style="margin-bottom: 55px;">
-      <!-- <img src="./assets/logo.png"> -->
-      <router-view name="app"></router-view>
+        <transition name="switch" mode="out-in">
+          <router-view name="app"></router-view>
+        </transition>
     </div>
     <!-- 底部播放条 -->
     <AudioBar></AudioBar>
+    <!--  -->
+    <div class="back-top" :show="backTopIsShown" @click="backToTop"></div>
   </div>
 </template>
 
@@ -17,6 +20,17 @@ import AudioBar from './components/AudioBar.vue'
 import HeaderBar from './components/HeaderBar.vue'
 export default {
   name: 'app',
+  data () {
+    return {
+      test: 0
+    }
+  },
+  computed: { 
+    backTopIsShown () {
+      console.log(this.test)
+      return this.test > 100
+    }
+  },
   components: {
     'HeaderBar': HeaderBar,
     'AudioBar': AudioBar
@@ -25,27 +39,39 @@ export default {
     hideSomething() {
       this.$store.dispatch('setIsShowVolume', false)
       this.$store.dispatch('setIsShowList', false)
+    },
+    appScroll () {
+      this.test = window.pageYOffset
+    },
+    backToTop () {
+      document.body.scrollTop  = 0
     }
   },
+  ready () {
+    window.addEventListener('scroll', this.appScroll);
+  },
   created () {
+    // 播放列表
     axios.get('static/data/play_list.json').then((res) => {
       this.$store.dispatch('setPlayList', res.data.list)
-      this.$store.dispatch('setMusic', res.data.list[0])
-      this.$store.dispatch('setPlayIndex', 0)
-      console.log(this.$store.getters.PlayList)
-      // // data.user的信息赋值给info  再通过组件的数据传递传给sideBar
-      // this.info = res.data.user
-      // // 把所有的音乐数据给vuex的musicAllList
-      // store.dispatch('set_MusicAllList', res.data.music)
-      // // 所有的数据存起来  包括音乐个人信息 等等
-      // store.dispatch('set_AllInfo', res.data)
-      // // 设置音乐的地址  初始化 根据vuex的currentIndex来决定
-      // this.$refs.audio.setAttribute('src', store.getters.getCurrentMusic.url)
-      // // 给audio元素存在vuex 的state里面  方便日后调用
-      // store.dispatch('set_AudioElement', this.$refs.audio)
+      this.$store.dispatch('setPlayIndex', JSON.parse(localStorage.getItem('VUE_MUSIC')).playIndex || 0)
+      this.$store.dispatch('setMusic', res.data.list[this.$store.getters.PlayIndex])
     }, (err) => {
       console.log(err)
     })
+    // 推荐页面
+    axios.get('static/data/recommend.json').then((res) => {
+      this.$store.dispatch('setHotList', res.data.hot)
+      this.$store.dispatch('setPersonalList', res.data.personal)
+      console.log(this.$store.getters.HotList)
+    }, (err) => {
+      console.log(err)
+    })
+  },
+  watch: {
+    test (n, o) {
+      console.log(222)
+    }
   }
 }
 </script>
@@ -56,5 +82,25 @@ export default {
     padding: 0; 
     box-sizing:border-box;
     user-select: text; 
+  }
+  .back-top {
+    position: fixed;
+    z-index: 100;
+    right: 100px;
+    bottom: 200px;
+    width: 49px;
+    height: 44px;
+    background: url(http://s2.music.126.net/style/web2/img/sprite.png?a30c23da103f33c2b2e7d44eb6d862d5) no-repeat 0 9999px;
+    background-position: -265px -47px;
+    cursor: pointer;
+  }
+  .back-top {
+    background-position: -325px -47px;
+  }
+  .switch-enter-active, .switch-leave-active {
+    transition: opacity .3s;
+  }
+  .switch-enter, .switch-leave-active {
+    opacity: 0;
   }
 </style>

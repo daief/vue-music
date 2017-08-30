@@ -23,6 +23,7 @@
 		</div>
 		<div class="content">
 			<div class="content-left">
+				<!-- 热门推荐 -->
 				<div class="panel hot-panel">
 					<div class="panel-title">
 						<div class="p-t-text">热门推荐</div>
@@ -39,19 +40,58 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="p-b-item">
+						<div class="p-b-item"  v-for="(item,index) in $store.getters.HotList">
 							<div  style="position:relative;">
-								<img src="http://p1.music.126.net/72BVDE_AVAoxXAwTJnkiHQ==/18524571905077671.jpg?param=140y140" alt="">
+								<img :src="item.img" alt="">
 								<div class="button">
 									<span class="icon-headset"></span>
-									<span class="number">假装很多人</span>
+									<span class="number">{{item.number}}</span>
 									<a href="#" class="icon-play"></a>
 								</div>
 							</div>
-							<a href="#" class="desc">
-								泡一壶稍浓的秋茶，品之
-							</a>
+							<a href="#" class="desc">{{item.desc}}</a>
 						</div>
+					</div>
+				</div>
+				<!-- 个性化推荐 -->
+				<div class="panel">
+					<div class="panel-title">
+						<div class="p-t-text">个性化推荐</div>
+					</div>
+					<div class="panel-body">
+						<div class="p-b-item">
+							<div class="week">
+								{{ week }}
+							</div>
+							<div class="day">
+								{{ new Date().getDate() }}
+							</div>
+						</div>
+						<div class="p-b-item"  v-for="(item,index) in $store.getters.PersonalList">
+							<div  style="position:relative;">
+								<img :src="item.img" alt="">
+								<div class="button">
+									<span class="icon-headset"></span>
+									<span class="number">{{item.number}}</span>
+									<a href="#" class="icon-play"></a>
+								</div>
+							</div>
+							<a href="#" class="desc">{{item.desc}}</a>
+						</div>
+					</div>
+				</div>
+				<!-- 榜单 -->
+				<div class="panel">
+					<div class="panel-title">
+						<div class="p-t-text">榜单</div>
+						<!-- 更多 -->
+						<div class="p-t-more">
+							<span>更多</span>
+							<span class="icon"></span>
+						</div>
+					</div>
+					<div class="panel-body">
+						
 					</div>
 				</div>
 			</div>
@@ -100,6 +140,17 @@
 				return {
 					'background-color': this.imgsArray[this.imgIndex].mainColor
 				}
+			},
+			week() {
+				let weekday=new Array(7)
+				weekday[0]="星期日"
+				weekday[1]="星期一"
+				weekday[2]="星期二"
+				weekday[3]="星期三"
+				weekday[4]="星期四"
+				weekday[5]="星期五"
+				weekday[6]="星期六"
+				return weekday[new Date().getDay()]
 			}
 		},
 		methods: {
@@ -223,6 +274,7 @@
 		height: 100%;
 		position: absolute;
 		background-color: #d3d3d3;
+		top: 0px;
 		right: -1px;
 		z-index: 5;
 	}
@@ -366,5 +418,26 @@
 		height: 16px;
 		margin-top: 5px;
 		margin-left: 22px;
+	}
+	.week {
+		height: 33px;
+		text-align: center;
+		line-height: 33px;
+	    color: #fed9d9;
+	    font-size: 14px;
+	    text-shadow: 0 -1px #962626;
+	    background: url(http://s2.music.126.net/style/web2/img/date.png?cc834598921e07bf034d0aa9d10c8b4a) no-repeat 0 9999px;
+	    background-position: 0 0;
+	}
+	.day {
+		height: 107px;
+		text-align: center;
+		background: url(http://s2.music.126.net/style/web2/img/date.png?cc834598921e07bf034d0aa9d10c8b4a) no-repeat 0 9999px;
+		background-position: 0 -150px;
+		line-height: 102px;
+	    font-size: 94px;
+	    font-family: Arial, Helvetica, sans-serif;
+	    font-weight: bold;
+	    color: #202020;
 	}
 </style>

@@ -60,6 +60,7 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	import PlayList from './PlayList.vue'
 	var pointCanDrag = false
 	var volumePointCanDrag = false
@@ -69,9 +70,9 @@
 		data () {
 			return {
 				// 0~1
-				volume: 0.75,
+				volume: JSON.parse(localStorage.getItem('VUE_MUSIC')).volume || 0.75,
 				// 1循环 2单曲 3随机
-				loopType: 1
+				loopType: JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType || 1
 			}
 		},
 		components: {
@@ -115,7 +116,10 @@
 					case 3:
 						return 'loop-random'
 				}
-			}
+			},
+			...mapGetters([
+	            'PlayIndex'
+	        ])
 		},
 		methods: {
 			preMusic(){
@@ -258,7 +262,21 @@
 			this.$store.dispatch('setPlayer', this.$refs.audio)
 		},
 		watch: {
-			
+			volume (newvalue) {
+				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				loaclData.volume = newvalue
+				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+			},
+			loopType (newvalue) {
+				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				loaclData.loopType = newvalue
+				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+			},
+			PlayIndex (newvalue) {
+				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				loaclData.playIndex = newvalue
+				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+			}
 		}
 	}
 </script>
