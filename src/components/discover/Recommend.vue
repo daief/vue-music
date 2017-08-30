@@ -92,30 +92,29 @@
 					</div>
 					<div class="panel-body">
 						<div class="blist">
+							<!-- 榜单1 -->
 							<div class="blist-column">
 								<div class="blist-column-top even-bg">
-									<img src="http://p4.music.126.net/DrRIg6CrgDfVLEph9SNh7w==/18696095720518497.jpg?param=100y100">
+									<img :src="$store.getters.BList[0].img">
 									<div class="blist-top-right">
-										<span class="title">云音乐飙升榜</span>
+										<span class="title">{{$store.getters.BList[0].name}}</span>
 										<span class="play"></span>
-										<span class="collect"></span>
+										<span class="subscribe"></span>
 									</div>
 								</div>
-								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item odd-bg"><span class="s-name">Almost Home</span></div>
-								<div class="blist-item even-bg"><span class="s-name">Almost Home</span></div>
+								<div class="blist-item odd-bg" 
+									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
+									v-for="(song,index) in $store.getters.BList[0].songs.slice(0, 10)">
+									<span class="no"> {{ index + 1 }}</span>
+									<span class="s-name">{{ song.name }}</span>
+								</div>
 								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
 							</div>
+							<!-- 榜单2 -->
 							<div class="blist-column">
 								
 							</div>
+							<!-- 榜单3 -->
 							<div class="blist-column">
 								
 							</div>
@@ -199,11 +198,12 @@
 			}
 		},
 		created () {
+			// 自动轮播
 			let wrapRoll = setInterval(() => {
 				if (this.autoRoll)	{
 					this.nextWrapPage()
 				}
-			}, 2000)
+			}, 3000)
 		}
 	}
 </script>
@@ -514,7 +514,7 @@
 	    word-wrap: normal;
 	}
 	.blist-top-right .play,
-	.blist-top-right .collect {
+	.blist-top-right .subscribe {
 		width: 22px;
 		height: 22px;
 		display: inline-block;
@@ -529,10 +529,10 @@
 	.blist-top-right .play:hover {
 		background-position: -267px -235px;
 	}
-	.blist-top-right .collect {
+	.blist-top-right .subscribe {
 		background-position: -300px -205px;
 	}
-	.blist-top-right .collect:hover {
+	.blist-top-right .subscribe:hover {
 		background-position: -300px -235px;
 	}
 	.odd-bg {
@@ -546,16 +546,25 @@
 		font-size: 12px;
 		line-height: 32px;
 	    text-align: left;
-	    padding-left: 20px;
+	    padding-left: 10px;
 	}
 	.blist-item-more {
 		padding-right: 20px;
 		text-align: right;
 	}
+	.blist-item .no {
+		float: left;
+	    width: 35px;
+	    height: 32px;
+	    text-align: center;
+	    color: #666;
+	    font-size: 16px;
+	    display: inline-block;
+	}
 	.blist-item .s-name {
 		display: inline-block;
 		height: 32px;
-		max-width: 100%;
+		max-width: 180px;
 		overflow: hidden;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;

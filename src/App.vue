@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click.self="hideSomething" ref="app">
+  <div id="app" @click.self="hideSomething">
     <!-- 顶部菜单条 -->
     <HeaderBar></HeaderBar>
     <div @click="hideSomething" style="margin-bottom: 55px;">
@@ -10,7 +10,7 @@
     <!-- 底部播放条 -->
     <AudioBar></AudioBar>
     <!--  -->
-    <div class="back-top" :show="backTopIsShown" @click="backToTop"></div>
+    <div class="back-top" :style="backTopStyle" @click="backToTop"></div>
   </div>
 </template>
 
@@ -22,13 +22,15 @@ export default {
   name: 'app',
   data () {
     return {
-      test: 0
+      // 页面滚动的距离
+      windowPageYOffset: window.pageYOffset
     }
   },
   computed: { 
-    backTopIsShown () {
-      console.log(this.test)
-      return this.test > 100
+    backTopStyle () {
+      return {
+        'opacity': this.windowPageYOffset > 170? 1: 0
+      }
     }
   },
   components: {
@@ -41,37 +43,46 @@ export default {
       this.$store.dispatch('setIsShowList', false)
     },
     appScroll () {
-      this.test = window.pageYOffset
+      this.windowPageYOffset = window.pageYOffset
     },
     backToTop () {
       document.body.scrollTop  = 0
     }
   },
-  ready () {
-    window.addEventListener('scroll', this.appScroll);
+  mounted () {
+    window.addEventListener('scroll', this.appScroll)
   },
   created () {
     // 播放列表
     axios.get('static/data/play_list.json').then((res) => {
       this.$store.dispatch('setPlayList', res.data.list)
-      this.$store.dispatch('setPlayIndex', JSON.parse(localStorage.getItem('VUE_MUSIC')).playIndex || 0)
+
+      this.$store.dispatch('setPlayIndex', (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).playIndex) || 0)
       this.$store.dispatch('setMusic', res.data.list[this.$store.getters.PlayIndex])
     }, (err) => {
       console.log(err)
     })
+
     // 推荐页面
     axios.get('static/data/recommend.json').then((res) => {
       this.$store.dispatch('setHotList', res.data.hot)
       this.$store.dispatch('setPersonalList', res.data.personal)
-      console.log(this.$store.getters.HotList)
+      this.$store.dispatch('setBList', res.data.bList)
+      // console.log(this.$store.getters.BList)
+    }, (err) => {
+      console.log(err)
+    })
+
+    // 加载all_music.json
+    axios.get('static/data/all_music.json').then((res) => {
+      this.$store.dispatch('setAllSongs', res.data.songs)
+      this.$store.dispatch('gainSongById', 459717294)
+      console.log(this.$store.getters.SongById)
     }, (err) => {
       console.log(err)
     })
   },
   watch: {
-    test (n, o) {
-      console.log(222)
-    }
   }
 }
 </script>
@@ -87,14 +98,15 @@ export default {
     position: fixed;
     z-index: 100;
     right: 100px;
-    bottom: 200px;
+    bottom: 150px;
     width: 49px;
     height: 44px;
     background: url(http://s2.music.126.net/style/web2/img/sprite.png?a30c23da103f33c2b2e7d44eb6d862d5) no-repeat 0 9999px;
     background-position: -265px -47px;
     cursor: pointer;
+    transition: opacity .4s;
   }
-  .back-top {
+  .back-top:hover {
     background-position: -325px -47px;
   }
   .switch-enter-active, .switch-leave-active {

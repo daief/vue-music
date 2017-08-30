@@ -60,7 +60,6 @@
 	}
 	.item-tab:hover {
 		background-color: #000;
-		cursor: pointer;
 	}
 	.item-tab {
 		height: 70px;
@@ -69,6 +68,7 @@
 		padding-left: 20px;
 		padding-right: 20px;
 		position: relative;
+		cursor: pointer;
 	}
 	.item-tab a {
 		display: block;
