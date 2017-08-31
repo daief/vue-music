@@ -13,7 +13,7 @@
 			@mousemove.stop.prevent="bodyMove($event)"
 			@mouseup.stop.prevent="bodyUp($event)">
 			<div class="body-left"
-				@mousewheel="listWheel($event)">
+				@mousewheel.stop.prevent="listWheel($event)">
 				<div class="list" :style="listContentStyle">
 					<div v-for="(song,index) in $store.getters.PlayList" class="list-row" ref="listRow"
 						:class="{'row-playing': song.id == $store.getters.Music.id}"
@@ -146,16 +146,18 @@
 				let e = event || window.event
 				// true:up, false:down
 				let direction = e.deltaY > 0
+				// 内容移动距离 内容高度-可视区域高度 = H - 248
+				let contentMaxMoveH = 28 * this.$store.getters.PlayList.length - 248
+				let step = 208 / contentMaxMoveH * 28 * 2
 				if (direction) {
 					// up
-					this.listScrollMoveData += 10
+					this.listScrollMoveData += step
 				} else {
-					this.listScrollMoveData -= 10
+					this.listScrollMoveData -= step
 				}
 				this.listScrollMoveData = this.listScrollMoveData > 208? 208: this.listScrollMoveData
 				this.listScrollMoveData = this.listScrollMoveData < 0? 0: this.listScrollMoveData
-				// 内容移动距离 内容高度-可视区域高度 = H - 248
-				let contentMaxMoveH = 28 * this.$store.getters.PlayList.length - 248
+				
 				// 内容高于可视区域才需要滚动
 				if (contentMaxMoveH > 0)
 					this.listContentMoveData = (this.listScrollMoveData / 208) * contentMaxMoveH
