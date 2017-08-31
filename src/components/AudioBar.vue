@@ -1,6 +1,7 @@
 <template>
 	<div class="audio-bar">
 		<audio :src="$store.getters.Music.url" 
+			@progress="musicProgress"
 			@loadstart="musicLoadStart"
 			@canplay="musicCanplay"
 			@loadedmetadata="musicMetadata" 
@@ -34,7 +35,7 @@
 							@mousedown.stop.prevent="pointDown" 
 							@mousemove.stop.prevent="pointMove($event)" 
 							@mouseup.stop.prevent="pointUp" >
-							<i class="point-loading" v-show="!$store.getters.Canplay"></i>
+							<i class="point-loading" v-show="!$store.getters.Canplay || this.dataLoading"></i>
 						</span>
 					</div>
 					<div class="time-text">
@@ -81,7 +82,9 @@
 				// 0~1
 				volume: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).volume) || 0.75,
 				// 1循环 2单曲 3随机
-				loopType: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType) || 1
+				loopType: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType) || 1,
+				// 加载
+				dataLoading: true
 			}
 		},
 		components: {
@@ -157,6 +160,9 @@
 					this.musicEnded()
 				}
 			},
+			musicProgress () {
+				this.dataLoading = true
+			},
 			musicLoadStart () {
 				this.$store.dispatch('setCanplay', false)
 			},
@@ -168,6 +174,7 @@
 				this.$store.dispatch('play')
 			},
 			musicTimeUpdate(){
+				this.dataLoading = false
 				// 虽然不是用于移动端，但这个判断用于在移动端获取duration
 				if (this.$store.getters.Duration == 0)	
 					this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
