@@ -1,6 +1,10 @@
 <template>
 	<div class="audio-bar">
-		<audio :src="$store.getters.Music.url" @loadedmetadata="musicMetadata" @timeupdate="musicTimeUpdate" 
+		<audio :src="$store.getters.Music.url" 
+			@loadstart="musicLoadStart"
+			@canplay="musicCanplay"
+			@loadedmetadata="musicMetadata" 
+			@timeupdate="musicTimeUpdate" 
 			@ended="musicEnded"ref="audio"></audio>
 		<div class="bar-content">
 			<!-- 播放、上下首按钮 -->
@@ -26,7 +30,12 @@
 					<div class="spiner" ref="spiner" @click.stop.prevent="pointClick($event)">
 						<div class="duration" :style=""></div>
 						<div class="current" :style="currenStyle"></div>
-						<span class="point" :style="pointStyle" @mousedown.stop.prevent="pointDown" @mousemove.stop.prevent="pointMove($event)" @mouseup.stop.prevent="pointUp" ></span>
+						<span class="point" :style="pointStyle" 
+							@mousedown.stop.prevent="pointDown" 
+							@mousemove.stop.prevent="pointMove($event)" 
+							@mouseup.stop.prevent="pointUp" >
+							<i class="point-loading" v-show="!$store.getters.Canplay"></i>
+						</span>
 					</div>
 					<div class="time-text">
 						<span class="song-time">{{ formatSecondTime($store.getters.CurrentTime) }}</span><span class="song-time">&nbsp;/&nbsp;</span><span class="song-time">{{ formatSecondTime($store.getters.Duration) }}</span>
@@ -130,6 +139,9 @@
 				this.$store.getters.Player.currentTime = 0
 			},
 			togglePlay() {
+				if (!this.$store.getters.Canplay) {
+					this.$store.getters.Player.load()
+				}
 				this.$store.dispatch('togglePlay')
 			},
 			nextMusic() {
@@ -144,6 +156,12 @@
 				else {
 					this.musicEnded()
 				}
+			},
+			musicLoadStart () {
+				this.$store.dispatch('setCanplay', false)
+			},
+			musicCanplay () {
+				this.$store.dispatch('setCanplay', true)
 			},
 			musicMetadata () {
 				this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
@@ -409,6 +427,14 @@
 		left: 100%;
 		top: -5px;
 		cursor: pointer;
+	}
+	.point-loading {
+		position: absolute;
+		left: -6px;
+		top: 2px;
+		width: 12px;
+		height: 12px;
+		background-image: url(http://s2.music.126.net/style/web2/img/outchain/loading.gif?2b3b83a7b944db50b714347179cfc826);
 	}
 	.point:hover:before {
 		background-color: rgb(255,255,255);

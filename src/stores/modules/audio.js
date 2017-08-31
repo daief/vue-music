@@ -4,6 +4,8 @@ const audio = {
 		player: null,
 		// 播放状态
 		isPlaying: false,
+		// canplay
+		canplay: false,
 		// 当前播放时间
 		currentTime: 0,
 		// 总时长
@@ -37,6 +39,10 @@ const audio = {
 		setIsPlaying (state, obj) {
 			state.isPlaying = obj
 		},
+		// 设置canplay
+		setCanplay(state, obj) {
+			state.canplay = obj
+		},
 		// 设置currenttime
 		setCurrentTime(state, obj) {
 			state.currentTime = obj
@@ -61,8 +67,11 @@ const audio = {
 				state.isPlaying = false
 				state.player.pause()
 			} else {
-				state.isPlaying = true
-				state.player.play()	
+				// 可以播放才能播放
+				if (state.canplay) {
+					state.isPlaying = true
+					state.player.play()
+				}
 			}
 		},
 		// 设置music
@@ -95,6 +104,10 @@ const audio = {
 		// 设置播放状态
 		setIsPlaying ({commit}, obj) {
 			commit('setIsPlaying', obj)
+		},
+		// 设置canplay
+		setCanplay({commit}, obj) {
+			commit('setCanplay', obj)
 		},
 		// 设置currenttime
 		setCurrentTime({commit}, obj) {
@@ -155,7 +168,9 @@ const audio = {
 		// 获取索引
 		PlayIndex: state => state.playIndex,
 		// 获取isShowList
-		IsShowList: state => state.isShowList
+		IsShowList: state => state.isShowList,
+		// 获取canplay
+		Canplay: state => state.canplay
 	}
 }
 
