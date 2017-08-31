@@ -110,11 +110,11 @@
 									<span class="no"> {{ index + 1 }}</span>
 									<span 
 										:class="{'s-name-hover': blistItemRecord.order == 0 && blistItemRecord.index == index}"
-										class="s-name" >{{ song.name }}</span>
+										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == 0 && blistItemRecord.index == index">
-										<i class="play"></i>
-										<i class="add"></i>
+										<i class="play" title="播放"></i>
+										<i class="add" title="添加到播放列表"></i>
 									</div>
 								</div>
 								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
@@ -599,8 +599,14 @@
 		background: url(http://s2.music.126.net/style/web2/img/icon.png?ebc504027bf661e93747ae5c27fb270e) no-repeat 0 9999px;
 	    background-position: 1px -699px;
 	}
+	.blist-operate .add:hover {
+		background-position: -21px -699px;
+	}
 	.blist-operate .play {
 	    background-position: -267px -268px;
+	}
+	.blist-operate .play:hover {
+	    background-position: -267px -288px;
 	}
 	.blist-item-more {
 		padding-right: 20px;
