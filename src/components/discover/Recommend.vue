@@ -102,11 +102,20 @@
 										<span class="subscribe"></span>
 									</div>
 								</div>
-								<div class="blist-item odd-bg" 
+								<div v-for="(song,index) in $store.getters.BList[0].songs.slice(0, 10)"
+									class="blist-item odd-bg" 
 									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
-									v-for="(song,index) in $store.getters.BList[0].songs.slice(0, 10)">
+									@mouseover.stop.prevent="blistItemMouseOver(0, index)"
+									@mouseleave.stop.prevent="blistItemMouseLeave()">
 									<span class="no"> {{ index + 1 }}</span>
-									<span class="s-name">{{ song.name }}</span>
+									<span 
+										:class="{'s-name-hover': blistItemRecord.order == 0 && blistItemRecord.index == index}"
+										class="s-name" >{{ song.name }}</span>
+									<div class="blist-operate" 
+										v-show="blistItemRecord.order == 0 && blistItemRecord.index == index">
+										<i class="play"></i>
+										<i class="add"></i>
+									</div>
 								</div>
 								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
 							</div>
@@ -159,7 +168,14 @@
 				],
 				imgIndex: 0,
 				// 自动轮播
-				autoRoll: true
+				autoRoll: true,
+				// 记录哪个榜单哪项hover
+				blistItemRecord: {
+					// 0,1,2
+					order: -1,
+					// 0~9
+					index: -1
+				}
 			}
 		},
 		computed: {
@@ -195,6 +211,20 @@
 			},
 			nextWrapPage () {
 				this.imgIndex = (this.imgIndex + 1) % this.imgsArray.length
+			},
+			// 榜单列表鼠标悬浮事件
+			blistItemMouseOver (order, index) {
+				this.blistItemRecord = {
+					order: order,
+					index: index
+				}
+			},
+			// 榜单列表鼠标离开的事件
+			blistItemMouseLeave () {
+				this.blistItemRecord = {
+					order: -1,
+					index: -1
+				}
 			}
 		},
 		created () {
@@ -542,15 +572,43 @@
 		background-color: rgb(244,244,244);
 	}
 	.blist-item {
+		position: relative;
 		height: 32px;
 		font-size: 12px;
 		line-height: 32px;
 	    text-align: left;
 	    padding-left: 10px;
 	}
+	.blist-operate {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		height: 32px;
+		width: 82px;
+	}
+	.blist-operate i {
+		display: inline-block;
+		margin-top: 8px;
+		margin-left: 6px;
+		width: 17px;
+		height: 17px;
+		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
+		cursor: pointer;
+	}
+	.blist-operate .add {
+		background: url(http://s2.music.126.net/style/web2/img/icon.png?ebc504027bf661e93747ae5c27fb270e) no-repeat 0 9999px;
+	    background-position: 1px -699px;
+	}
+	.blist-operate .play {
+	    background-position: -267px -268px;
+	}
 	.blist-item-more {
 		padding-right: 20px;
 		text-align: right;
+		cursor: pointer;
+	}
+	.blist-item-more:hover {
+		text-decoration: underline;
 	}
 	.blist-item .no {
 		float: left;
@@ -573,7 +631,8 @@
 		line-height: 32px;
 		cursor: pointer;
 	}
-	.s-name:hover {
+	.s-name-hover {
 		text-decoration: underline;
+		max-width: 100px !important;
 	}
 </style>
