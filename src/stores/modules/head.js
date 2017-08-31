@@ -1,3 +1,4 @@
+import avatar from '@/assets/images/avatar.jpg'
 const head = {
 	state: {
 		// 一级菜单项
@@ -18,6 +19,13 @@ const head = {
 				text: '下载客户端',
 				isActive: false
 			}
+		},
+		// 用户信息
+		user: {
+			nickname: 'daief',
+			// 不能使用 avatar: '../assets/images/avatar.jpg',这样会当成字符串处理，
+			// 使用import avatar from '@/assets/images/avatar.jpg'导入
+			avatar: avatar
 		}
 	},
 	mutations: {
@@ -41,7 +49,8 @@ const head = {
 		}
 	},
 	getters: {
-		TabList: state => state.tabList
+		TabList: state => state.tabList,
+		User: state => state.user
 	}
 }
 
