@@ -98,7 +98,8 @@
 									<img :src="$store.getters.BList[0].img">
 									<div class="blist-top-right">
 										<span class="title">{{$store.getters.BList[0].name}}</span>
-										<span class="play"></span>
+										<span class="play" title="播放" 
+											@click.stop.prevent="blistAllPlay($store.getters.BList[0].songs)"></span>
 										<span class="subscribe"></span>
 									</div>
 								</div>
@@ -214,6 +215,18 @@
 			},
 			nextWrapPage () {
 				this.imgIndex = (this.imgIndex + 1) % this.imgsArray.length
+			},
+			// 播放整个榜单歌曲
+			blistAllPlay(songs) {
+				this.$store.dispatch('setPlayList', [])
+				for (let i = 0; i < songs.length; i++) {
+					this.$store.dispatch('gainSongById', songs[i].id)
+					this.$store.dispatch('addSongToPlayList', this.$store.getters.SongById)
+				}
+				this.$store.dispatch('setPlayIndex', 0)
+				this.$store.dispatch('setMusic', this.$store.getters.PlayList[0])
+				// 显示提示
+				this.$store.dispatch('showTip', '已开始播放')
 			},
 			// 榜单列表鼠标悬浮事件
 			blistItemMouseOver (order, index) {

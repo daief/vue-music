@@ -59,7 +59,7 @@ export default {
       this.$store.dispatch('setPlayList', (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).playList) || res.data.list)
       // 获取本地值，如果存在
       this.$store.dispatch('setPlayIndex', (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).playIndex) || 0)
-      this.$store.dispatch('setMusic', res.data.list[this.$store.getters.PlayIndex])
+      this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
     }, (err) => {
       console.log(err)
     })
