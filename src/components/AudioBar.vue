@@ -285,6 +285,7 @@
 		},
 		mounted () {
 			this.$store.dispatch('setPlayer', this.$refs.audio)
+			this.$store.getters.Player.volume = this.volume
 		},
 		watch: {
 			volume (newvalue) {
