@@ -132,7 +132,8 @@
 			},
 			...mapGetters([
 				'PlayIndex',
-	            'IsShowTip'
+	            'IsShowTip',
+	            'PlayList'
 	        ])
 		},
 		methods: {
@@ -312,6 +313,12 @@
 						this.$store.dispatch('hideTip')
 					}, 2500)
 				}
+			},
+			// watch PlayList
+			PlayList(newvalue) {
+				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				loaclData.playList = newvalue
+				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
 			}
 		}
 	}

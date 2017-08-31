@@ -55,8 +55,9 @@ export default {
   created () {
     // 播放列表
     axios.get('static/data/play_list.json').then((res) => {
-      this.$store.dispatch('setPlayList', res.data.list)
-
+      // 获取本地列表，如果存在
+      this.$store.dispatch('setPlayList', (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).playList) || res.data.list)
+      // 获取本地值，如果存在
       this.$store.dispatch('setPlayIndex', (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).playIndex) || 0)
       this.$store.dispatch('setMusic', res.data.list[this.$store.getters.PlayIndex])
     }, (err) => {
