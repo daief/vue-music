@@ -113,8 +113,11 @@
 										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == 0 && blistItemRecord.index == index">
-										<i class="play" title="播放"></i>
-										<i class="add" title="添加到播放列表"></i>
+										<i class="play" title="播放" 
+											@click.stop.prevent="blistItemPlay(song.id)"></i>
+										<i class="add" title="添加到播放列表"
+											@click.stop.prevent="blistItemAdd(song.id)"></i>
+										<i class="sub" title="收藏？不存在的~"></i>
 									</div>
 								</div>
 								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
@@ -225,6 +228,28 @@
 					order: -1,
 					index: -1
 				}
+			},
+			// 榜单列表项的播放事件
+			blistItemPlay(id) {
+				// 先添加到列表
+				this.blistItemAdd(id)
+				// 再播放
+				for (let i = 0; i < this.$store.getters.PlayList.length; i++) {
+					if (id == this.$store.getters.PlayList[i].id) {
+						this.$store.dispatch('setPlayIndex', i)
+						this.$store.dispatch('setMusic', this.$store.getters.PlayList[i])
+						break
+					}
+				}
+				// 显示提示
+				this.$store.dispatch('showTip', '已开始播放')
+			},
+			// 榜单列表项的添加列表
+			blistItemAdd(id) {
+				this.$store.dispatch('gainSongById', id)
+				this.$store.dispatch('addSongToPlayList', this.$store.getters.SongById)
+				// 显示提示
+				this.$store.dispatch('showTip', '已添加到播放列表')
 			}
 		},
 		created () {
@@ -607,6 +632,12 @@
 	}
 	.blist-operate .play:hover {
 	    background-position: -267px -288px;
+	}
+	.blist-operate .sub {
+        background-position: -297px -268px;
+	}
+	.blist-operate .sub:hover {
+	    background-position: -297px -288px;
 	}
 	.blist-item-more {
 		padding-right: 20px;

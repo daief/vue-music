@@ -62,7 +62,8 @@
 			<!-- 列表开关 -->
 			<div class="list-switch" @click.stop.prevent="toggleIsShowList">
 				{{this.$store.getters.PlayList.length}}
-				
+				<!-- 提示 -->
+				<div class="bar-tip" v-show="IsShowTip">{{$store.getters.TipText}}</div>
 			</div>
 		</div>
 		<PlayList class="play-list" v-show="$store.getters.IsShowList"></PlayList>
@@ -130,7 +131,8 @@
 				}
 			},
 			...mapGetters([
-	            'PlayIndex'
+				'PlayIndex',
+	            'IsShowTip'
 	        ])
 		},
 		methods: {
@@ -302,6 +304,14 @@
 				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
 				loaclData.playIndex = newvalue
 				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+			},
+			IsShowTip (newvalue) {
+				// 检测到提示信息显示，一段时间后自动隐藏
+				if (newvalue) {
+					setTimeout(() => {
+						this.$store.dispatch('hideTip')
+					}, 2500)
+				}
 			}
 		}
 	}
@@ -575,6 +585,7 @@
 	}
 	/*列表开关*/
 	.list-switch {
+		position: relative;
 		width: 59px;
 		height: 25px;
 		background: url(../assets/images/playbar.png) no-repeat;
@@ -597,5 +608,18 @@
 		margin-left: -30em;
 
 		transition: all 0.3s;
+	}
+	/*提示*/
+	.bar-tip {
+		position: absolute;
+	    top: -62px;
+	    right: -6px;
+	    width: 152px;
+	    height: 49px;
+	    text-align: center;
+	    color: #fff;
+	    line-height: 37px;
+	    background: url(../assets/images/playbar.png) no-repeat 0 9999px;
+	    background-position: 0 -287px;
 	}
 </style>

@@ -26,6 +26,10 @@ const audio = {
 		isShowVolume: false,
 		// 列表是否show
 		isShowList: false,
+		// 提示是否展示
+		isShowTip: false,
+		// 提示文字
+		tipText: '',
 		// 列表索引
 		playIndex: 0
 	},
@@ -93,6 +97,27 @@ const audio = {
 		// 设置isShowList
 		setIsShowList(state, obj) {
 			state.isShowList = obj
+		},
+		// 显示提示
+		showTip(state, obj) {
+			state.isShowTip = true
+			state.tipText = obj
+		},
+		// 隐藏提示
+		hideTip(state) {
+			state.isShowTip = false
+			state.tipText = ''
+		},
+		// playList中添加歌曲
+		addSongToPlayList(state, obj) {
+			let isExist = false
+			for (let i = 0; i < state.playList.length; i++) {
+				if (obj.id == state.playList[i].id) {
+					isExist = true
+					break
+				}
+			}
+			if (!isExist)	state.playList.push(obj)
 		}
 	},
 	// 提交mutations
@@ -148,6 +173,18 @@ const audio = {
 		// 设置isShowList
 		setIsShowList({commit}, obj) {
 			commit('setIsShowList', obj)
+		},
+		// 显示tip
+		showTip({commit}, obj) {
+			commit('showTip', obj)
+		},
+		// 隐藏提示
+		hideTip({commit}) {
+			commit('hideTip')
+		},
+		// playList中添加歌曲
+		addSongToPlayList({commit}, obj) {
+			commit('addSongToPlayList', obj)
 		}
 	},
 	getters: {
@@ -170,7 +207,11 @@ const audio = {
 		// 获取isShowList
 		IsShowList: state => state.isShowList,
 		// 获取canplay
-		Canplay: state => state.canplay
+		Canplay: state => state.canplay,
+		// 获取isShowTip
+		IsShowTip: state => state.isShowTip,
+		// 获取tipText
+		TipText: state => state.tipText
 	}
 }
 
