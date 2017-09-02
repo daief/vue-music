@@ -46,10 +46,11 @@
 								<div class="button">
 									<span class="icon-headset"></span>
 									<span class="number">{{item.number}}</span>
-									<a href="#" class="icon-play"></a>
+									<a href="javascript:;" class="icon-play" 
+										@click.stop.prevent="blistAllPlay(item.songs)"></a>
 								</div>
 							</div>
-							<a href="#" class="desc">{{item.desc}}</a>
+							<a href="javascript:;" class="desc">{{item.desc}}</a>
 						</div>
 					</div>
 				</div>
@@ -73,10 +74,11 @@
 								<div class="button">
 									<span class="icon-headset"></span>
 									<span class="number">{{item.number}}</span>
-									<a href="#" class="icon-play"></a>
+									<a href="javascript:;" class="icon-play"
+										@click.stop.prevent="blistAllPlay(item.songs)"></a>
 								</div>
 							</div>
-							<a href="#" class="desc">{{item.desc}}</a>
+							<a href="javascript:;" class="desc">{{item.desc}}</a>
 						</div>
 					</div>
 				</div>
