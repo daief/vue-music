@@ -29,7 +29,9 @@ export default {
   computed: { 
     backTopStyle () {
       return {
-        'opacity': this.windowPageYOffset > 170? 1: 0
+        'opacity': this.windowPageYOffset > 170? 1: 0,
+        'height': this.windowPageYOffset > 170? '44px': 0,
+        'width': this.windowPageYOffset > 170? '49px': 0
       }
     }
   },
@@ -50,6 +52,12 @@ export default {
     }
   },
   mounted () {
+    // console.log(window.screen.width() + 'asd')
+    if (document.body.clientWidth < 1279) {
+      document.getElementById('app').style.display = 'none'
+      alert('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡')
+      console.log('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡')
+    }
     window.addEventListener('scroll', this.appScroll)
   },
   created () {
@@ -78,7 +86,7 @@ export default {
     axios.get('static/data/all_music.json').then((res) => {
       this.$store.dispatch('setAllSongs', res.data.songs)
       this.$store.dispatch('gainSongById', 459717294)
-      console.log(this.$store.getters.SongById)
+      console.log('所有歌曲：' + res.data.songs.length)
     }, (err) => {
       console.log(err)
     })
@@ -95,6 +103,9 @@ export default {
     box-sizing:border-box;
     user-select: text; 
   }
+  #app {
+    width: 100%;
+  }
   .back-top {
     position: fixed;
     z-index: 100;
@@ -105,7 +116,7 @@ export default {
     background: url(http://s2.music.126.net/style/web2/img/sprite.png?a30c23da103f33c2b2e7d44eb6d862d5) no-repeat 0 9999px;
     background-position: -265px -47px;
     cursor: pointer;
-    transition: opacity .4s;
+    transition: all .4s;
   }
   .back-top:hover {
     background-position: -325px -47px;

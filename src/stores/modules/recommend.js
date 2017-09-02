@@ -11,6 +11,18 @@ const recommend = {
 				"img": "",
 				"name": "",
 				"songs": []
+			},
+			{
+				"id": 0,
+				"img": "",
+				"name": "",
+				"songs": []
+			},
+			{
+				"id": 0,
+				"img": "",
+				"name": "",
+				"songs": []
 			}
 		]
 	},
