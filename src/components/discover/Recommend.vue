@@ -199,6 +199,12 @@
 </template>
 
 <script>
+	// 只是不想控制台出现一大堆https请求http的警告
+	import wrap_18607035278848184 from '@/assets/wrap_images/18607035278848184.jpg'
+	import wrap_19117208672462334 from '@/assets/wrap_images/19117208672462334.jpg'
+	import wrap_18616930883538652 from '@/assets/wrap_images/18616930883538652.jpg'
+	import wrap_19020451649211508 from '@/assets/wrap_images/19020451649211508.jpg'
+	import wrap_19196373509656967 from '@/assets/wrap_images/19196373509656967.jpg'
 	export default {
 		name: 'Recommend',
 		data () {
@@ -206,23 +212,23 @@
 				// 轮播图片链接&主色调
 				imgsArray: [
 					{
-						url: 'http://p1.music.126.net/ixddIer4fctxuZkjs0EpMA==/18607035278848184.jpg',
+						url: wrap_18607035278848184,
 						mainColor: 'rgb(255, 240, 1)'
 					},
 					{
-						url: 'http://p1.music.126.net/37iWrfqQvLBOzuMpukCnvQ==/19117208672462334.jpg',
+						url: wrap_19117208672462334,
 						mainColor: '#FFF'
 					},
 					{
-						url: 'http://p1.music.126.net/Svl_W0HP7YPsnkRRhuYfdg==/18616930883538652.jpg',
+						url: wrap_18616930883538652,
 						mainColor: '#020123'
 					},
 					{
-						url: 'http://p1.music.126.net/FAzLlV7hQAffgZRTvz6Zow==/19020451649211508.jpg',
+						url: wrap_19020451649211508,
 						mainColor: 'rgb(22, 5, 15)'
 					},
 					{
-						url: 'http://p1.music.126.net/Ju4JzOllkI-VtOQ1N6NTyA==/19196373509656967.jpg',
+						url: wrap_19196373509656967,
 						mainColor: 'rgb(68, 169, 187)'
 					}
 				],

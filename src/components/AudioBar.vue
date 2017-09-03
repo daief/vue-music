@@ -221,7 +221,6 @@
 			// audio地址出错
 			musicError () {
 				if (this.$store.getters.Music.id != 0) {
-					console.log('error')
 					// 显示提示
 					this.$store.dispatch('showTip', '播放失败:' + this.$store.getters.Music.name)
 					this.nextMusic()
