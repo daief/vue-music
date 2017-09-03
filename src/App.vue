@@ -123,7 +123,7 @@
         background: url(http://s2.music.126.net/style/web2/img/sprite.png?a30c23da103f33c2b2e7d44eb6d862d5) no-repeat 0 9999px;
         background-position: -265px -47px;
         cursor: pointer;
-        transition: all .4s;
+        transition: opacity,height .4s;
     }
     .back-top:hover {
         background-position: -325px -47px;

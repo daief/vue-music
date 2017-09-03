@@ -357,7 +357,7 @@
 		width: 100%;
 		padding-top: 10px;
 		zoom: 1;
-		z-index: 1000;
+		z-index: 100;
 		/*border: solid 1px black;*/
 		/*background-color: rgba(0,0,0,0.5);*/
 		/*background-attachment: fixed;*/
@@ -433,8 +433,15 @@
 	.song-info {
 		height: 20px;
 		font-size: 12px;
+		overflow: hidden;
+		white-space: nowrap;
+	    text-overflow: ellipsis;
 	}
 	.song-info a {
+		display: inline-block;
+		overflow: hidden;
+		white-space: nowrap;
+	    text-overflow: ellipsis;
 		text-decoration: none;
 		color: rgb(120,120,120);
 	}
@@ -443,6 +450,7 @@
 		cursor: pointer;
 	}
 	.song-info a:first-child {
+		max-width: 45%;
 		color: rgb(211,211,211);
 		margin-right: 15px;
 	}
