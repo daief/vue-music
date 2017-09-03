@@ -31,7 +31,27 @@ const audio = {
 		// 提示文字
 		tipText: '',
 		// 列表索引
-		playIndex: 0
+		playIndex: 0,
+		// 所有歌曲信息
+		allSongs: [
+			{
+	            "id": 0,
+	            "url": "",
+	            "name": "",
+	            "singers": [],
+	            "img": "",
+	            "lyric": ""
+	        }
+		],
+		// 根据id搜索的结果
+		songById: {
+			"id": 0,
+            "url": "",
+            "name": "",
+            "singers": [],
+            "img": "",
+            "lyric": ""
+		}
 	},
 	// 改变状态
 	mutations: {
@@ -118,6 +138,31 @@ const audio = {
 				}
 			}
 			if (!isExist)	state.playList.push(obj)
+		},
+		// 设置allSongs
+		setAllSongs(state, obj) {
+			state.allSongs = obj
+		},
+		// 根据id搜索歌曲
+		gainSongById(state, id) {
+			for(let i = 0; i < state.allSongs.length; i++) {
+				if (id == state.allSongs[i].id) {
+					state.songById = state.allSongs[i]
+					break
+				}
+			}
+		},
+		// 根据id数组设置playList
+		setPlayListWithIds(state, ids) {
+			state.playList = []
+			for (let i = 0; i < ids.length; i++) {
+				for(let j = 0; j < state.allSongs.length; j++) {
+					if (ids[i] == state.allSongs[j].id) {
+						state.playList.push(state.allSongs[j])
+						break
+					}
+				}
+			}
 		}
 	},
 	// 提交mutations
@@ -185,6 +230,18 @@ const audio = {
 		// playList中添加歌曲
 		addSongToPlayList({commit}, obj) {
 			commit('addSongToPlayList', obj)
+		},
+		// 设置allsongs
+		setAllSongs({commit}, obj) {
+			commit('setAllSongs', obj)
+		},
+		// 根据id搜索
+		gainSongById({commit}, id) {
+			commit('gainSongById', id)
+		},
+		// 根据id数组设置playList
+		setPlayListWithIds({commit}, ids) {
+			commit('setPlayListWithIds', ids)
 		}
 	},
 	getters: {
@@ -211,7 +268,11 @@ const audio = {
 		// 获取isShowTip
 		IsShowTip: state => state.isShowTip,
 		// 获取tipText
-		TipText: state => state.tipText
+		TipText: state => state.tipText,
+		// 获取allSongs
+		AllSongs: state => state.allSongs,
+		// 获得结果
+		SongById: state => state.songById
 	}
 }
 

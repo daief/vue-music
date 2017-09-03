@@ -1,52 +1,31 @@
+// local storage的版本
+const VERSION = 'v0.01'
+
 const app = {
 	state: {
-		// 所有歌曲信息
-		allSongs: [
-			{
-	            "id": 0,
-	            "url": "",
-	            "name": "",
-	            "singers": [],
-	            "img": "",
-	            "lyric": ""
-	        }
-		],
-		// 根据id搜索的结果
-		songById: {
-			"id": 0,
-            "url": "",
-            "name": "",
-            "singers": [],
-            "img": "",
-            "lyric": ""
+		local_data: {
+			'volume': 0.75,
+			'loopType': 1,
+			'playIndex': 0,
+			// [1,2,3]
+			'playList': [],
+			'version': VERSION
 		}
 	},
 	mutations: {
-		setAllSongs(state, obj) {
-			state.allSongs = obj
-		},
-		gainSongById(state, id) {
-			for(let i = 0; i < state.allSongs.length; i++) {
-				if (id == state.allSongs[i].id) {
-					state.songById = state.allSongs[i]
-					break
-				}
+		setLocal_data(state, obj) {
+			if (obj && obj.version == VERSION) {
+				state.local_data = obj
 			}
 		}
 	},
 	actions: {
-		setAllSongs({commit}, obj) {
-			commit('setAllSongs', obj)
-		},
-		// 根据id搜索
-		gainSongById({commit}, id) {
-			commit('gainSongById', id)
-		}
+		setLocal_data({commit}, obj) {
+			commit('setLocal_data', obj)
+		}		
 	},
 	getters: {
-		AllSongs: state => state.allSongs,
-		// 获得结果
-		SongById: state => state.songById
+		Local_data: state => state.local_data
 	}
 }
 

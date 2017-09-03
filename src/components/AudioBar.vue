@@ -81,11 +81,12 @@
 	export default {
 		name: 'AudioBar',
 		data () {
+			let self = this
 			return {
 				// 0~1
-				volume: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).volume) || 0.75,
+				volume: self.$store.getters.Local_data.volume || 0.75,
 				// 1循环 2单曲 3随机
-				loopType: (JSON.parse(localStorage.getItem('VUE_MUSIC')) && JSON.parse(localStorage.getItem('VUE_MUSIC')).loopType) || 1,
+				loopType: self.$store.getters.Local_data.loopType || 1,
 				// 加载
 				dataLoading: true
 			}
@@ -135,7 +136,8 @@
 			...mapGetters([
 				'PlayIndex',
 	            'IsShowTip',
-	            'PlayList'
+	            'PlayList',
+	            'Local_data'
 	        ])
 		},
 		methods: {
@@ -304,19 +306,36 @@
 		},
 		watch: {
 			volume (newvalue) {
-				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				let loaclData = this.Local_data
 				loaclData.volume = newvalue
-				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+				this.$store.dispatch('setLocal_data', loaclData)
 			},
 			loopType (newvalue) {
-				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				let loaclData = this.Local_data
 				loaclData.loopType = newvalue
-				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+				this.$store.dispatch('setLocal_data', loaclData)
 			},
 			PlayIndex (newvalue) {
-				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
+				let loaclData = this.Local_data
 				loaclData.playIndex = newvalue
-				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
+				this.$store.dispatch('setLocal_data', loaclData)
+			},
+			// watch PlayList
+			PlayList(newvalue) {
+				let loaclData = this.Local_data
+				let ids = []
+				for (let index in newvalue) {
+					ids.push(newvalue[index].id)
+				}
+				loaclData.playList = ids
+				this.$store.dispatch('setLocal_data', loaclData)
+			},
+			Local_data: {
+				handler(newvalue) {
+		      		//要干的事情
+		      		window.localStorage.setItem("VUE_MUSIC", JSON.stringify(newvalue))
+		      	},
+		      	deep: true
 			},
 			IsShowTip (newvalue) {
 				// 检测到提示信息显示，一段时间后自动隐藏
@@ -325,12 +344,6 @@
 						this.$store.dispatch('hideTip')
 					}, 3000)
 				}
-			},
-			// watch PlayList
-			PlayList(newvalue) {
-				let loaclData = JSON.parse(localStorage.getItem('VUE_MUSIC') || '{}')
-				loaclData.playList = newvalue
-				localStorage.setItem('VUE_MUSIC',JSON.stringify(loaclData))
 			}
 		}
 	}
