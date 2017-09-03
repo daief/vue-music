@@ -3,10 +3,12 @@
 		<audio :src="$store.getters.Music.url" 
 			@progress="musicProgress"
 			@loadstart="musicLoadStart"
+			@durationchange="musicDurationChange"
 			@canplay="musicCanplay"
 			@loadedmetadata="musicMetadata" 
 			@timeupdate="musicTimeUpdate" 
-			@ended="musicEnded"ref="audio"></audio>
+			@ended="musicEnded"ref="audio"
+			@error="musicError"></audio>
 		<div class="bar-content">
 			<!-- 播放、上下首按钮 -->
 			<div class="control-div">
@@ -63,7 +65,7 @@
 			<div class="list-switch" @click.stop.prevent="toggleIsShowList">
 				{{this.$store.getters.PlayList.length}}
 				<!-- 提示 -->
-				<div class="bar-tip" v-show="IsShowTip">{{$store.getters.TipText}}</div>
+				<div class="bar-tip" v-show="IsShowTip" @click.stop.prevent="">{{$store.getters.TipText}}</div>
 			</div>
 		</div>
 		<PlayList class="play-list" v-show="$store.getters.IsShowList"></PlayList>
@@ -169,11 +171,13 @@
 			musicLoadStart () {
 				this.$store.dispatch('setCanplay', false)
 			},
+			musicDurationChange () {
+				this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
+			},
 			musicCanplay () {
 				this.$store.dispatch('setCanplay', true)
 			},
 			musicMetadata () {
-				this.$store.dispatch('setDuration', this.$store.getters.Player.duration)
 				this.$store.dispatch('play')
 			},
 			musicTimeUpdate(){
@@ -214,9 +218,18 @@
 				// 更换之后不能马上play，在loadmetadata里play
 				// this.$store.dispatch('play')
 			},
+			// audio地址出错
+			musicError () {
+				if (this.$store.getters.Music.id != 0) {
+					console.log('error')
+					// 显示提示
+					this.$store.dispatch('showTip', '播放失败:' + this.$store.getters.Music.name)
+					this.nextMusic()
+				}
+			},
 			formatSecondTime(second){
-				let min = Number.parseInt(second / 60)
-				let sec = Number.parseInt(second) % 60
+				let min = Number.parseInt(second / 60) || 0
+				let sec = Number.parseInt(second) % 60 || 0
 				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
 			},
 			pointDown(){
@@ -311,7 +324,7 @@
 				if (newvalue) {
 					setTimeout(() => {
 						this.$store.dispatch('hideTip')
-					}, 2500)
+					}, 3000)
 				}
 			},
 			// watch PlayList
@@ -619,14 +632,21 @@
 	/*提示*/
 	.bar-tip {
 		position: absolute;
+		z-index: 3;
 	    top: -62px;
 	    right: -6px;
 	    width: 152px;
 	    height: 49px;
+	    padding-left: 3px;
+	    padding-right: 3px;
 	    text-align: center;
 	    color: #fff;
 	    line-height: 37px;
 	    background: url(../assets/images/playbar.png) no-repeat 0 9999px;
 	    background-position: 0 -287px;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+		white-space: nowrap;
+		word-wrap: normal;
 	}
 </style>
