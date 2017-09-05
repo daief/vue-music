@@ -3,11 +3,10 @@
 # vue-music
 学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版，仅供学习。
 
-## 从中解析出歌曲信息 
-http://music.163.com/api/playlist/detail?id=715645771
-
 ## 使用外链转换工具 | HHTJim.Com Web App V170429
 http://link.hhtjim.com/
+
+[学习记录](https://daief.github.io/2017-09-04/vue-music%E8%AE%B0%E5%BD%95.html#more)
 
 ## Build Setup
 

@@ -23,6 +23,7 @@ const head = {
 		// 用户信息
 		user: {
 			nickname: 'daief',
+			github: 'https://github.com/daief/vue-music',
 			// 不能使用 avatar: '../assets/images/avatar.jpg',这样会当成字符串处理，
 			// 使用import avatar from '@/assets/images/avatar.jpg'导入
 			avatar: avatar

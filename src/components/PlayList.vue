@@ -363,38 +363,3 @@
     	font-size: 14px;
 	}
 </style>
-
-
-
-
-
-<!-- 比如vuex中的state是这样的，有一个userId变量和对应的getter
-export default {
-    state: {
-        userId: 1
-    },
-    getters: {
-        getUserId: state => {
-            return state.userId;
-        },
-mutations: {
-    setUserId(state, newUserId) {
-        state.userId = newUserId;
-    },
-}
-
-那么在组件中可以这样
-import {mapGetters, mapMutations, mapActions} from 'vuex';
-export default{
-    computed: {
-        ...mapGetters([
-            'getUserId'
-        ])
-    },
-    watch: {
-          // 这样就可以在任何组件调用commit('setUserId', xxx);时watch到全局state中userId的变化
-        getUserId: function(newUserId) {
-            let vm = this;
-               ......
-        }
-    } -->

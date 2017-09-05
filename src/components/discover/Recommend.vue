@@ -192,14 +192,15 @@
 				</div>
 			</div>
 			<div class="content-right">
-				
+				<UserInfo></UserInfo>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-	// 只是不想控制台出现一大堆https请求http的警告
+	import UserInfo from './Recommend/UserInfo'
+	// 只是不想控制台出现这部分https请求http的警告
 	import wrap_18607035278848184 from '@/assets/wrap_images/18607035278848184.jpg'
 	import wrap_19117208672462334 from '@/assets/wrap_images/19117208672462334.jpg'
 	import wrap_18616930883538652 from '@/assets/wrap_images/18616930883538652.jpg'
@@ -243,6 +244,9 @@
 					index: -1
 				}
 			}
+		},
+		components: {
+			'UserInfo': UserInfo
 		},
 		computed: {
 			hugeScreenStyle () {
@@ -439,7 +443,7 @@
 	}
 	.content-right {
 		float: right;
-		width: 254px;
+		width: 251px;
 	}
 	.content:after {
 		content: '';
