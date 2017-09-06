@@ -12,8 +12,7 @@
 			</div>
 		</div>
 		<div class="other">
-			<img class="logo" src="../../../assets/logo.png" alt="">
-			<div class="animation" @click.stop.prevent="startClock">
+			<div class="clock">
 				<div id="clock">
 			        <div id="hour" style="">
 			        	<img src="../../../assets/images/hourHand.png" data-type="hour" :style="hourStyle"></div>
@@ -23,6 +22,7 @@
 			        	<img src="../../../assets/images/secondHand.png" data-type="second" :style="secondStyle"></div>
 			    </div>
 			</div>
+			<img class="logo" src="../../../assets/logo.png" alt="">
 		</div>
 	</div>
 </template>
@@ -129,15 +129,22 @@
 		transform: rotateY(720deg);
 	}
 	/*css时钟*/
+	.clock {
+		text-align: center;
+	}
 	#clock {
 		position: relative;
-		width: 378px;
-		height: 378px;
+		width: 200px;
+		height: 200px;
 		background-image: url('../../../assets/images/clockFace.png');
-		left: 50%;
-		margin: 5em 0 0 -189px;
+		background-size: 100% 100%;
+		/*left: 50%;*/
+		margin: 1em auto;
 	}
-
+	#clock img {
+		width: 200px;
+		height: 200px; 
+	}
 	#clock div {
 	    position: absolute;
 	}
