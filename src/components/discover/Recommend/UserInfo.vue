@@ -15,11 +15,11 @@
 			<img class="logo" src="../../../assets/logo.png" alt="">
 			<div class="animation" @click.stop.prevent="startClock">
 				<div id="clock">
-			        <div id="hour" ref="hour" style="">
-			        	<img src="../../../assets/images/hourHand.png" data-type="hour"></div>
-			        <div id="minute" ref="minute" style="">
-			        	<img src="../../../assets/images/minuteHand.png" data-type="minute"></div>
-			        <div id="second" ref="second" style="">
+			        <div id="hour" style="">
+			        	<img src="../../../assets/images/hourHand.png" data-type="hour" :style="hourStyle"></div>
+			        <div id="minute" style="">
+			        	<img src="../../../assets/images/minuteHand.png" data-type="minute" :style="minuteStyle"></div>
+			        <div id="second" >
 			        	<img src="../../../assets/images/secondHand.png" data-type="second" :style="secondStyle"></div>
 			    </div>
 			</div>
@@ -31,44 +31,45 @@
 	export default {
 		name: 'UserInfo',
 		data: function () {
+			let date = new Date()
 			return {
-				time: new Date()
+				second: date.getSeconds(),
+				minute: date.getMinutes(),
+				hour: date.getHours() % 12
 			}
 		},
 		computed: {
 			secondStyle () {
+				let angle = this.second * 6 % 360
 				return {
-					'transform': 'rotate(' + this.time.getSeconds() * 6 + ' deg)'
+					transform: 'rotate(' + angle + 'deg)'
+				}
+			},
+			minuteStyle () {
+				let angle = this.minute * 6 % 360
+				return {
+					transform: 'rotate(' + angle + 'deg)'
+				}
+			},
+			hourStyle () {
+				let angle = (360/12) * this.hour + (360/(12*60)) * this.minute
+				return {
+					transform: 'rotate(' + angle + 'deg)'
 				}
 			}
 		},
 		methods: {
-			startClock () {
-				console.log('startClock')
-				var angle = 360/60;
-				var date = new Date()
-				var hour = date.getHours();
-				if(hour > 12) {
-					hour = hour - 12;
-				}
-				var minute = date.getMinutes();
-				var second = date.getSeconds();
-				var hourAngle = (360/12)*hour + (360/(12*60))*minute + 270;
 
-				document.querySelector('#second img').style['transform'] = 'rotate('+angle*second+'deg)'
-				document.querySelector('#minute img').style['transform'] = 'rotate('+angle*minute+'deg)'
-				document.querySelector('#hour img').style['transform'] = 'rotate('+hourAngle+'deg)'
-			}
 		},
 		created () {
-			// this.startClock()
+			
 		},
 		mounted () {
-			// setTimeout(this.startClock(), 2000)
-			// this.startClock()
-			document.querySelector('#second img').style['transform'] = 'rotate(-3600000deg)'
-			document.querySelector('#minute img').style['transform'] = 'rotate(-36000deg)'
-			document.querySelector('#hour img').style['transform'] = 'rotate(-360deg)'
+			setTimeout(() => {
+				document.querySelector('#second img').style['transform'] = 'rotate(3600000deg)'
+				document.querySelector('#minute img').style['transform'] = 'rotate(36000deg)'
+				document.querySelector('#hour img').style['transform'] = 'rotate(360deg)'
+			}, 100)
 		}
 	}
 </script>
