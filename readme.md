@@ -3,6 +3,8 @@
 # vue-music
 学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版，仅供学习。
 
+2017年9月10日：暂停了，外链转的网易云全都用不了了，等空了、有时间学习[网易云音乐nodejs api](https://github.com/Binaryify/NeteaseCloudMusicApi)再继续。
+
 ## 使用外链转换工具 | HHTJim.Com Web App V170429
 http://link.hhtjim.com/
 

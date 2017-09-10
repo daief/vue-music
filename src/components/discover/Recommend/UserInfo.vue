@@ -13,14 +13,16 @@
 		</div>
 		<div class="other">
 			<div class="clock">
-				<div id="clock">
-			        <div id="hour" style="">
-			        	<img src="../../../assets/images/hourHand.png" data-type="hour" :style="hourStyle"></div>
-			        <div id="minute" style="">
-			        	<img src="../../../assets/images/minuteHand.png" data-type="minute" :style="minuteStyle"></div>
-			        <div id="second" >
-			        	<img src="../../../assets/images/secondHand.png" data-type="second" :style="secondStyle"></div>
-			    </div>
+				<a href="https://paulrhayes.com/an-analogue-clock-using-only-css/" target="_Blank" title="By Paul Hayes">
+					<div id="clock">
+				        <div id="hour" style="">
+				        	<img src="../../../assets/images/hourHand.png" data-type="hour" :style="hourStyle"></div>
+				        <div id="minute" style="">
+				        	<img src="../../../assets/images/minuteHand.png" data-type="minute" :style="minuteStyle"></div>
+				        <div id="second" >
+				        	<img src="../../../assets/images/secondHand.png" data-type="second" :style="secondStyle"></div>
+				    </div>
+				</a>
 			</div>
 			<img class="logo" src="../../../assets/logo.png" alt="">
 		</div>
@@ -136,7 +138,7 @@
 		position: relative;
 		width: 200px;
 		height: 200px;
-		background-image: url('../../../assets/images/clockFace.png');
+		background-image: url('../../../assets/images/clockFace200x200.png');
 		background-size: 100% 100%;
 		/*left: 50%;*/
 		margin: 1em auto;
