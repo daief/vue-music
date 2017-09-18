@@ -38,7 +38,7 @@
 			<div class="body-right">
 				<div class="no-lyric" v-show="!$store.getters.Music.lyric">暂时没有歌词</div>
 				<div class="lyric" :style="lyricContentStyle">
-					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('↵')"
+					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('\n')"
 						:class="{'line-active': index == currentLyricIndex}">
 						{{line.replace(/\[(\d*):(\d*)\.(\d*)\]/, "") }}
 						<br />
@@ -81,8 +81,8 @@
 			// 歌词索引
 			currentLyricIndex () {
 				let i = 0
-				for(i = 0; i < this.$store.getters.Music.lyric.split('↵').length; i++) {
-					var line = this.$store.getters.Music.lyric.split('↵')[i]
+				for(i = 0; i < this.$store.getters.Music.lyric.split('\n').length; i++) {
+					var line = this.$store.getters.Music.lyric.split('\n')[i]
 					if (line) {
 						let strTime = line.match(/\[(.+)\]/)[1]
 						let second = Number(strTime.split(':')[0]) * 60 + Number(strTime.split(':')[1])

@@ -15,7 +15,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     import AudioBar from './components/AudioBar.vue'
     import HeaderBar from './components/HeaderBar.vue'
     export default {
@@ -52,20 +51,15 @@
             }
         },
         mounted() {
-            // console.log(window.screen.width() + 'asd')
-            // if (document.body.clientWidth < 1279) {
-            //     document.getElementById('app').style.display = 'none'
-            //     alert('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡') 
-            //     console.log('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡')
-            // }
             window.addEventListener('scroll', this.appScroll)
+            console.log(this.MUrl)
         },
         created() {
             // 读取local storage
             this.$store.dispatch('setLocal_data', JSON.parse(window.localStorage.getItem("VUE_MUSIC")))
 
             // 推荐页面
-            axios.get('static/data/recommend.json').then((res) => {
+            this.$axios.get('static/data/recommend.json').then((res) => {
                 this.$store.dispatch('setHotList', res.data.hot) 
                 this.$store.dispatch('setPersonalList', res.data.personal) 
                 this.$store.dispatch('setBList', res.data.bList)
@@ -75,13 +69,13 @@
             })
 
             // 加载all_music.json
-            axios.get('static/data/all_music.json').then((res) => {
+            this.$axios.get('static/data/all_music.json').then((res) => {
                 this.$store.dispatch('setAllSongs', res.data.songs)
                 // this.$store.dispatch('gainSongById', 459717294)
                 console.log('所有歌曲：' + res.data.songs.length)
 
                 // 加载完所有歌曲后再加载播放列表
-                axios.get('static/data/play_list.json').then((res2) => {
+                this.$axios.get('static/data/play_list.json').then((res2) => {
                     let ids = this.$store.getters.Local_data.playList
                     // 存在本地缓存
                     if (ids.length > 0) {

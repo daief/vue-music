@@ -137,7 +137,8 @@
 				'PlayIndex',
 	            'IsShowTip',
 	            'PlayList',
-	            'Local_data'
+	            'Local_data',
+	            'Music'
 	        ])
 		},
 		methods: {
@@ -344,6 +345,44 @@
 						this.$store.dispatch('hideTip')
 					}, 3000)
 				}
+			},
+			// 播放的音乐
+			Music: {
+				handler(newvalue, oldvalue) {
+					// id改变的时候就是换歌了，换歌要换图片，歌手，歌词...
+					if (newvalue.id && newvalue.id != oldvalue.id) {
+						let music = {
+				            "id": 0,
+				            "url": "",
+				            "name": "",
+				            "singers": [],
+				            "album": "",
+				            "img": "",
+				            "lyric": ""
+				        }
+						music.id = newvalue.id
+						this.$axios.all([
+					    	this.$axios.get(this.MUrl + 'song/detail?ids=' + music.id),
+					    	this.$axios.get(this.MUrl + 'music/url?id=' + music.id),
+						    this.$axios.get(this.MUrl + 'lyric?id=' + music.id)
+						]).then(this.$axios.spread((songs, url, lyric) => {
+							console.log(url)
+						    music.url = url.data.data[0].url || ''
+						    music.name = songs.data.songs[0].name || ''
+						    music.singers = songs.data.songs[0].ar.map(function(value, index, array) {
+									return value.name
+								}) || []
+						    music.album = songs.data.songs[0].al.name || ''
+						    music.img = songs.data.songs[0].al.picUrl || ''
+						    music.lyric = lyric.data.lrc.lyric || ''
+
+						    console.log(music)
+
+						    this.$store.dispatch('setMusic', music)
+					  	}))
+					}
+				},
+				deep: true
 			}
 		}
 	}
