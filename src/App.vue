@@ -78,14 +78,14 @@
                 this.$axios.get('static/data/play_list.json').then((res2) => {
                     let ids = this.$store.getters.Local_data.playList
                     // 存在本地缓存
-                    if (ids.length > 0) {
-                        this.$store.dispatch('setPlayListWithIds', ids) 
-                        this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
-                    } else {
-                        this.$store.dispatch('setPlayListWithIds', res2.data.ids) 
+                    // if (ids.length > 0) {
+                    //     this.$store.dispatch('setPlayListWithIds', ids) 
+                    //     this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
+                    // } else {
+                        this.$store.dispatch('setPlayList', res2.data.list) 
                         this.$store.dispatch('setPlayIndex', 0)
-                    }
-                    this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+                    // }
+                    this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
                 },(err) => {
                     console.log(err)
                 })

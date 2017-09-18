@@ -21,7 +21,16 @@ const audio = {
             "lyric": ""
         },
         // playList
-        playList: [],
+        playList: [
+        	{
+	            "id": 0,
+	            "name": "",
+	            "singers": [],
+	            "album": "",
+	            "img": "",
+	            "duration": 0	            
+        	}
+        ],
 		// 音量是否show
 		isShowVolume: false,
 		// 列表是否show
@@ -163,6 +172,38 @@ const audio = {
 					}
 				}
 			}
+		},
+		/*****************************playList改版******************************/
+		// playList中添加歌曲
+		addSongToPlayList1(state, obj) {
+			let isExist = false
+			for (let i = 0; i < state.playList.length; i++) {
+				if (obj.id == state.playList[i].id) {
+					isExist = true
+					break
+				}
+			}
+			if (!isExist)	state.playList.push(obj)
+		},
+		// 将PlayList中index位置的值设置成music（不包括url，lyric）
+		setMusicFormPlayList(state, index){
+			let m = {
+	            "id": 0,
+	            "url": "",
+	            "name": "",
+	            "singers": [],
+	            "album": "",
+	            "img": "",
+	            "lyric": ""
+	        }
+	        m.id = state.playList[index].id
+	        m.name = state.playList[index].name
+	        m.singers = state.playList[index].singers
+	        m.album = state.playList[index].album
+	        m.img = state.playList[index].img
+	        // 暂时设置成playList里的值，duration在资源加载好后会获得真正的数据
+	        state.duration = state.playList[index].duration
+	        state.music = m
 		}
 	},
 	// 提交mutations
@@ -242,6 +283,10 @@ const audio = {
 		// 根据id数组设置playList
 		setPlayListWithIds({commit}, ids) {
 			commit('setPlayListWithIds', ids)
+		},
+		/*****************************playList改版******************************/
+		setMusicFormPlayList({commit}, index){
+			commit('setMusicFormPlayList', index)
 		}
 	},
 	getters: {

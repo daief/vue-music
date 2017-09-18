@@ -102,7 +102,7 @@
 				for (let i = 0; i < this.$store.getters.PlayList.length; i++) {
 					if (songId == this.$store.getters.PlayList[i].id) {
 						this.$store.dispatch('setPlayIndex', i)
-						this.$store.dispatch('setMusic', this.$store.getters.PlayList[i])
+						this.$store.dispatch('setMusicFormPlayList', i)
 						break
 					}
 				}

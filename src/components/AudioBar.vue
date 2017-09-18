@@ -88,7 +88,9 @@
 				// 1循环 2单曲 3随机
 				loopType: self.$store.getters.Local_data.loopType || 1,
 				// 加载
-				dataLoading: true
+				dataLoading: true,
+				// 请求数据中
+				apiRequesting: true
 			}
 		},
 		components: {
@@ -146,7 +148,7 @@
 				let listLength = this.$store.getters.PlayList.length
 				let index = this.$store.getters.PlayIndex + listLength
 				this.$store.dispatch('setPlayIndex', --index % listLength)
-				this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+				this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
 				this.$store.getters.Player.currentTime = 0
 			},
 			togglePlay() {
@@ -161,7 +163,7 @@
 					let listLength = this.$store.getters.PlayList.length
 					let index = this.$store.getters.PlayIndex
 					this.$store.dispatch('setPlayIndex', (++index) % listLength)
-					this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+					this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
 					this.$store.getters.Player.currentTime = 0
 				}
 				else {
@@ -216,14 +218,14 @@
 					}
 					this.$store.dispatch('setPlayIndex', random)
 				}
-				this.$store.dispatch('setMusic', this.$store.getters.PlayList[this.$store.getters.PlayIndex])
+				this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
 				this.$store.getters.Player.currentTime = 0
 				// 更换之后不能马上play，在loadmetadata里play
 				// this.$store.dispatch('play')
 			},
 			// audio地址出错
 			musicError () {
-				if (this.$store.getters.Music.id != 0) {
+				if (this.$store.getters.Music.id != 0 && !this.apiRequesting) {
 					// 显示提示
 					this.$store.dispatch('showTip', '播放失败:' + this.$store.getters.Music.name)
 					this.nextMusic()
@@ -349,37 +351,22 @@
 			// 播放的音乐
 			Music: {
 				handler(newvalue, oldvalue) {
-					// id改变的时候就是换歌了，换歌要换图片，歌手，歌词...
+					// id改变的时候就是换歌了，换歌就要抓取url，lyric
 					if (newvalue.id && newvalue.id != oldvalue.id) {
-						let music = {
-				            "id": 0,
-				            "url": "",
-				            "name": "",
-				            "singers": [],
-				            "album": "",
-				            "img": "",
-				            "lyric": ""
-				        }
+						let music = this.$store.getters.Music
 						music.id = newvalue.id
-						this.dataLoading = true
+						this.apiRequesting = true
 						this.$axios.all([
-					    	this.$axios.get(this.MUrl + 'song/detail?ids=' + music.id),
 					    	this.$axios.get(this.MUrl + 'music/url?id=' + music.id),
 						    this.$axios.get(this.MUrl + 'lyric?id=' + music.id)
-						]).then(this.$axios.spread((songs, url, lyric) => {
+						]).then(this.$axios.spread((url, lyric) => {
 						    music.url = url.data.data[0].url || ''
-						    music.name = songs.data.songs[0].name || ''
-						    music.singers = songs.data.songs[0].ar.map(function(value, index, array) {
-									return value.name
-								}) || []
-						    music.album = songs.data.songs[0].al.name || ''
-						    music.img = songs.data.songs[0].al.picUrl || ''
 						    music.lyric = lyric.data.lrc.lyric || ''
 
 						    this.$store.dispatch('setMusic', music)
-						    this.dataLoading = false
+						    this.apiRequesting = false
 					  	})).catch((error) => {
-					  		this.dataLoading = false
+					  		this.apiRequesting = false
 							console.log(error)
 					  	})
 					}
