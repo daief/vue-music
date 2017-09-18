@@ -42,15 +42,15 @@
 					<div class="panel-body">
 						<div class="p-b-item"  v-for="(item,index) in $store.getters.HotList">
 							<div  style="position:relative;">
-								<img :src="item.img" alt="">
+								<img :src="item.picUrl" alt="">
 								<div class="button">
 									<span class="icon-headset"></span>
-									<span class="number">{{item.number}}</span>
-									<a href="javascript:;" class="icon-play" 
-										@click.stop.prevent="blistAllPlay(item.songs)"></a>
+									<span class="number">{{item.playCount}}</span>
+									<a href="javascript:;" class="icon-play"
+										@click.stop.prevent="playAllList(item.id)"></a>
 								</div>
 							</div>
-							<a href="javascript:;" class="desc">{{item.desc}}</a>
+							<a href="javascript:;" class="desc">{{item.name}}</a>
 						</div>
 					</div>
 				</div>
@@ -329,6 +329,29 @@
 				this.$store.dispatch('addSongToPlayList', this.$store.getters.SongById)
 				// 显示提示
 				this.$store.dispatch('showTip', '已添加到播放列表')
+			},
+			/*****************************改写**********************************/
+			playAllList(listId){
+				this.$axios.get(this.MUrl + 'playlist/detail?id=' + listId)
+				.then((rsp) => {
+					let list = rsp.data.playlist.tracks.map((v,i) => {
+						return {
+							"id": v.id,
+				            "name": v.name,
+				            "singers": [
+				            	"暂无"
+				            ],
+				            "album": v.al.name,
+				            "img": v.al.picUrl,
+				            "duration": v.dt
+						}
+					})
+					this.$store.dispatch('setPlayList', list)
+					this.$store.dispatch('setPlayIndex', 0)
+					this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
+				}).catch((error) => {
+					console.log(error)
+				})
 			}
 		},
 		created () {

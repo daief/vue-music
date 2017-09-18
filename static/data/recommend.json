@@ -78,5 +78,79 @@
 			"name": "凑数榜",
 			"songs": [{"id":4917141,"name":"大切な场所"},{"id":401250894,"name":"Up All Night"},{"id":30474370,"name":"I Know You"},{"id":5040138,"name":"My Love"},{"id":854729,"name":"ニッポン笑顔百景"},{"id":35920006,"name":"Wish☆Wing"},{"id":1217607,"name":"What If"},{"id":29107444,"name":"いーあるふぁんくらぶ"},{"id":28593014,"name":"ぽっぴんジャンプ♪"},{"id":809268,"name":"sweets parade"},{"id":1519358,"name":"Never Let You Go"},{"id":475277298,"name":"ちょこんとふわり"},{"id":1987888,"name":"I Love You"},{"id":438801167,"name":"青、淡き旅"},{"id":29781166,"name":"Dance In Dreams"},{"id":559427,"name":"ゆっこはほんとにバカだなあ"},{"id":456175178,"name":"ときめきエクスペリエンス!"},{"id":452608523,"name":"夢中トラベラー"},{"id":653660,"name":"Growing!"},{"id":5093684,"name":"Just the Way You Are"},{"id":461301613,"name":"戦線のリアリズム"},{"id":2187730,"name":"Born to Make You Happy"},{"id":35447182,"name":"FOOLS"},{"id":444269114,"name":"so beautiful ;- )"},{"id":28176168,"name":"I Believe"},{"id":30621945,"name":"アップルティーの味"},{"id":17081097,"name":"distance"},{"id":22705492,"name":"アイロニ"},{"id":458507422,"name":"春待ちクローバー"},{"id":36586466,"name":"Purpose"},{"id":572048,"name":"寝・逃・げでリセット!"}]
 		}
-	]
+	],
+	"personalized": [
+        {
+            "id": 696129664,
+            "type": 0,
+            "name": "思念止于唇齿，却不愿随风而散",
+            "copywriter": "编辑推荐：思念是种会病入膏肓的病",
+            "picUrl": "http://p1.music.126.net/hMy-Do-aGvXit4VqdVhiBg==/19175482788757042.jpg",
+            "canDislike": false,
+            "playCount": 471549.4,
+            "trackCount": 34,
+            "highQuality": false,
+            "alg": "featured"
+        },
+        {
+            "id": 922791900,
+            "type": 0,
+            "name": "论正确背诗的方式【持续更新",
+            "copywriter": "编辑推荐：这才是背诗的正确姿势",
+            "picUrl": "http://p1.music.126.net/HvlIdazMr-IMxV_F-kD7Ag==/109951163026788047.jpg",
+            "canDislike": false,
+            "playCount": 112390.6,
+            "trackCount": 395,
+            "highQuality": false,
+            "alg": "featured"
+        },
+        {
+            "id": 863577291,
+            "type": 0,
+            "name": "【 原曲 翻唱 混音丨降临 重生 再造 〗",
+            "copywriter": "根据你喜欢的标签 欧美 推荐",
+            "picUrl": "http://p1.music.126.net/p3t_Fh2egxj5RdBI64OJ3g==/18641120139362650.jpg",
+            "canDislike": true,
+            "playCount": 148262.8,
+            "trackCount": 280,
+            "highQuality": false,
+            "alg": "taste"
+        },
+        {
+            "id": 912256078,
+            "type": 0,
+            "name": "R&B柔情男嗓丨萦绕心间的温暖细腻",
+            "copywriter": "热门推荐",
+            "picUrl": "http://p1.music.126.net/2Ru-VwrBY0k3ROEcI7poyQ==/109951163022926005.jpg",
+            "canDislike": true,
+            "playCount": 2607578.2,
+            "trackCount": 112,
+            "highQuality": false,
+            "alg": "cityLevel_unknow"
+        },
+        {
+            "id": 805199918,
+            "type": 0,
+            "name": "想撩妹？用这单就够了",
+            "copywriter": "热门推荐",
+            "picUrl": "http://p1.music.126.net/pkAoiUaNX7ywcMxOvwcUMQ==/19177681811910570.jpg",
+            "canDislike": true,
+            "playCount": 8359552,
+            "trackCount": 57,
+            "highQuality": false,
+            "alg": "cityLevel_unknow"
+        },
+        {
+            "id": 908262904,
+            "type": 0,
+            "name": "医生说我的抖腿已经无药可治了",
+            "copywriter": "热门推荐",
+            "picUrl": "http://p1.music.126.net/4SZ7gkNxL19C7pl3UWGxcA==/109951163019589590.jpg",
+            "canDislike": true,
+            "playCount": 5402565,
+            "trackCount": 89,
+            "highQuality": false,
+            "alg": "cityLevel_unknow"
+        }
+    ]
 }

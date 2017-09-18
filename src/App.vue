@@ -60,7 +60,9 @@
 
             // 推荐页面
             this.$axios.get('static/data/recommend.json').then((res) => {
-                this.$store.dispatch('setHotList', res.data.hot) 
+                // this.$store.dispatch('setHotList', res.data.hot) 
+                // 文档形式的热门推荐
+                this.$store.dispatch('setHotList', res.data.personalized)
                 this.$store.dispatch('setPersonalList', res.data.personal) 
                 this.$store.dispatch('setBList', res.data.bList)
                 // console.log(this.$store.getters.BList)
@@ -76,15 +78,15 @@
 
                 // 加载完所有歌曲后再加载播放列表
                 this.$axios.get('static/data/play_list.json').then((res2) => {
-                    let ids = this.$store.getters.Local_data.playList
+                    let list = this.$store.getters.Local_data.playList
                     // 存在本地缓存
-                    // if (ids.length > 0) {
-                    //     this.$store.dispatch('setPlayListWithIds', ids) 
-                    //     this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
-                    // } else {
+                    if (list.length > 0) {
+                        this.$store.dispatch('setPlayList', list) 
+                        this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
+                    } else {
                         this.$store.dispatch('setPlayList', res2.data.list) 
                         this.$store.dispatch('setPlayIndex', 0)
-                    // }
+                    }
                     this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
                 },(err) => {
                     console.log(err)

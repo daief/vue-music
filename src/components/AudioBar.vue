@@ -326,11 +326,7 @@
 			// watch PlayList
 			PlayList(newvalue) {
 				let loaclData = this.Local_data
-				let ids = []
-				for (let index in newvalue) {
-					ids.push(newvalue[index].id)
-				}
-				loaclData.playList = ids
+				loaclData.playList = newvalue
 				this.$store.dispatch('setLocal_data', loaclData)
 			},
 			Local_data: {
