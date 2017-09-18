@@ -361,12 +361,12 @@
 				            "lyric": ""
 				        }
 						music.id = newvalue.id
+						this.dataLoading = true
 						this.$axios.all([
 					    	this.$axios.get(this.MUrl + 'song/detail?ids=' + music.id),
 					    	this.$axios.get(this.MUrl + 'music/url?id=' + music.id),
 						    this.$axios.get(this.MUrl + 'lyric?id=' + music.id)
 						]).then(this.$axios.spread((songs, url, lyric) => {
-							console.log(url)
 						    music.url = url.data.data[0].url || ''
 						    music.name = songs.data.songs[0].name || ''
 						    music.singers = songs.data.songs[0].ar.map(function(value, index, array) {
@@ -376,10 +376,12 @@
 						    music.img = songs.data.songs[0].al.picUrl || ''
 						    music.lyric = lyric.data.lrc.lyric || ''
 
-						    console.log(music)
-
 						    this.$store.dispatch('setMusic', music)
-					  	}))
+						    this.dataLoading = false
+					  	})).catch((error) => {
+					  		this.dataLoading = false
+							console.log(error)
+					  	})
 					}
 				},
 				deep: true
