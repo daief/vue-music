@@ -1,14 +1,14 @@
 <template>
     <div id="app" @click.self="hideSomething">
         <!-- 顶部菜单条 -->
-        <HeaderBar></HeaderBar>
-        <div @click="hideSomething" style="margin-bottom: 55px;">
+        <HeaderBar style="min-width:1280px;"></HeaderBar>
+        <div @click="hideSomething" style="margin-bottom: 55px;min-width:1280px;">
             <transition name="switch" mode="out-in">
                 <router-view name="app"></router-view>
             </transition>
         </div>
         <!-- 底部播放条 -->
-        <AudioBar></AudioBar>
+        <AudioBar style="min-width:1280px;"></AudioBar>
         <!--  -->
         <div class="back-top" :style="backTopStyle" @click="backToTop"></div>
     </div>
@@ -53,11 +53,11 @@
         },
         mounted() {
             // console.log(window.screen.width() + 'asd')
-            if (document.body.clientWidth < 1279) {
-                document.getElementById('app').style.display = 'none'
-                alert('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡') 
-                console.log('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡')
-            }
+            // if (document.body.clientWidth < 1279) {
+            //     document.getElementById('app').style.display = 'none'
+            //     alert('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡') 
+            //     console.log('推荐使用分辨率1280以上的设备\n我不会告诉你我只是隐藏了div\nヾ(｡｀Д´｡)ﾉ彡')
+            // }
             window.addEventListener('scroll', this.appScroll)
         },
         created() {
