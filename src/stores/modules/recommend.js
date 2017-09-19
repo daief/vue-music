@@ -24,10 +24,31 @@ const recommend = {
 			"20": "台湾Hito排行榜",  
 			"21": "Beatport全球电子舞曲榜"
 		},
-		// 热门推荐
-		hotList: [],
-		// 个性推荐
-		personalList: [],
+		// 热门推荐，结构
+		hotList: [
+			{
+	            "id": 0,
+	            "type": 0,
+	            "name": "",
+	            "copywriter": "",
+	            "picUrl": "",
+	            "canDislike": false,
+	            "playCount": 0,
+	            "trackCount": 0,
+	            "highQuality": false,
+	            "alg": ""
+	        }
+		],
+		// 个性推荐(网友精选碟)
+		personalList: [
+			{
+	            "name": "",
+	            "id": 0,
+	            "coverImgUrl": "",
+	            "description": "",
+	            "playCount": 0
+	        }
+		],
 		// 榜单，到时候得添加三个元素，构造结构
 		bList: [
 			{
@@ -49,43 +70,7 @@ const recommend = {
 			},
 			{"id":0,"name":"","img":"","playCount":0,"description":"","tracks":[{"id":0,"name":"","singers":[],"album":"","img":"","duration":0}]},
 			{"id":0,"name":"","img":"","playCount":0,"description":"","tracks":[{"id":0,"name":"","singers":[],"album":"","img":"","duration":0}]}
-		],
-		// 云音乐新歌榜
-		topListIdx0: {
-			"id": 0,
-			"name": "",
-			"img": "",
-			"playCount": 0,
-			"description": "",
-			"tracks": [
-				{
-		            "id": 0,
-		            "name": "",
-		            "singers": [],
-		            "album": "",
-		            "img": "",
-		            "duration": 0	            
-	        	}
-			]
-		},
-		// 云音乐飙升榜
-		topListIdx3: {
-			"id": 0,
-			"name": "",
-			"img": "",
-			"playCount": 0,
-			"description": "",
-			"tracks": [
-				{
-		            "id": 0,
-		            "name": "",
-		            "singers": [],
-		            "album": "",
-		            "img": "",
-		            "duration": 0	            
-	        	}
-			]
-		}
+		]
 	},
 	mutations: {
 		setHotList(state, obj) {
@@ -96,12 +81,6 @@ const recommend = {
 		},
 		setBList(state, obj) {
 			state.bList = obj
-		},
-		setTopListIdx0(state, obj){
-			state.topListIdx0 = obj
-		},
-		setTopListIdx3(state, obj){
-			state.topListIdx3 = obj
 		}
 	},
 	actions: {
@@ -113,20 +92,12 @@ const recommend = {
 		},
 		setBList({commit}, obj) {
 			commit('setBList', obj)
-		},
-		setTopListIdx0({commit}, obj){
-			commit('setTopListIdx0', obj)
-		},
-		setTopListIdx3({commit}, obj){
-			commit('setTopListIdx3', obj)
-		}		
+		}	
 	},
 	getters: {
 		HotList: state => state.hotList,
 		PersonalList: state => state.personalList,
-		BList: state => state.bList,
-		TopListInx3: state => state.topListIdx3,
-		TopListInx0: state => state.topListIdx0
+		BList: state => state.bList
 	}
 }
 

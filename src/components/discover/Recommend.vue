@@ -54,10 +54,10 @@
 						</div>
 					</div>
 				</div>
-				<!-- 个性化推荐 -->
-				<!-- <div class="panel">
+				<!-- 个性化推荐 实际是网友精选碟-->
+				<div class="panel">
 					<div class="panel-title">
-						<div class="p-t-text">个性化推荐</div>
+						<div class="p-t-text">网友精选碟</div>
 					</div>
 					<div class="panel-body">
 						<div class="p-b-item">
@@ -70,18 +70,18 @@
 						</div>
 						<div class="p-b-item"  v-for="(item,index) in $store.getters.PersonalList">
 							<div  style="position:relative;">
-								<img :src="item.img" alt="">
+								<img :src="item.coverImgUrl" alt="">
 								<div class="button">
 									<span class="icon-headset"></span>
-									<span class="number">{{item.number}}</span>
+									<span class="number">{{item.playCount}}</span>
 									<a href="javascript:;" class="icon-play"
-										@click.stop.prevent="blistAllPlay(item.songs)"></a>
+										@click.stop.prevent="playAllList(item.id)"></a>
 								</div>
 							</div>
-							<a href="javascript:;" class="desc">{{item.desc}}</a>
+							<a href="javascript:;" class="desc">{{item.name}}</a>
 						</div>
 					</div>
-				</div> -->
+				</div>
 				<!-- 榜单 -->
 				<div class="panel">
 					<div class="panel-title">
@@ -94,28 +94,29 @@
 					</div>
 					<div class="panel-body">
 						<div class="blist">
-							<!-- 榜单1 -->
-							<div class="blist-column">
+							<!-- v-for生成榜单begin -->
+							<div class="blist-column" 
+								v-for="(toplist, bListIndex) in $store.getters.BList.slice(0, 3)">
 								<div class="blist-column-top even-bg">
-									<img :src="$store.getters.BList[0].img">
+									<img :src="toplist.img">
 									<div class="blist-top-right">
-										<span class="title">{{$store.getters.BList[0].name}}</span>
+										<span class="title">{{toplist.name}}</span>
 										<span class="play" title="播放" 
-											@click.stop.prevent="playAllTopList($store.getters.BList[0].tracks)"></span>
+											@click.stop.prevent="playAllTopList(toplist.tracks)"></span>
 										<span class="subscribe" title="Ծ‸Ծ"></span>
 									</div>
 								</div>
-								<div v-for="(song,index) in $store.getters.BList[0].tracks.slice(0, 10)"
+								<div v-for="(song,index) in toplist.tracks.slice(0, 10)"
 									class="blist-item odd-bg" 
 									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
-									@mouseover.stop.prevent="blistItemMouseOver(0, index)"
+									@mouseover.stop.prevent="blistItemMouseOver(bListIndex, index)"
 									@mouseleave.stop.prevent="blistItemMouseLeave()">
 									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
 									<span 
-										:class="{'s-name-hover': blistItemRecord.order == 0 && blistItemRecord.index == index}"
+										:class="{'s-name-hover': blistItemRecord.order == bListIndex && blistItemRecord.index == index}"
 										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
-										v-show="blistItemRecord.order == 0 && blistItemRecord.index == index">
+										v-show="blistItemRecord.order == bListIndex && blistItemRecord.index == index">
 										<i class="play" title="播放" 
 											@click.stop.prevent="blistItemPlay(song)"></i>
 										<i class="add" title="添加到播放列表"
@@ -125,68 +126,7 @@
 								</div>
 								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
 							</div>
-							<!-- 榜单2 -->
-							<div class="blist-column">
-								<div class="blist-column-top even-bg">
-									<img :src="$store.getters.BList[1].img">
-									<div class="blist-top-right">
-										<span class="title">{{$store.getters.BList[1].name}}</span>
-										<span class="play" title="播放" 
-											@click.stop.prevent="playAllTopList($store.getters.BList[1].tracks)"></span>
-										<span class="subscribe" title="Ծ‸Ծ"></span>
-									</div>
-								</div>
-								<div v-for="(song,index) in $store.getters.BList[1].tracks.slice(0, 10)"
-									class="blist-item odd-bg" 
-									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
-									@mouseover.stop.prevent="blistItemMouseOver(1, index)"
-									@mouseleave.stop.prevent="blistItemMouseLeave()">
-									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
-									<span 
-										:class="{'s-name-hover': blistItemRecord.order == 1 && blistItemRecord.index == index}"
-										class="s-name" :title="song.name">{{ song.name }}</span>
-									<div class="blist-operate" 
-										v-show="blistItemRecord.order == 1 && blistItemRecord.index == index">
-										<i class="play" title="播放" 
-											@click.stop.prevent="blistItemPlay(song)"></i>
-										<i class="add" title="添加到播放列表"
-											@click.stop.prevent="blistItemAdd(song)"></i>
-										<i class="sub" title="收藏？不存在的~"></i>
-									</div>
-								</div>
-								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
-							</div>
-							<!-- 榜单3 -->
-							<div class="blist-column">
-								<div class="blist-column-top even-bg">
-									<img :src="$store.getters.BList[2].img">
-									<div class="blist-top-right">
-										<span class="title">{{$store.getters.BList[2].name}}</span>
-										<span class="play" title="播放" 
-											@click.stop.prevent="playAllTopList($store.getters.BList[2].tracks)"></span>
-										<span class="subscribe" title="Ծ‸Ծ"></span>
-									</div>
-								</div>
-								<div v-for="(song,index) in $store.getters.BList[2].tracks.slice(0, 10)"
-									class="blist-item odd-bg" 
-									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
-									@mouseover.stop.prevent="blistItemMouseOver(2, index)"
-									@mouseleave.stop.prevent="blistItemMouseLeave()">
-									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
-									<span 
-										:class="{'s-name-hover': blistItemRecord.order == 2 && blistItemRecord.index == index}"
-										class="s-name" :title="song.name">{{ song.name }}</span>
-									<div class="blist-operate" 
-										v-show="blistItemRecord.order == 2 && blistItemRecord.index == index">
-										<i class="play" title="播放" 
-											@click.stop.prevent="blistItemPlay(song)"></i>
-										<i class="add" title="添加到播放列表"
-											@click.stop.prevent="blistItemAdd(song)"></i>
-										<i class="sub" title="收藏？不存在的~"></i>
-									</div>
-								</div>
-								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
-							</div>
+							<!-- v-for生成榜单end -->
 						</div>
 					</div>
 				</div>
@@ -322,8 +262,7 @@
 				// 显示提示
 				this.$store.dispatch('showTip', '已添加到播放列表')
 			},
-			/*****************************改写**********************************/
-			// 播放热门推荐这种的所有歌曲
+			// 根据list的id播放列表，播放热门推荐这种的所有歌曲
 			playAllList(listId){
 				this.$axios.get(this.MUrl + 'playlist/detail?id=' + listId)
 				.then((rsp) => {
@@ -342,8 +281,12 @@
 					this.$store.dispatch('setPlayList', list)
 					this.$store.dispatch('setPlayIndex', 0)
 					this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
+					// 显示提示
+					this.$store.dispatch('showTip', '已开始播放')
 				}).catch((error) => {
 					console.log(error)
+					// 显示提示
+					this.$store.dispatch('showTip', '请更换村通网')
 				})
 			},
 			// 播放榜单的所有歌曲
@@ -351,6 +294,7 @@
 				this.$store.dispatch('setPlayList', tracks)
 				this.$store.dispatch('setPlayIndex', 0)
 				this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
+				this.$store.dispatch('showTip', '已开始播放')
 			}
 		},
 		created () {

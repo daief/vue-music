@@ -58,9 +58,24 @@
             // 读取local storage
             this.$store.dispatch('setLocal_data', JSON.parse(window.localStorage.getItem("VUE_MUSIC")))
 
-            // 推荐页面
-            this.$axios.get('static/data/recommend.json').then((res) => {
-                this.$store.dispatch('setHotList', res.data.personalized)
+            // 热门推荐页面
+            this.$axios.get(this.MUrl + 'personalized').then((res) => {
+                this.$store.dispatch('setHotList', res.data.result)
+            },(err) => {
+                console.log(err)
+            })
+
+            // 个性推荐（网友精选碟）
+            this.$axios.get(this.MUrl + 'top/playlist?limit=3&order=new').then((res) => {
+                this.$store.dispatch('setPersonalList', res.data.playlists.map((list) => {
+                    return {
+                        "name": list.name,
+                        "id": list.id,
+                        "coverImgUrl": list.coverImgUrl,
+                        "description": list.description,
+                        "playCount": list.playCount
+                    }
+                }))
             },(err) => {
                 console.log(err)
             })
@@ -97,7 +112,7 @@
                 console.log(error)
             })
 
-            // 加载完所有歌曲后再加载播放列表
+            // 加载默认播放列表
             this.$axios.get('static/data/play_list.json').then((res2) => {
                 let list = this.$store.getters.Local_data.playList
                 // 存在本地缓存
