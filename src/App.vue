@@ -55,6 +55,7 @@
             console.log(this.MUrl)
         },
         created() {
+            let date = new Date()
             // 读取local storage
             this.$store.dispatch('setLocal_data', JSON.parse(window.localStorage.getItem("VUE_MUSIC")))
 
@@ -82,11 +83,11 @@
 
             // 拉取榜单
             this.$axios.all([
-                this.$axios.get(this.MUrl + 'top/list?idx=0'),
-                this.$axios.get(this.MUrl + 'top/list?idx=2'),
-                this.$axios.get(this.MUrl + 'top/list?idx=3')
+                this.$axios.get(this.MUrl + 'playlist/detail?id=761845200'),
+                this.$axios.get(this.MUrl + 'playlist/detail?id=748100345'),
+                this.$axios.get(this.MUrl + 'playlist/detail?id=310970433')
             ]).then(this.$axios.spread((idx0, idx2, idx3) => {
-                let rspArry = [idx0.data.result, idx2.data.result, idx3.data.result]
+                let rspArry = [idx0.data.playlist, idx2.data.playlist, idx3.data.playlist]
                 this.$store.dispatch('setBList', rspArry.map((rsp) => {
                     return {
                         "id": rsp.id,
@@ -98,12 +99,12 @@
                             return {
                                 "id": v.id,
                                 "name": v.name,
-                                "singers": v.artists.map((singer) => {
+                                "singers": v.ar.map((singer) => {
                                     return singer.name
                                 }),
-                                "album": v.album.name,
-                                "img": v.album.picUrl,
-                                "duration": v.duration              
+                                "album": v.al.name,
+                                "img": v.al.picUrl,
+                                "duration": v.dt              
                             }
                         })
                     }
