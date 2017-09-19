@@ -84,6 +84,7 @@
 				for(i = 0; i < this.$store.getters.Music.lyric.split('\n').length; i++) {
 					var line = this.$store.getters.Music.lyric.split('\n')[i]
 					if (line) {
+						if(!line.match(/\[(.+)\]/))	continue
 						let strTime = line.match(/\[(.+)\]/)[1]
 						let second = Number(strTime.split(':')[0]) * 60 + Number(strTime.split(':')[1])
 						if (second >= this.$store.getters.CurrentTime + 0.5) {

@@ -338,9 +338,9 @@
 						return {
 							"id": v.id,
 				            "name": v.name,
-				            "singers": [
-				            	"暂无"
-				            ],
+				            "singers": v.ar.map((v2) => {
+				            	return v2.name
+				            }),
 				            "album": v.al.name,
 				            "img": v.al.picUrl,
 				            "duration": v.dt

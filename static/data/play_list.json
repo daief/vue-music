@@ -24,6 +24,16 @@
             "album": "犬猫的電子座曲",
             "duration": 198791,
             "img": "http://p1.music.126.net/szADTzjHolUwl2ZQ2IYqbw==/18623527953049095.jpg"              
+    	},
+    	{
+            "id": 33419144,
+            "name": "白雪歌",
+            "singers": [
+            	"言和"
+            ],
+            "album": "热门华语272",
+            "duration": 221000,
+            "img": "http://p1.music.126.net/gvU5elgCPar8nsUeNWaiOg==/3348012906580223.jpg"              
     	}
     ]
 }
