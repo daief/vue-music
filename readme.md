@@ -1,14 +1,11 @@
 
 
 # vue-music
-学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版，仅供学习。
+学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版。
+[演示](https://daief.github.io/vue-music/#/)
 
-2017年9月10日：暂停了，mp3链接失效了，等空了、有时间学习[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)再继续。
-
-2017年9月17日：`http://link.hhtjim.com/`的外链恢复了，但是已经计划使用NeteaseCloudMusicApi。
-
-## 使用外链转换工具 | HHTJim.Com Web App V170429
-http://link.hhtjim.com/
+## api来源
+[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 ## 过程记录
 [学习记录](https://daief.github.io/2017-09-04/vue-music%E8%AE%B0%E5%BD%95.html#more)
