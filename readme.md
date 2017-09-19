@@ -2,7 +2,7 @@
 
 # vue-music
 学习使用vue、vue-router、vuex，山寨一个网易云音乐的pc网页版。
-[演示](https://daief.github.io/vue-music/#/)
+[演示地址](http://daief.coding.me/vue-music/#/)
 
 ## api来源
 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)

@@ -87,7 +87,7 @@
 					<div class="panel-title">
 						<div class="p-t-text">榜单</div>
 						<div class="p-t-small">
-							<span>假装是榜单（加载榜单列表的时候总是报错:ERR_CONTENT_LENGTH_MISMATCH，未能解决）</span>
+							<span style="color:white;">加载榜单列表的时候有时报错:ERR_CONTENT_LENGTH_MISMATCH，未能解决；但有时能正常抓取，靠杯啊</span>
 						</div>
 						<!-- 更多 -->
 						<div class="p-t-more">

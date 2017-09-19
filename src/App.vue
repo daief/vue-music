@@ -67,7 +67,7 @@
             })
 
             // 个性推荐（网友精选碟）
-            this.$axios.get(this.MUrl + 'top/playlist?limit=3&order=new').then((res) => {
+            this.$axios.get(this.MUrl + 'top/playlist?limit=3&order=hot').then((res) => {
                 this.$store.dispatch('setPersonalList', res.data.playlists.map((list) => {
                     return {
                         "name": list.name,
@@ -81,11 +81,12 @@
                 console.log(err)
             })
 
-            // 拉取榜单
+            // 拉取榜单，加载榜单的时候可能会ERR_CONTENT_LENGTH_MISMATCH
+            // 不通过/top/list?idx=6的方式获取榜单，与普通歌单的获取方式相同
             this.$axios.all([
-                this.$axios.get(this.MUrl + 'playlist/detail?id=761845200'),
-                this.$axios.get(this.MUrl + 'playlist/detail?id=748100345'),
-                this.$axios.get(this.MUrl + 'playlist/detail?id=310970433')
+                this.$axios.get(this.MUrl + 'playlist/detail?id=3779629'),
+                this.$axios.get(this.MUrl + 'playlist/detail?id=2884035'),
+                this.$axios.get(this.MUrl + 'playlist/detail?id=19723756')
             ]).then(this.$axios.spread((idx0, idx2, idx3) => {
                 let rspArry = [idx0.data.playlist, idx2.data.playlist, idx3.data.playlist]
                 this.$store.dispatch('setBList', rspArry.map((rsp) => {
@@ -110,8 +111,9 @@
                     }
                 }))
             })).catch((error) => {
-                console.log(error)
+                console.log('抓取榜单失败', error)
             })
+            
 
             // 加载默认播放列表
             this.$axios.get('static/data/play_list.json').then((res2) => {
