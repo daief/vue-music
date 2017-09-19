@@ -39,7 +39,8 @@
 				<div class="no-lyric" v-show="!$store.getters.Music.lyric">暂时没有歌词</div>
 				<div class="lyric" :style="lyricContentStyle">
 					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('\n')"
-						:class="{'line-active': index == currentLyricIndex}">
+						:class="{'line-active': index == currentLyricIndex}"
+						ref="line">
 						{{line.replace(/\[(\d*):(\d*)\.(\d*)\]/, "") }}
 						<br />
 					</p>
@@ -59,7 +60,9 @@
 				// 列表滑块移动距离
 				listScrollMoveData: 0,
 				// 列表内容移动的距离
-				listContentMoveData: 0
+				listContentMoveData: 0,
+				// 歌词移动的距离
+				lyricContentMoveData: 0
 			}
 		},
 		computed: {
@@ -74,8 +77,14 @@
 				}
 			},
 			lyricContentStyle () {
+				this.lyricContentMoveData = 0
+				if (this.currentLyricIndex > -1 && this.$refs.line[this.currentLyricIndex]) {
+					for (let i = 0; i <= this.currentLyricIndex; i++) {
+						this.lyricContentMoveData += this.$refs.line[i].getBoundingClientRect().height
+					}
+				}
 				return {
-					top: 108 - (this.currentLyricIndex) * 32 + 'px'
+					top: 108 - this.lyricContentMoveData + 'px'
 				}
 			},
 			// 歌词索引
@@ -84,8 +93,10 @@
 				for(i = 0; i < this.$store.getters.Music.lyric.split('\n').length; i++) {
 					var line = this.$store.getters.Music.lyric.split('\n')[i]
 					if (line) {
-						if(!line.match(/\[(.+)\]/))	continue
-						let strTime = line.match(/\[(.+)\]/)[1]
+						if(!/\[(\d*):(\d*)\.(\d*)\]/.test(line))	continue
+
+						let strTime = line.match(/\[(\d*):(\d*)\.(\d*)\]/)[0]
+						strTime = strTime.substr(1, strTime.length - 2)
 						let second = Number(strTime.split(':')[0]) * 60 + Number(strTime.split(':')[1])
 						if (second >= this.$store.getters.CurrentTime + 0.5) {
 							break
@@ -349,6 +360,8 @@
 	}
 	.line {
 		font-size: 12px;
+		padding-left: 5px;
+		padding-right: 5px;
 	    color: #989898;
 	    word-wrap: break-word;
 	    text-align: center;

@@ -34,6 +34,16 @@
             "album": "热门华语272",
             "duration": 221000,
             "img": "http://p1.music.126.net/gvU5elgCPar8nsUeNWaiOg==/3348012906580223.jpg"              
+    	},
+    	{
+            "id": 480167037,
+            "name": "将进酒",
+            "singers": [
+            	"F.Be.I"
+            ],
+            "album": "请朗读并背诵全文系列",
+            "duration": 352819,
+            "img": "http://p1.music.126.net/pCIH78-HKn4QzXUtSMUTnA==/17750515719163824.jpg"              
     	}
     ]
 }
