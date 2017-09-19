@@ -24,7 +24,7 @@ const recommend = {
 			'20': ['台湾Hito排行榜', '/api/playlist/detail?id=112463'],
 			'21': ['Beatport全球电子舞曲榜', '/api/playlist/detail?id=3812895']
 		},
-		// 热门推荐，结构
+		// 热门推荐，结构personalized
 		hotList: [
 			{
 	            "id": 0,
@@ -39,7 +39,7 @@ const recommend = {
 	            "alg": ""
 	        }
 		],
-		// 个性推荐(网友精选碟)
+		// 个性推荐(网友精选碟)top/playlist
 		personalList: [
 			{
 	            "name": "",

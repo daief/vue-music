@@ -51,6 +51,7 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	var listCanDrag = false
 	var listDragY = 0
 	export default {
@@ -106,7 +107,10 @@
 					}
 				}
 				return i - 1
-			}
+			},
+			...mapGetters([
+				'IsShowList'
+	        ])
 		},
 		methods: {
 			// 点击播放列表
@@ -182,6 +186,23 @@
 			// CurrentTime (n, o) {
 			// 	console.log(n)
 			// }
+			// 监测是否展现歌曲列表面板
+			IsShowList(n, o) {
+				if (n) {
+					// 内容最大移动距离 内容高度-可视区域高度 = H - 248
+					let contentMaxMoveH = 28 * this.$store.getters.PlayList.length - 248
+					let scrollMovePercent = this.$store.getters.PlayIndex == 0? 0:
+						(this.$store.getters.PlayIndex + 1) / this.$store.getters.PlayList.length
+					this.listScrollMoveData = scrollMovePercent * 208
+					console.log(this.listScrollMoveData)
+					this.listScrollMoveData = this.listScrollMoveData > 208? 208: this.listScrollMoveData
+					this.listScrollMoveData = this.listScrollMoveData < 0? 0: this.listScrollMoveData
+					
+					// 内容高于可视区域才需要滚动
+					if (contentMaxMoveH > 0)
+						this.listContentMoveData = (this.listScrollMoveData / 208) * contentMaxMoveH
+				}
+			}
 		}
 	}
 </script>
