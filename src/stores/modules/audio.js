@@ -137,17 +137,6 @@ const audio = {
 			state.isShowTip = false
 			state.tipText = ''
 		},
-		// playList中添加歌曲
-		addSongToPlayList(state, obj) {
-			let isExist = false
-			for (let i = 0; i < state.playList.length; i++) {
-				if (obj.id == state.playList[i].id) {
-					isExist = true
-					break
-				}
-			}
-			if (!isExist)	state.playList.push(obj)
-		},
 		// 设置allSongs
 		setAllSongs(state, obj) {
 			state.allSongs = obj
@@ -175,7 +164,7 @@ const audio = {
 		},
 		/*****************************playList改版******************************/
 		// playList中添加歌曲
-		addSongToPlayList1(state, obj) {
+		addSongToPlayList(state, obj) {
 			let isExist = false
 			for (let i = 0; i < state.playList.length; i++) {
 				if (obj.id == state.playList[i].id) {
@@ -202,7 +191,7 @@ const audio = {
 	        m.album = state.playList[index].album
 	        m.img = state.playList[index].img
 	        // 暂时设置成playList里的值，duration在资源加载好后会获得真正的数据
-	        state.duration = state.playList[index].duration
+	        state.duration = state.playList[index].duration / 1000
 	        state.music = m
 		}
 	},

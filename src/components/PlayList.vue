@@ -111,6 +111,9 @@
 		methods: {
 			// 点击播放列表
 			listRowClick(songId) {
+				if (songId == this.$store.getters.Music.id) {
+					return;
+				}
 				for (let i = 0; i < this.$store.getters.PlayList.length; i++) {
 					if (songId == this.$store.getters.PlayList[i].id) {
 						this.$store.dispatch('setPlayIndex', i)

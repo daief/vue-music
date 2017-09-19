@@ -55,7 +55,7 @@
 					</div>
 				</div>
 				<!-- 个性化推荐 -->
-				<div class="panel">
+				<!-- <div class="panel">
 					<div class="panel-title">
 						<div class="p-t-text">个性化推荐</div>
 					</div>
@@ -81,7 +81,7 @@
 							<a href="javascript:;" class="desc">{{item.desc}}</a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- 榜单 -->
 				<div class="panel">
 					<div class="panel-title">
@@ -101,25 +101,25 @@
 									<div class="blist-top-right">
 										<span class="title">{{$store.getters.BList[0].name}}</span>
 										<span class="play" title="播放" 
-											@click.stop.prevent="blistAllPlay($store.getters.BList[0].songs)"></span>
-										<span class="subscribe"></span>
+											@click.stop.prevent="playAllTopList($store.getters.BList[0].tracks)"></span>
+										<span class="subscribe" title="Ծ‸Ծ"></span>
 									</div>
 								</div>
-								<div v-for="(song,index) in $store.getters.BList[0].songs.slice(0, 10)"
+								<div v-for="(song,index) in $store.getters.BList[0].tracks.slice(0, 10)"
 									class="blist-item odd-bg" 
 									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
 									@mouseover.stop.prevent="blistItemMouseOver(0, index)"
 									@mouseleave.stop.prevent="blistItemMouseLeave()">
-									<span class="no"> {{ index + 1 }}</span>
+									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
 									<span 
 										:class="{'s-name-hover': blistItemRecord.order == 0 && blistItemRecord.index == index}"
 										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == 0 && blistItemRecord.index == index">
 										<i class="play" title="播放" 
-											@click.stop.prevent="blistItemPlay(song.id)"></i>
+											@click.stop.prevent="blistItemPlay(song)"></i>
 										<i class="add" title="添加到播放列表"
-											@click.stop.prevent="blistItemAdd(song.id)"></i>
+											@click.stop.prevent="blistItemAdd(song)"></i>
 										<i class="sub" title="收藏？不存在的~"></i>
 									</div>
 								</div>
@@ -132,25 +132,25 @@
 									<div class="blist-top-right">
 										<span class="title">{{$store.getters.BList[1].name}}</span>
 										<span class="play" title="播放" 
-											@click.stop.prevent="blistAllPlay($store.getters.BList[1].songs)"></span>
-										<span class="subscribe"></span>
+											@click.stop.prevent="playAllTopList($store.getters.BList[1].tracks)"></span>
+										<span class="subscribe" title="Ծ‸Ծ"></span>
 									</div>
 								</div>
-								<div v-for="(song,index) in $store.getters.BList[1].songs.slice(0, 10)"
+								<div v-for="(song,index) in $store.getters.BList[1].tracks.slice(0, 10)"
 									class="blist-item odd-bg" 
 									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
 									@mouseover.stop.prevent="blistItemMouseOver(1, index)"
 									@mouseleave.stop.prevent="blistItemMouseLeave()">
-									<span class="no"> {{ index + 1 }}</span>
+									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
 									<span 
 										:class="{'s-name-hover': blistItemRecord.order == 1 && blistItemRecord.index == index}"
 										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == 1 && blistItemRecord.index == index">
 										<i class="play" title="播放" 
-											@click.stop.prevent="blistItemPlay(song.id)"></i>
+											@click.stop.prevent="blistItemPlay(song)"></i>
 										<i class="add" title="添加到播放列表"
-											@click.stop.prevent="blistItemAdd(song.id)"></i>
+											@click.stop.prevent="blistItemAdd(song)"></i>
 										<i class="sub" title="收藏？不存在的~"></i>
 									</div>
 								</div>
@@ -163,25 +163,25 @@
 									<div class="blist-top-right">
 										<span class="title">{{$store.getters.BList[2].name}}</span>
 										<span class="play" title="播放" 
-											@click.stop.prevent="blistAllPlay($store.getters.BList[2].songs)"></span>
-										<span class="subscribe"></span>
+											@click.stop.prevent="playAllTopList($store.getters.BList[2].tracks)"></span>
+										<span class="subscribe" title="Ծ‸Ծ"></span>
 									</div>
 								</div>
-								<div v-for="(song,index) in $store.getters.BList[2].songs.slice(0, 10)"
+								<div v-for="(song,index) in $store.getters.BList[2].tracks.slice(0, 10)"
 									class="blist-item odd-bg" 
 									:class="{'odd-bg': index % 2 == 0, 'even-bg': index % 2 != 0}"
 									@mouseover.stop.prevent="blistItemMouseOver(2, index)"
 									@mouseleave.stop.prevent="blistItemMouseLeave()">
-									<span class="no"> {{ index + 1 }}</span>
+									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
 									<span 
 										:class="{'s-name-hover': blistItemRecord.order == 2 && blistItemRecord.index == index}"
 										class="s-name" :title="song.name">{{ song.name }}</span>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == 2 && blistItemRecord.index == index">
 										<i class="play" title="播放" 
-											@click.stop.prevent="blistItemPlay(song.id)"></i>
+											@click.stop.prevent="blistItemPlay(song)"></i>
 										<i class="add" title="添加到播放列表"
-											@click.stop.prevent="blistItemAdd(song.id)"></i>
+											@click.stop.prevent="blistItemAdd(song)"></i>
 										<i class="sub" title="收藏？不存在的~"></i>
 									</div>
 								</div>
@@ -282,18 +282,6 @@
 			nextWrapPage () {
 				this.imgIndex = (this.imgIndex + 1) % this.imgsArray.length
 			},
-			// 播放整个榜单歌曲
-			blistAllPlay(songs) {
-				this.$store.dispatch('setPlayList', [])
-				for (let i = 0; i < songs.length; i++) {
-					this.$store.dispatch('gainSongById', songs[i].id)
-					this.$store.dispatch('addSongToPlayList', this.$store.getters.SongById)
-				}
-				this.$store.dispatch('setPlayIndex', 0)
-				this.$store.dispatch('setMusic', this.$store.getters.PlayList[0])
-				// 显示提示
-				this.$store.dispatch('showTip', '已开始播放')
-			},
 			// 榜单列表鼠标悬浮事件
 			blistItemMouseOver (order, index) {
 				this.blistItemRecord = {
@@ -309,14 +297,19 @@
 				}
 			},
 			// 榜单列表项的播放事件
-			blistItemPlay(id) {
+			blistItemPlay(song) {
+				// 已经在播放当前歌曲
+				if (this.$store.getters.Music.id == song.id) {
+					this.$store.dispatch('showTip', '已开始播放')
+					return;
+				}
 				// 先添加到列表
-				this.blistItemAdd(id)
+				this.blistItemAdd(song)
 				// 再播放
 				for (let i = 0; i < this.$store.getters.PlayList.length; i++) {
-					if (id == this.$store.getters.PlayList[i].id) {
+					if (song.id == this.$store.getters.PlayList[i].id) {
 						this.$store.dispatch('setPlayIndex', i)
-						this.$store.dispatch('setMusic', this.$store.getters.PlayList[i])
+						this.$store.dispatch('setMusicFormPlayList', i)
 						break
 					}
 				}
@@ -324,13 +317,13 @@
 				this.$store.dispatch('showTip', '已开始播放')
 			},
 			// 榜单列表项的添加列表
-			blistItemAdd(id) {
-				this.$store.dispatch('gainSongById', id)
-				this.$store.dispatch('addSongToPlayList', this.$store.getters.SongById)
+			blistItemAdd(song) {
+				this.$store.dispatch('addSongToPlayList', song)
 				// 显示提示
 				this.$store.dispatch('showTip', '已添加到播放列表')
 			},
 			/*****************************改写**********************************/
+			// 播放热门推荐这种的所有歌曲
 			playAllList(listId){
 				this.$axios.get(this.MUrl + 'playlist/detail?id=' + listId)
 				.then((rsp) => {
@@ -352,6 +345,12 @@
 				}).catch((error) => {
 					console.log(error)
 				})
+			},
+			// 播放榜单的所有歌曲
+			playAllTopList(tracks){
+				this.$store.dispatch('setPlayList', tracks)
+				this.$store.dispatch('setPlayIndex', 0)
+				this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
 			}
 		},
 		created () {
@@ -757,6 +756,9 @@
 	    color: #666;
 	    font-size: 16px;
 	    display: inline-block;
+	}
+	.no.top-three {
+		color: rgb(193, 13, 12);
 	}
 	.blist-item .s-name {
 		display: inline-block;

@@ -60,37 +60,55 @@
 
             // 推荐页面
             this.$axios.get('static/data/recommend.json').then((res) => {
-                // this.$store.dispatch('setHotList', res.data.hot) 
-                // 文档形式的热门推荐
                 this.$store.dispatch('setHotList', res.data.personalized)
-                this.$store.dispatch('setPersonalList', res.data.personal) 
-                this.$store.dispatch('setBList', res.data.bList)
-                // console.log(this.$store.getters.BList)
             },(err) => {
                 console.log(err)
             })
 
-            // 加载all_music.json
-            this.$axios.get('static/data/all_music.json').then((res) => {
-                this.$store.dispatch('setAllSongs', res.data.songs)
-                // this.$store.dispatch('gainSongById', 459717294)
-                console.log('所有歌曲：' + res.data.songs.length)
-
-                // 加载完所有歌曲后再加载播放列表
-                this.$axios.get('static/data/play_list.json').then((res2) => {
-                    let list = this.$store.getters.Local_data.playList
-                    // 存在本地缓存
-                    if (list.length > 0) {
-                        this.$store.dispatch('setPlayList', list) 
-                        this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
-                    } else {
-                        this.$store.dispatch('setPlayList', res2.data.list) 
-                        this.$store.dispatch('setPlayIndex', 0)
+            // 拉取榜单
+            this.$axios.all([
+                this.$axios.get(this.MUrl + 'top/list?idx=0'),
+                this.$axios.get(this.MUrl + 'top/list?idx=2'),
+                this.$axios.get(this.MUrl + 'top/list?idx=3')
+            ]).then(this.$axios.spread((idx0, idx2, idx3) => {
+                let rspArry = [idx0.data.result, idx2.data.result, idx3.data.result]
+                this.$store.dispatch('setBList', rspArry.map((rsp) => {
+                    return {
+                        "id": rsp.id,
+                        "name": rsp.name,
+                        "img": rsp.coverImgUrl,
+                        "playCount": rsp.playCount,
+                        "description": rsp.description,
+                        "tracks": rsp.tracks.map((v) => {
+                            return {
+                                "id": v.id,
+                                "name": v.name,
+                                "singers": v.artists.map((singer) => {
+                                    return singer.name
+                                }),
+                                "album": v.album.name,
+                                "img": v.album.picUrl,
+                                "duration": v.duration              
+                            }
+                        })
                     }
-                    this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
-                },(err) => {
-                    console.log(err)
-                })
+                }))
+            })).catch((error) => {
+                console.log(error)
+            })
+
+            // 加载完所有歌曲后再加载播放列表
+            this.$axios.get('static/data/play_list.json').then((res2) => {
+                let list = this.$store.getters.Local_data.playList
+                // 存在本地缓存
+                if (list.length > 0) {
+                    this.$store.dispatch('setPlayList', list) 
+                    this.$store.dispatch('setPlayIndex', this.$store.getters.Local_data.playIndex)
+                } else {
+                    this.$store.dispatch('setPlayList', res2.data.list) 
+                    this.$store.dispatch('setPlayIndex', 0)
+                }
+                this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
             },(err) => {
                 console.log(err)
             })
