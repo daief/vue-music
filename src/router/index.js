@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../stores'
 
+import Hello from '@/components/Hello'
 import SecondMenu from '@/components/SecondMenu'
 import Recommend from '@/components/discover/Recommend'
 import Toplist from '@/components/discover/Toplist'
@@ -9,6 +10,7 @@ import Playlist from '@/components/discover/Playlist'
 import My from '@/components/my/My'
 import Friend from '@/components/friend/Friend'
 import Download from '@/components/download/Download'
+import Song from '@/components/discover/song/Song'
 
 Vue.use(Router)
 
@@ -73,6 +75,15 @@ const router = new Router({
 	  name: 'Download',
 	  components: {
 	    app: Download
+	  }
+    },
+    // 歌曲详情
+    {
+	  path: '/song/:songId',
+	  name: 'Song',
+	  components: {
+	    app: Song,
+	    secondMenu: SecondMenu
 	  }
     },
     // 首页/默认发现/推荐

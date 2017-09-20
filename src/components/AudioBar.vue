@@ -26,7 +26,8 @@
 				 @mouseup.stop.prevent="pointUp" 
 				 @mousemove.stop.prevent="pointMove($event)">
 				<div class="song-info">
-					<a href="#">{{$store.getters.Music.name}}</a>
+					<!-- <a href="#">{{$store.getters.Music.name}}</a> -->
+					<router-link :to="{ name: 'Song', params: { songId: $store.getters.Music.id }}">{{$store.getters.Music.name}}</router-link>
 					<a href="#" v-for="(singer, index) in $store.getters.Music.singers">{{singer}}<span v-if="index != $store.getters.Music.singers.length - 1">/</span></a>
 				</div>
 				<div class="time-info">
