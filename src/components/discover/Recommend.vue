@@ -709,7 +709,7 @@
 		color: rgb(193, 13, 12);
 	}
 	.blist-item .s-name {
-		color: #666;
+		color: #000;
 		display: inline-block;
 		height: 32px;
 		max-width: 180px;

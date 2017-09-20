@@ -11,6 +11,7 @@ import My from '@/components/my/My'
 import Friend from '@/components/friend/Friend'
 import Download from '@/components/download/Download'
 import Song from '@/components/discover/song/Song'
+import PlayListDetail from '@/components/discover/playlist/PlayListDetail'
 
 Vue.use(Router)
 
@@ -86,6 +87,24 @@ const router = new Router({
 	    secondMenu: SecondMenu
 	  }
     },
+    // 歌单详情
+    {
+	  path: '/discover/playlist/:listId',
+	  name: 'PlayListDetail',
+	  components: {
+	    app: PlayListDetail,
+	    secondMenu: SecondMenu
+	  }
+    },
+    // 歌单详情别名
+    { 
+      path: '/playlist/:listId', 
+      components: {
+	    app: PlayListDetail,
+	    secondMenu: SecondMenu
+	  },
+      alias: '/discover/playlist/:listId' 
+  	},
     // 首页/默认发现/推荐
     {
 	  path: '/',

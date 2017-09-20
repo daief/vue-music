@@ -32,6 +32,8 @@
 				<a href="javscript:void(0)" v-show="songObj.lyric"
 					class="lryic-switch" @click.stop.prevent="toggleLyric">
 					{{isShowAllLyric?'收起':'展开'}}<i class="icon arr-down" :class="{'arr-up':isShowAllLyric}"></i></a>
+				<div class="lyric-user" v-show="lyricUser">贡献歌词：
+					<a href="javascript:;">{{lyricUser}}</a></div>
 			</div>
 		</div>
 	</div>
@@ -124,16 +126,17 @@
 					console.log(error)
 				})
 				// 歌词，如果是当前播放的歌曲，直接拿，否则请求
-				if (this.$route.params.songId == this.$store.getters.Music.id) {
-					this.songObj.lyric = this.$store.getters.Music.lyric
-				} else {
-					this.$axios.get(this.MUrl + 'lyric?id=' + this.$route.params.songId).then((rsp) => {
-						this.songObj.lyric = rsp.data.lrc.lyric || ''
-						this.lyricUser = rsp.data.lyricUser.nickname || ''
-					}).catch((error) => {
-
-					})
-				}
+				// if (this.$route.params.songId == this.$store.getters.Music.id) {
+				// 	this.songObj.lyric = this.$store.getters.Music.lyric
+				// } else {
+				// 为了显示歌词作者，选择请求
+				this.$axios.get(this.MUrl + 'lyric?id=' + this.$route.params.songId).then((rsp) => {
+					this.songObj.lyric = rsp.data.lrc.lyric || ''
+					this.lyricUser = rsp.data.lyricUser.nickname || ''
+				}).catch((error) => {
+					console.log(error)
+				})
+				// }
 			},
 			// 展示、收起歌词
 			toggleLyric () {
@@ -245,6 +248,7 @@
 	    background-position: 0 -18px;
 	    position: absolute;
 	    right: 5px;
+	    cursor: pointer;
 	}
 	.artists {
 		
@@ -339,5 +343,15 @@
 	    height: 8px;
 	    display: inline-block;
 	    background-position: -45px -520px;
+	}
+	.lyric-user {
+		margin-top: 25px;
+		color: #666;
+		text-align: right;
+		font-size: 12px;
+	}
+	.lyric-user a {
+		color: #0c73c2;
+		font-size: 12px;
 	}
 </style>

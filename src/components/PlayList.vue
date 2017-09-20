@@ -1,4 +1,5 @@
 <template>
+	<!-- 这个PlayList是底部打开的播放列表 -->
 	<div class="play-list" @click.stop.prevent="" @mouseup.stop.prevent="">
 		<div class="list-head">
 			<div class="head-left">

@@ -12,6 +12,10 @@
 	            </router-link>
 				<label class="cor" v-show="tab.isActive"></label>
 			</div>
+			<!-- 搜索 -->
+			<div class="search">
+				<input type="text" @keyup.enter="submitSearch" ref="search">
+			</div>
 			<!-- 用户 -->
 			<div class="user"
 				@mouseover="showUserMenu"
@@ -51,6 +55,11 @@
 			},
 			hideUserMenu () {
 				this.userMenuShow = false
+			},
+			// 回车查询
+			submitSearch() {
+				let keyWord = this.$refs.search.value
+				console.log(keyWord)
 			}
 		}
 	}
@@ -120,6 +129,30 @@
 		padding-top: 2px;
 		padding-bottom: 2px;
 		background-color: #C20C0C;
+	}
+	/*搜索*/
+	.search {
+		right: 240px;
+		width: 158px;
+		height: 32px;
+		background: url(http://s2.music.126.net/style/web2/img/frame/topbar.png?e55282ebe5ef2e7122f0e6cb6243ab81) no-repeat 0 9999px;
+	    background-position: 0 -99px;
+	    background-color: #fff;
+	    border-radius: 32px;
+	    position: absolute;
+	}
+	.search input {
+		position: absolute;
+		right: 10px;
+		width: 76%;
+	    color: #333;
+    	line-height: 16px;
+    	font-size: 12px;
+    	height: 16px;
+    	top: 50%;
+    	margin-top: -8px;
+    	border: none;
+    	outline: none;
 	}
 	/*用户*/
 	.user {
