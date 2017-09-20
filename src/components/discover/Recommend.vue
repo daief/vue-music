@@ -115,9 +115,9 @@
 									@mouseover.stop.prevent="blistItemMouseOver(bListIndex, index)"
 									@mouseleave.stop.prevent="blistItemMouseLeave()">
 									<span class="no" :class="{'top-three': index<3}"> {{ index + 1 }}</span>
-									<span 
+									<router-link :to="{ name: 'Song', params: { songId: song.id }}"
 										:class="{'s-name-hover': blistItemRecord.order == bListIndex && blistItemRecord.index == index}"
-										class="s-name" :title="song.name">{{ song.name }}</span>
+										class="s-name" :title="song.name">{{ song.name }}</router-link>
 									<div class="blist-operate" 
 										v-show="blistItemRecord.order == bListIndex && blistItemRecord.index == index">
 										<i class="play" title="播放" 
@@ -709,6 +709,7 @@
 		color: rgb(193, 13, 12);
 	}
 	.blist-item .s-name {
+		color: #666;
 		display: inline-block;
 		height: 32px;
 		max-width: 180px;
@@ -719,6 +720,10 @@
 		font-size: 12px;
 		line-height: 32px;
 		cursor: pointer;
+		text-decoration: none;
+	}
+	.blist-item .s-name:hover {
+		text-decoration: underline;
 	}
 	.s-name-hover {
 		text-decoration: underline;

@@ -27,7 +27,10 @@
 							
 						</div>
 						<div class="row-4" @click.stop.prevent="">
-							<a href="#" v-for="(singer, index) in song.singers">{{singer}}<span v-if="index != song.singers.length - 1">/</span></a>
+							<a href="javascript:;" v-for="(singer, index) in song.singers">{{singer}}<span v-if="index != song.singers.length - 1">/</span></a>
+						</div>
+						<div class="row-5">
+							{{formatSecondTime(song.duration / 1000)}}
 						</div>
 					</div>
 				</div>
@@ -180,6 +183,11 @@
 				// 内容高于可视区域才需要滚动
 				if (contentMaxMoveH > 0)
 					this.listContentMoveData = (this.listScrollMoveData / 208) * contentMaxMoveH
+			},
+			formatSecondTime(second){
+				let min = Number.parseInt(second / 60) || 0
+				let sec = Number.parseInt(second) % 60 || 0
+				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
 			}
 		},
 		watch: {
@@ -312,6 +320,10 @@
 	.row-playing {
 		background-color: rgb(18,18,18);
 	}
+	.row-playing div, 
+	.row-playing a {
+		color: white !important; 
+	}
 	.row-1 {
 		margin-left: 10px;
 		width: 10px;
@@ -339,13 +351,14 @@
 	}
 	/*歌手*/
 	.row-4 {
-		width: 60px;
+		width: 70px;
 		color: #9b9b9b;
 		font-size: 12px;
 		line-height: 28px;
 		overflow: hidden;
 	    white-space: nowrap;
 	    text-overflow: ellipsis;
+	    cursor: pointer;
 	}
 	.row-4:hover {
 		text-decoration: underline;
@@ -353,6 +366,15 @@
 	.row-4 a {
 		color: #9b9b9b;
 		text-decoration: none;
+	}
+	/*duration*/
+	.row-5 {
+		margin-left: 7px;
+		height: 28px;
+		width: 45px;
+		color: #666;
+		font-size: 12px;
+		line-height: 28px;
 	}
 	.body-right {
 		height: 248px;
