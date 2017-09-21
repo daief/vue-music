@@ -13,10 +13,10 @@
 					<span class="create-time">{{getStrTime}}创建</span>
 				</div>
 				<div class="ops">
-					<a href="javascript:;" class="play" title="播放" @click="">
+					<a href="javascript:;" class="play" title="播放" @click="playListObj">
 						<em class="pl"></em>播放
 					</a>
-					<a href="javascript:;" class="add" title="添加到列表" @click=""></a>
+					<a href="javascript:;" class="add" title="添加到列表" @click="addListObj"></a>
 				</div>
 				<div class="tags">
 					标签：
@@ -157,20 +157,36 @@
 					console.log('歌单详情', error)
 				})
 			},
+			// 切换是否展现全部描述
 			toggleShowDesc() {
 				this.isShowAllDesc = !this.isShowAllDesc
 			},
+			// 将秒数格式化成时:分
 			formatSecondTime(second){
 				let min = Number.parseInt(second / 60) || 0
 				let sec = Number.parseInt(second) % 60 || 0
 				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
+			},
+			// 播放列表
+			playListObj(){
+				this.$store.dispatch('setPlayList', this.listObj.tracks)
+				this.$store.dispatch('setPlayIndex', 0)
+				this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
+				this.$store.dispatch('showTip', '已开始播放')
+			},
+			// 添加歌单到播放列表
+			addListObj(){
+				for(let i = 0; i < this.listObj.tracks.length; i++) {
+					this.$store.dispatch('addSongToPlayList', this.listObj.tracks[i])
+				}
+				this.$store.dispatch('showTip', '已添加到列表')
 			}
 		},
 		created(){
 			this.getList()
 		},
 		mounted () {
-			
+
 		},
 		watch: {
 			// 当路由变化的时候会再次执行该函数
