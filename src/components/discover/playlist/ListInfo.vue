@@ -38,9 +38,36 @@
 				<span class="number">{{listObj.tracks.length}}首歌</span>
 				<span class="play-count">播放：<span style="color:#c20c0c;">{{listObj.playCount}}</span>次</span>
 			</div>
-			<div class="list-row">
-				
-			</div>
+			<!-- 歌单曲目 -->
+			<table class="list-table">
+				<thead>
+					<tr>
+						<th class="col-1"></th>
+						<th class="col-2">歌曲标题</th>
+						<th class="col-3">时长</th>
+						<th class="col-4">歌手</th>
+						<th class="col-5">专辑</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 歌单列表 -->
+					<tr v-for="(song,idx) in listObj.tracks" :class="{even: idx % 2 == 0}">
+						<td class="col-1">
+							<div class="col-1-div">
+								<span class="li-idx">{{idx + 1}}</span>
+								<span class="li-pl" @click=""></span>
+							</div>
+						</td>
+						<td class="col-2">
+							<router-link :title="song.name"
+								:to="{ name: 'Song', params: { songId: song.id }}">{{song.name}}</router-link>
+						</td>
+						<td class="col-3">{{formatSecondTime(song.duration / 1000)}}</td>
+						<td class="col-4">{{...song.singers}}</td>
+						<td class="col-5">{{song.album}}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </template>
@@ -120,7 +147,7 @@
 	                            singers: song.ar.map((ar) => {
 	                            	return ar.name
 	                            }),
-	                            album: song.al,
+	                            album: song.al.name,
 	                            img: song.al.picUrl,
 	                            duration: song.dt
 							}
@@ -132,6 +159,11 @@
 			},
 			toggleShowDesc() {
 				this.isShowAllDesc = !this.isShowAllDesc
+			},
+			formatSecondTime(second){
+				let min = Number.parseInt(second / 60) || 0
+				let sec = Number.parseInt(second) % 60 || 0
+				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
 			}
 		},
 		mounted () {
@@ -355,5 +387,86 @@
 		font-size: 12px;
 		color: #333;
 		float: right;
+	}
+	.list-table {
+		width: 100%;
+		margin-bottom: 13px;
+		border-collapse:collapse;
+		border-bottom: 1px solid #d9d9d9;
+		border-right: 1px solid #d9d9d9;
+		border-left: 1px solid #d9d9d9;
+		font-size: 12px;
+	}
+	.list-table thead th {
+		height: 34px;
+		text-align: left;
+	    font-weight: normal;
+	    color: #666;
+	    background: url(http://s2.music.126.net/style/web2/img/table.png?0cee541075da9e932dc39c8aa877c304) no-repeat 0 9999px;
+	    background-color: #f7f7f7;
+	    background-position: 0 0;
+		background-repeat: repeat-x;
+		border-right: 1px solid rgba(199,199,199,0.4);
+		padding-left: 10px;
+	}
+	.col-1 {
+		width: 74px;
+		max-width: 74px;
+	}
+	.col-2 {
+		width: 237px;
+		max-width: 237px;
+	}
+	.col-3 {
+		width: 111px;
+		max-width: 111px;
+	}
+	.col-4 {
+		width: 89px;
+		max-width: 89px;
+	}
+	.col-5 {
+		width: 127px;
+		max-width: 127px;
+	}
+	tbody tr {
+		height: 30px;
+	}
+	.even {
+		background-color: rgb(247,247,247);
+	}
+	tbody td {
+		padding-left: 10px;
+		padding-right: 10px;
+		overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    color: #333;
+	}
+	tbody a {
+		color: #333;
+		text-decoration: none;
+	}
+	tbody a:hover {
+		text-decoration: underline;
+	}
+	.col-1-div {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.li-idx {
+		height: 17px;
+		color: #999;
+	}
+	.li-pl {
+		height: 17px;
+		width: 17px;
+	    background: url(http://s2.music.126.net/style/web2/img/table.png?0cee541075da9e932dc39c8aa877c304) no-repeat 0 9999px;
+        cursor: pointer;
+    	background-position: 0 -103px;
+	}
+	.li-pl:hover {
+	    background-position: 0 -128px;
 	}
 </style>
