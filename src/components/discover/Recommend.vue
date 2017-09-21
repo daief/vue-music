@@ -185,7 +185,9 @@
 					order: -1,
 					// 0~9
 					index: -1
-				}
+				},
+				// 轮播interval
+				wrapRoll: null
 			}
 		},
 		components: {
@@ -302,11 +304,16 @@
 		},
 		created () {
 			// 自动轮播
-			let wrapRoll = setInterval(() => {
+			this.wrapRoll = setInterval(() => {
 				if (this.autoRoll)	{
 					this.nextWrapPage()
 				}
 			}, 3000)
+		},
+		beforeDestroy() {
+			if (this.wrapRoll != null) {
+				clearInterval(this.wrapRoll)
+			}
 		}
 	}
 </script>

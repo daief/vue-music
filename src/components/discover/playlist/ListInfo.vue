@@ -166,8 +166,11 @@
 				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
 			}
 		},
-		mounted () {
+		created(){
 			this.getList()
+		},
+		mounted () {
+			
 		},
 		watch: {
 			// 当路由变化的时候会再次执行该函数
