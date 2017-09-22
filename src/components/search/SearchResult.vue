@@ -130,6 +130,10 @@
 		cursor: pointer;
 		position: absolute;
 		right: 0;
+		background: url(http://s2.music.126.net/style/web2/img/sprite.png?cf1eca6b022fa691cd80b2a63a797ea5) no-repeat 0 9999px;
+	}
+	.search-input:hover a:hover {
+		background-position: -430px 0;
 	}
 	.sh-rs {
 		width: 900px;
