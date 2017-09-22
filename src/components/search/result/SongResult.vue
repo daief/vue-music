@@ -28,6 +28,7 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	export default {
 		name: 'SongResult',
 		data () {
@@ -52,13 +53,19 @@
 				}
 			}
 		},
+		computed: {
+			...mapGetters([
+				'CurrentPage'
+	        ])
+		},
 		methods: {
 			// 获取搜索结果
 			getQueryRs(){
 				let keyWord = this.$route.query.keyWord
 				let type = this.$route.query.type
+				let offset = 30 * (this.CurrentPage - 1)
 				if (type == 1 && keyWord) {
-					let params = 'keywords=' + keyWord + '&type=' + type + '&limit=30&offset=0'
+					let params = 'keywords=' + keyWord + '&type=' + type + '&limit=30&offset=' + offset
 					// 内容不为空时请求
 					this.$axios.get(this.MUrl + 'search?' + params).then((rsp) => {
 						this.result = rsp.data.result
@@ -137,7 +144,11 @@
 			this.getQueryRs()
 		},
 		watch: {
-			'$route': 'getQueryRs'
+			'$route': 'getQueryRs',
+			// 页数变化了
+			CurrentPage () {
+				this.getQueryRs()
+			}
 		}
 	}
 </script>

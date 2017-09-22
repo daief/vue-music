@@ -16,8 +16,13 @@
 					{{tab}}
 				</div>
 			</div>
+			<!-- 搜索结果 -->
 			<div class="sh-cnt">
 				<SongResult v-show="type == 1"></SongResult>
+			</div>
+			<!-- 分页 -->
+			<div class="sh-pages">
+				<Page></Page>
 			</div>
 		</div>
 	</div>
@@ -25,10 +30,14 @@
 
 <script>
 	import SongResult from './result/SongResult'
+
+	import Page from './Page'
+
 	export default {
 		name: 'SearchResult',
 		components: {
-			'SongResult': SongResult
+			'SongResult': SongResult,
+			'Page': Page
 		},
 		data () {
 			return {
