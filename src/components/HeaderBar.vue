@@ -14,7 +14,7 @@
 			</div>
 			<!-- 搜索 -->
 			<div class="search">
-				<input type="text" @keyup.enter="submitSearch" ref="search">
+				<input type="text" @keyup.enter="submitSearch" ref="search" placeholder="♩♪♫♬">
 			</div>
 			<!-- 用户 -->
 			<div class="user"
@@ -59,7 +59,9 @@
 			// 回车查询
 			submitSearch() {
 				let keyWord = this.$refs.search.value
-				console.log(keyWord)
+				if (keyWord.trim()) {
+					this.$router.push({ name: 'SearchResult', query: { keyWord: keyWord, type: 1 }})
+				}
 			}
 		}
 	}

@@ -55,7 +55,7 @@
 						<td class="col-1">
 							<div class="col-1-div">
 								<span class="li-idx">{{idx + 1}}</span>
-								<span class="li-pl" @click=""></span>
+								<span class="li-pl" @click="playSong(song)" title="music~go"></span>
 							</div>
 						</td>
 						<td class="col-2">
@@ -180,6 +180,26 @@
 					this.$store.dispatch('addSongToPlayList', this.listObj.tracks[i])
 				}
 				this.$store.dispatch('showTip', '已添加到列表')
+			},
+			// 播放列表中的单曲
+			playSong(song) {
+				// 已经在播放当前歌曲
+				if (this.$store.getters.Music.id == song.id) {
+					this.$store.dispatch('showTip', '已开始播放')
+					return;
+				}
+				// 先添加到列表
+				this.$store.dispatch('addSongToPlayList', song)
+				// 再播放
+				for (let i = 0; i < this.$store.getters.PlayList.length; i++) {
+					if (song.id == this.$store.getters.PlayList[i].id) {
+						this.$store.dispatch('setPlayIndex', i)
+						this.$store.dispatch('setMusicFormPlayList', i)
+						break
+					}
+				}
+				// 显示提示
+				this.$store.dispatch('showTip', '已开始播放')
 			}
 		},
 		created(){

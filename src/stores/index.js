@@ -6,6 +6,7 @@ import Audio from './modules/audio'
 import Head from './modules/head'
 import Recommend from './modules/recommend'
 import App from './modules/app'
+import Search from './modules/search'
 
 // 使用vuex
 Vue.use(Vuex)
@@ -26,7 +27,8 @@ const store = new Vuex.Store({
   	audio: Audio,
     head: Head,
     reaommend: Recommend,
-    app: App
+    app: App,
+    search: Search
   }
 })
 

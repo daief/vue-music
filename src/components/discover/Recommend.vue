@@ -42,7 +42,9 @@
 					<div class="panel-body">
 						<div class="p-b-item"  v-for="(item,index) in $store.getters.HotList">
 							<div  style="position:relative;">
-								<img :src="item.picUrl" alt="">
+								<router-link :to="{ name: 'PlayListDetail', params: { listId: item.id }}">
+									<img :src="item.picUrl" alt="">
+								</router-link>
 								<div class="button">
 									<span class="icon-headset"></span>
 									<span class="number">{{item.playCount}}</span>
@@ -70,7 +72,9 @@
 						</div>
 						<div class="p-b-item"  v-for="(item,index) in $store.getters.PersonalList">
 							<div  style="position:relative;">
-								<img :src="item.coverImgUrl" alt="">
+								<router-link :to="{ name: 'PlayListDetail', params: { listId: item.id }}">
+									<img :src="item.coverImgUrl" alt="">
+								</router-link>
 								<div class="button">
 									<span class="icon-headset"></span>
 									<span class="number">{{item.playCount}}</span>

@@ -12,6 +12,7 @@ import Friend from '@/components/friend/Friend'
 import Download from '@/components/download/Download'
 import Song from '@/components/discover/song/Song'
 import PlayListDetail from '@/components/discover/playlist/PlayListDetail'
+import SearchResult from '@/components/search/SearchResult'
 
 Vue.use(Router)
 
@@ -105,6 +106,14 @@ const router = new Router({
 	  },
       alias: '/discover/playlist/:listId' 
   	},
+  	// 搜索页面
+  	{
+	  path: '/search',
+	  name: 'SearchResult',
+	  components: {
+	    app: SearchResult
+	  }
+    },
     // 首页/默认发现/推荐
     {
 	  path: '/',
