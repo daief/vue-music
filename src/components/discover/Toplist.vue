@@ -1,5 +1,9 @@
 <template>
-	<div>排行榜</div>
+	<div>
+		排行榜
+		<br />
+		{{this.$store.getters.TipMessage}}
+	</div>
 </template>
 
 <script>

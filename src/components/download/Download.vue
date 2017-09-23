@@ -1,5 +1,9 @@
 <template>
-	<div>下载</div>
+	<div>
+		下载
+		<br />
+		{{this.$store.getters.TipMessage}}
+	</div>
 </template>
 
 <script>

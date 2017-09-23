@@ -1,5 +1,6 @@
 // local storage的版本
 const VERSION = 'v0.01'
+const tip_message = '这部分还没完成，可以来试个右上的搜索。'
 
 const app = {
 	state: {
@@ -10,7 +11,9 @@ const app = {
 			// [1,2,3]
 			'playList': [],
 			'version': VERSION
-		}
+		},
+		// 提示语
+		tipMessage: tip_message
 	},
 	mutations: {
 		setLocal_data(state, obj) {
@@ -25,7 +28,8 @@ const app = {
 		}		
 	},
 	getters: {
-		Local_data: state => state.local_data
+		Local_data: state => state.local_data,
+		TipMessage: state => state.tipMessage
 	}
 }
 
