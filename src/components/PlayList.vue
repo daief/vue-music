@@ -45,7 +45,7 @@
 					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('\n')"
 						:class="{'line-active': index == currentLyricIndex}"
 						ref="line">
-						{{line.replace(/\[(\d*):(\d*)\.(\d*)\]/, "") }}
+						{{line.replace(/\[(\d*):(\d*)(\.?)(\d*)\]/, "") }}
 						<br />
 					</p>
 				</div>
@@ -98,9 +98,9 @@
 				for(i = 0; i < this.$store.getters.Music.lyric.split('\n').length; i++) {
 					var line = this.$store.getters.Music.lyric.split('\n')[i]
 					if (line) {
-						if(!/\[(\d*):(\d*)\.(\d*)\]/.test(line))	continue
+						if(!/\[(\d*):(\d*)(\.?)(\d*)\]/.test(line))	continue
 
-						let strTime = line.match(/\[(\d*):(\d*)\.(\d*)\]/)[0]
+						let strTime = line.match(/\[(\d*):(\d*)(\.?)(\d*)\]/)[0]
 						strTime = strTime.substr(1, strTime.length - 2)
 						let second = Number(strTime.split(':')[0]) * 60 + Number(strTime.split(':')[1])
 						if (second >= this.$store.getters.CurrentTime + 0.5) {

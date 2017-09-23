@@ -66,7 +66,7 @@
 		computed: {
 			// 解析的歌词
 			lyricAnalyze() {
-				let rs = this.songObj.lyric.replace(/\[(\d*):(\d*)\.(\d*)\]/g, '')
+				let rs = this.songObj.lyric.replace(/\[(\d*):(\d*)(\.?)(\d*)\]/g, '')
 				return rs.replace(/\n/g, '<br />')
 			},
 			// 预先展示的部分歌词
