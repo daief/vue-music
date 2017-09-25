@@ -4,7 +4,16 @@
 		<Loading v-show="isLoading"></Loading>
 		<div class="panel" v-show="!isLoading">
 			<div class="panel-title">
-				<div class="p-t-text">网友精选碟</div>
+				<div class="p-t-text">{{cat}}</div>
+				<div class="cat">
+					<a href="javascript:;">选择分类<em></em></a>
+					<div class="cat-panel">
+						
+					</div>
+				</div>
+				<div class="hot-new">
+					<a @click="toggleOrder('hot')" href="javascript:;" class="left" :class="{active: order == 'hot'}">热门</a><a @click="toggleOrder('new')" href="javascript:;" class="right" :class="{active: order == 'new'}">最新</a>
+				</div>
 			</div>
 			<div class="panel-body">
 				<div class="p-b-item"  v-for="(item,index) in playList">
@@ -20,10 +29,11 @@
 						</div>
 					</div>
 					<a href="javascript:;" class="desc">{{item.name}}</a>
+					<div><span style="font-size:12px;color:#aaa;">by&nbsp;</span><a href="javascript:;" class="creator">{{item.creator.nickname}}</a></div>
 				</div>
 			</div>
 		</div>
-
+		<!-- 分页 -->
 		<Page></Page>
 	</div>
 </template>
@@ -53,7 +63,21 @@
 							nickname: ''
 						}
 					}
-				]
+				],
+				order: 'hot',
+				cat: '全部',
+				allCat: {
+					// 语种
+					lan: ["华语", "欧美", "日语","韩语","粤语","小语种"],
+					// 风格
+					style: ['流行','摇滚','民谣','电子','舞曲','说唱','轻音乐','爵士','乡村','R&B/Soul','古典','民族','英伦','金属','朋克','蓝调','雷鬼','世界音乐','拉丁','另类/独立','New Age','古风','后摇','Bossa Nova'],
+					// 场景
+					occasion: ['清晨','夜晚','学习','工作','午休','下午茶','地铁','驾车','运动','旅行','散步','酒吧'],
+					// 情感
+					emotion: ['怀旧','清新','浪漫','性感','伤感','治愈','放松','孤独','感动','兴奋','快乐','安静','思念'],
+					// 主题
+					theme: ['影视原声','ACG','校园','游戏','70后','80后','90后','网络歌曲','KTV','经典','翻唱','吉他','钢琴','器乐','儿童','榜单','00后']
+				}
 			}
 		},
 		computed: {
@@ -64,8 +88,8 @@
 		methods: {
 			getPlayLists(){
 				this.isLoading = true
-				let order = 'hot'
-				let cat = '全部'
+				let order = this.order
+				let cat = this.cat
 				let offset = 30 * (this.CurrentPage - 1)
 				let params = 'order=' + order + '&cat=' + cat + '&limit=30&offset=' + offset
 				this.$axios.get(this.MUrl + 'top/playlist?' + params).then((rsp) => {
@@ -102,6 +126,10 @@
 					// 显示提示
 					this.$store.dispatch('showTip', '请更换村通网')
 				})
+			},
+			// 热门、最新切换
+			toggleOrder(o) {
+				this.order = o
 			}
 		},
 		created(){
@@ -110,6 +138,10 @@
 		watch: {
 			// 页数变化了
 			CurrentPage () {
+				this.getPlayLists()
+			},
+			// 切换了热门、最新
+			order(n, o) {
 				this.getPlayLists()
 			}
 		}
@@ -140,46 +172,74 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
-		background-position: -225px -153px;
 	}
 	.p-t-text {
-		margin-left: 35px;
 		font-size: 20px;
 	}
-	.p-t-small {
-		font-size: 12px;
-		line-height: 14px;
-		height: 14px;
-		margin-left: 2.5em;
-		color: #666;
+	/*分类*/
+	.cat {
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding: 0 8px;
+		margin-left: 13px;
+		background-color: #fff;
 	}
-	.p-t-small a {
+	.cat:active {
+		background-color: rgb(246,246,246);
+	}
+	.cat a{
+	    display: inline-block;
+    	height: 23px;
+    	line-height: 23px;
 		text-decoration: none;
-		color: #666;
+		font-style: normal;
+		font-size: 12px;
+		color: #0c73c2;
 	}
-	.p-t-small a:hover {
+	.cat em {
+		background: url(http://s2.music.126.net/style/web2/img/icon.png?fa4c5ba8e293165d41c5262eca5bcce0) no-repeat 0 9999px;
+		display: inline-block;
+		overflow: hidden;
+		vertical-align: middle;
+		width: 8px;
+		height: 5px;
+		background-position: -70px -543px;
+	}
+	/*热门、最新切换*/
+	.hot-new {
+		position: absolute;
+		right: 0;
+	}
+	.hot-new a {
+		display: inline-block;
+	    width: 46px;
+	    height: 25px;
+	    line-height: 25px;
+	    text-align: center;
+        font-size: 12px;
+       	color: #000;
+	    text-decoration: none;
+	}
+	.hot-new a:hover {
 		text-decoration: underline;
 	}
-	.p-t-more {
-		position: absolute;
-		right: 0px;
-		height: 20px;
-		font-size: 12px;
-		line-height: 20px;
-		color: #666;
-		cursor: pointer;
+	.hot-new a.left {
+		border: 1px solid #cdcdcd;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
 	}
-	.p-t-more span {
-		line-height: 20px;
-		display: inline-block;
+	.hot-new a.right {
+		border-right: 1px solid #cdcdcd;
+		border-top: 1px solid #cdcdcd;
+		border-bottom: 1px solid #cdcdcd;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
 	}
-	.p-t-more .icon {
-		width: 12px;
-		height: 11px;
-		background: url(http://s2.music.126.net/style/web2/img/index/index.png?4708415b697a3fdf22bda20b0ce78d2f) no-repeat 0 9999px;
-		background-position: 0 -240px;
+	.hot-new a.active {
+		background-color: rgb(210,12,13);
+		color: #fff;
 	}
+
 
 	.panel-body {
 		width: 100%;
@@ -188,7 +248,7 @@
 	}
 	.p-b-item {
 		width: 140px;
-		height: 200px;
+		/*height: 200px;*/
 		text-align: left;
 		margin: 15px 20px;
 	}
@@ -205,6 +265,11 @@
 		font-size: 14px;
 		line-height: 1.4;
 		color: #000;
+	}
+	.p-b-item .creator {
+		font-size: 12px;
+		line-height: 1.5;
+		color: #666;
 	}
 	.p-b-item img {
 		width: 140px;
