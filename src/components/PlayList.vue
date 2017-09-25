@@ -44,6 +44,7 @@
 				<div class="lyric" :style="lyricContentStyle">
 					<p class="line" v-for="(line,index) in $store.getters.Music.lyric.split('\n')"
 						:class="{'line-active': index == currentLyricIndex}"
+						:lyric-time="/\[(\d*):(\d*)(\.?)(\d*)\]/.test(line)?line.match(/\[(\d*):(\d*)(\.?)(\d*)\]/)[0]:''"
 						ref="line">
 						{{line.replace(/\[(\d*):(\d*)(\.?)(\d*)\]/, "") }}
 						<br />

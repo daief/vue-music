@@ -37,26 +37,29 @@
 			return {
 				second: date.getSeconds(),
 				minute: date.getMinutes(),
-				hour: date.getHours() % 12
+				hour: date.getHours() % 12,
+				secondAngle: 0,
+				minuteAngle: 0,
+				hourAngle: 0
 			}
 		},
 		computed: {
 			secondStyle () {
-				let angle = this.second * 6 % 360
+				this.secondAngle = this.second * 6 % 360
 				return {
-					transform: 'rotate(' + angle + 'deg)'
+					transform: 'rotate(' + this.secondAngle + 'deg)'
 				}
 			},
 			minuteStyle () {
-				let angle = this.minute * 6 % 360
+				this.minuteAngle = this.minute * 6 % 360 + this.second / 60 * 6
 				return {
-					transform: 'rotate(' + angle + 'deg)'
+					transform: 'rotate(' + this.minuteAngle + 'deg)'
 				}
 			},
 			hourStyle () {
-				let angle = (360/12) * this.hour + (360/(12*60)) * this.minute
+				this.hourAngle = 30 * this.hour + this.minute / 60 * 30
 				return {
-					transform: 'rotate(' + angle + 'deg)'
+					transform: 'rotate(' + this.hourAngle + 'deg)'
 				}
 			}
 		},
@@ -68,9 +71,15 @@
 		},
 		mounted () {
 			setTimeout(() => {
-				document.querySelector('#second img').style['transform'] = 'rotate(3600000deg)'
-				document.querySelector('#minute img').style['transform'] = 'rotate(36000deg)'
-				document.querySelector('#hour img').style['transform'] = 'rotate(360deg)'
+				document.querySelector('#second img').style['transition'] = 'transform 43200s linear'
+				document.querySelector('#minute img').style['transition'] = 'transform 43200s linear'
+				document.querySelector('#hour img').style['transition'] = 'transform 43200s linear'
+				document.querySelector('#second img').style['transform'] = 
+					'rotate(' + (259200 + this.secondAngle) + 'deg)'
+				document.querySelector('#minute img').style['transform'] = 
+					'rotate(' + (4320 + this.minuteAngle) + 'deg)'
+				document.querySelector('#hour img').style['transform'] = 
+					'rotate(' + (360 + this.hourAngle) + 'deg)'
 			}, 100)
 		}
 	}
@@ -153,16 +162,17 @@
 
 	#clock img[data-type='second'] {
 		/*transform: rotate(3600000deg);*/
-	    transition: transform 600000s linear;
+	    /*transition: transform 600000s linear;*/
 	}
 
 	#clock img[data-type='minute'] {
 		/*transform: rotate(36000deg);*/
-	    transition: transform 360000s linear;
+	    /*transition: transform 360000s linear;*/
 	}
 
 	#clock img[data-type='hour'] {
 		/*transform: rotate(360deg);*/
-	    transition: transform 216000s linear;
+	    /*transition: transform 216000s linear;*/
+	    /*transition: transform 60s linear;*/
 	}
 </style>
