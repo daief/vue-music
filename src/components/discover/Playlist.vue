@@ -1,7 +1,8 @@
 <template>
 	<!-- 这个歌单是歌单页面，子目录下的是歌单详情页面 -->
 	<div class="pl-li">
-		<div class="panel">
+		<Loading v-show="isLoading"></Loading>
+		<div class="panel" v-show="!isLoading">
 			<div class="panel-title">
 				<div class="p-t-text">网友精选碟</div>
 			</div>
@@ -15,7 +16,7 @@
 							<span class="icon-headset"></span>
 							<span class="number">{{item.playCount}}</span>
 							<a href="javascript:;" class="icon-play"
-								@click.stop.prevent=""></a>
+								@click.stop.prevent="playAllList(item.id)"></a>
 						</div>
 					</div>
 					<a href="javascript:;" class="desc">{{item.name}}</a>
@@ -31,10 +32,13 @@
 	import {mapGetters} from 'vuex'
 
 	import Page from '../common/Page'
+	import Loading from '../common/Loading'
+
 	export default {
 		name: 'Playlist',
 		components: {
-			'Page': Page
+			'Page': Page,
+			'Loading': Loading
 		},
 		data () {
 			return {
@@ -70,6 +74,33 @@
 					this.isLoading = false
 				}).catch((error) => {
 					console.log('歌单获取', error)
+				})
+			},
+			// 根据list的id播放列表
+			playAllList(listId){
+				this.$axios.get(this.MUrl + 'playlist/detail?id=' + listId)
+				.then((rsp) => {
+					let list = rsp.data.playlist.tracks.map((v,i) => {
+						return {
+							"id": v.id,
+				            "name": v.name,
+				            "singers": v.ar.map((v2) => {
+				            	return v2.name
+				            }),
+				            "album": v.al.name,
+				            "img": v.al.picUrl,
+				            "duration": v.dt
+						}
+					})
+					this.$store.dispatch('setPlayList', list)
+					this.$store.dispatch('setPlayIndex', 0)
+					this.$store.dispatch('setMusicFormPlayList', this.$store.getters.PlayIndex)
+					// 显示提示
+					this.$store.dispatch('showTip', '已开始播放')
+				}).catch((error) => {
+					console.log(error)
+					// 显示提示
+					this.$store.dispatch('showTip', '请更换村通网')
 				})
 			}
 		},

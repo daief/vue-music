@@ -14,7 +14,7 @@ Vue.config.productionTip = false
 // 用this就可以引用
 Vue.prototype.$axios = axios
 Vue.prototype.MUrl = 'http://101.132.101.118:3000/'
-// Vue.prototype.MUrl = 'http://127.0.0.1:3000/'
+Vue.prototype.MUrl = 'http://127.0.0.1:3000/'
 
 /* eslint-disable no-new */
 new Vue({
