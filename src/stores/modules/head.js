@@ -22,6 +22,7 @@ const head = {
 		},
 		// 用户信息
 		user: {
+			id: 449986778,
 			nickname: 'daief',
 			github: 'https://github.com/daief/vue-music',
 			// 不能使用 avatar: '../assets/images/avatar.jpg',这样会当成字符串处理，

@@ -31,7 +31,7 @@
 <script>
 	import SongResult from './result/SongResult'
 
-	import Page from './Page'
+	import Page from '../common/Page'
 
 	export default {
 		name: 'SearchResult',
