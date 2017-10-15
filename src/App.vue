@@ -47,7 +47,8 @@
                 this.windowPageYOffset = window.pageYOffset
             },
             backToTop() {
-                document.body.scrollTop = 0
+                // use window.scrollTo to top
+                window.scrollTo(0, 0)
             }
         },
         mounted() {
