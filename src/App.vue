@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import AudioBar from './components/AudioBar.vue'
     import HeaderBar from './components/HeaderBar.vue'
     export default {
@@ -32,7 +33,11 @@
                     'height': this.windowPageYOffset > 170 ? '44px': 0,
                     'width': this.windowPageYOffset > 170 ? '49px': 0
                 }
-            }
+            },
+            ...mapGetters([
+                'IsPlaying',
+                'Music'
+            ])
         },
         components: {
             'HeaderBar': HeaderBar,
@@ -132,7 +137,16 @@
                 console.log(err)
             })
         },
-        watch: {}
+        watch: {
+            IsPlaying(nv, ov) {
+                // 如果正在播放歌曲，将歌曲名作为页面title
+                if (nv) {
+                    document.title = this.Music.name;
+                } else {
+                    document.title = 'vue-music';
+                }
+            }
+        }
     }
 </script>
 
