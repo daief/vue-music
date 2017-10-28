@@ -14,7 +14,7 @@
 		<div class="right-warp">
 			<!-- 右侧其他信息 -->
 			<div class="other-info">
-				
+				<SongOtherInfo></SongOtherInfo>
 			</div>
 		</div>
 	</div>
@@ -22,6 +22,7 @@
 
 <script>
 	import SongInfo from './SongInfo.vue'
+	import SongOtherInfo from './SongOtherInfo.vue'
 	export default {
 		name: 'Song',
 		data () {
@@ -30,7 +31,8 @@
 			}
 		},
 		components: {
-			'SongInfo': SongInfo
+			'SongInfo': SongInfo,
+			'SongOtherInfo': SongOtherInfo
 		},
 		computed: {
 
@@ -72,5 +74,9 @@
 	}
 	.right-warp {
 		width: 270px;
+		padding: 25px;
+	}
+	SongOtherInfo {
+
 	}
 </style>
