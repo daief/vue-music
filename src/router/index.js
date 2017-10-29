@@ -130,6 +130,7 @@ router.beforeEach((to, from, next) => {
   // ...
   // console.log(to.path.substr(1, to.path.length - 1))
   // console.log(store.getters.TabList)
+  store.dispatch('setIsShowList', false)
   store.dispatch('setTabList', to.path.substr(1, to.path.length - 1))
   next()
 })

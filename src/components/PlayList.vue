@@ -4,6 +4,9 @@
 		<div class="list-head">
 			<div class="head-left">
 				<div class="title-text">播放列表({{$store.getters.PlayList.length}})</div>
+				<div class="title-op">
+					<span class="t-op" @click.stop.prevent="emptyPlayList()"><i class="ico del"></i><a href="javascript:;">清除</a></span>
+				</div>
 			</div>
 			<div class="head-right">
 				<div class="song-name">{{$store.getters.Music.name}}</div>
@@ -38,8 +41,13 @@
 				<div class="list-scroll">
 					<div class="scroll" :style="listScrollStyle" @mousedown.stop.prevent="listScrollDown" @mousemove.stop.prevent="listScrollMove($event)" @mouseup.stop.prevent="listScrollUp"></div>
 				</div>
-				<div v-if="$store.getters.PlayList.length == 0">
-					<font color="red">no music</font>
+				<div v-if="$store.getters.PlayList.length == 0" class="empty-list">
+					<div class="e-l-content">
+						<i class="ico-face"></i>
+						你还没有添加任何歌曲
+						<br />
+						去首页<router-link :to="{ name: 'Discover'}">发现音乐</router-link>，或在<router-link :to="{ name: 'Playlist'}">歌单</router-link>中邂逅你中意的歌曲。
+					</div>
 				</div>
 			</div>
 			<div class="body-right">
@@ -214,6 +222,10 @@
 						this.$store.dispatch('setPlayIndex', plIdx - 1)
 					}
 				}
+			},
+			// 清除播放列表
+			emptyPlayList() {
+				this.$store.dispatch('setStateIfListEmpty')
 			}
 		},
 		watch: {
@@ -263,6 +275,7 @@
 		background-color: #000;
 	}
 	.head-left {
+		position: relative;
 		flex: 0 0 50%;
 	}
 	.head-right {
@@ -285,6 +298,41 @@
 		line-height: 40px;
 		font-size: 14px;
     	color: #e2e2e2;
+	}
+	.title-op {
+		display: inline-block;
+		position: absolute;
+		height: 40px;
+		right: 25px;
+		line-height: 40px;
+		font-size: 12px;
+    	color: #e2e2e2;
+	}
+	.t-op {
+		cursor: pointer;
+	}
+	.t-op a {
+		color: #ccc;
+		text-decoration: none;
+	}
+	.t-op:hover a{
+		color: #e2e2e2;
+		text-decoration: underline;
+	}
+	.t-op:hover .ico.del{
+		background-position: -51px -20px;
+	}
+	.title-op .ico {
+		display: inline-block;
+	    position: relative;
+	    vertical-align: middle;
+		height: 16px;
+		width: 13px;
+	    margin-right: 5px;
+	    background: url(http://s2.music.126.net/style/web2/img/frame/playlist.png?8ba1b0af560f32b4631496f1f0f1749a) no-repeat 0 9999px;
+	}
+	.title-op .ico.del {
+		background-position: -51px 0;
 	}
 	.song-name {
 		height: 40px;
@@ -463,5 +511,32 @@
 	.line-active {
 		color: #fff;
     	font-size: 14px;
+	}
+	/*空列表*/
+	.empty-list {
+		width: 100%;
+		height: 100%;
+	}
+	.empty-list .ico-face {
+		display: inline-block;
+	    position: relative;
+	    width: 36px;
+	    height: 29px;
+	    margin-right: 3px;
+	    background: url(http://s2.music.126.net/style/web2/img/frame/playlist.png?8ba1b0af560f32b4631496f1f0f1749a) no-repeat 0 9999px;
+	    background-position: -138px 0;
+	    vertical-align: middle;
+	}
+	.e-l-content {
+		position: relative;
+		line-height: 33px;
+		top: 35%;
+		text-align: center;
+		font-size: 12px;
+		color: #aaa;
+	}
+	.e-l-content a {
+		font-size: 12px;
+		color: #aaa;
 	}
 </style>
