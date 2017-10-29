@@ -157,19 +157,6 @@ const audio = {
 		setStateIfListEmpty(state) {
 			state.playList = []
 			state.playIndex = 0
-			// state.duration = 0
-			// state.isPlaying = false
-			// state.canplay = false
-			// state.currentTime = 0
-			// state.music = {
-	  //           "id": 0,
-	  //           "url": "",
-	  //           "name": "",
-	  //           "singers": [],
-	  //           "album": "",
-	  //           "img": "",
-	  //           "lyric": ""
-	  //       }
 		}
 	},
 	// 提交mutations

@@ -207,7 +207,7 @@
 				this.$store.dispatch('pause')
 				let listLength = this.$store.getters.PlayList.length
 				if (listLength == 0) { return }
-				
+
 				// 循环
 				if (this.loopType == 1) {
 					let index = this.$store.getters.PlayIndex
@@ -358,22 +358,18 @@
 				handler(newvalue, oldvalue) {
 					// id改变的时候就是换歌了，换歌就要抓取url，lyric
 					if (newvalue.id && newvalue.id != oldvalue.id) {
-						let music = this.$store.getters.Music
-						music.id = newvalue.id
 						this.apiRequesting = true
 						this.$axios.all([
-					    	this.$axios.get(this.MUrl + 'music/url?id=' + music.id),
-						    this.$axios.get(this.MUrl + 'lyric?id=' + music.id)
+					    	this.$axios.get(this.MUrl + 'music/url?id=' + newvalue.id),
+						    this.$axios.get(this.MUrl + 'lyric?id=' + newvalue.id)
 						]).then(this.$axios.spread((url, lyric) => {
-						    music.url = url.data.data[0].url || ''
-						    music.lyric = lyric.data.lrc.lyric || ''
-
-						    this.$store.dispatch('setMusic', music)
+						    newvalue.url = url.data.data[0].url || ''
+						    newvalue.lyric = lyric.data.lrc.lyric || ''
 
 						    this.musicUrlLric = {
-								id: music.id || 0,
-						    	url: music.url || '',
-								lyric: music.lyric || ''
+								id: newvalue.id || 0,
+						    	url: newvalue.url || '',
+								lyric: newvalue.lyric || ''
 							}
 						    this.apiRequesting = false
 					  	})).catch((error) => {
