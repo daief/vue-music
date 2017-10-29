@@ -145,6 +145,16 @@
                 } else {
                     document.title = 'vue-music';
                 }
+            },
+            Music: {
+                handler(newvalue, oldvalue) {
+                    if (this.IsPlaying) {
+                        document.title = newvalue.name;
+                    } else {
+                        document.title = 'vue-music';
+                    }
+                },
+                deep: true
             }
         }
     }
