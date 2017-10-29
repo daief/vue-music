@@ -15,7 +15,7 @@
 			@mouseup.stop.prevent="bodyUp($event)">
 			<div class="body-left"
 				@mousewheel.stop.prevent="listWheel($event)">
-				<div class="list" :style="listContentStyle">
+				<div class="list" :style="listContentStyle" v-show="$store.getters.PlayList.length > 0">
 					<div v-for="(song,index) in $store.getters.PlayList" class="list-row" ref="listRow"
 						:class="{'row-playing': song.id == $store.getters.Music.id}"
 						@click.stop.prevent="listRowClick(song.id)">
@@ -25,7 +25,7 @@
 							{{song.name}}
 						</div>
 						<div class="row-3">
-							
+							<i title="删除" class="ic i-del" @click.stop.prevent="deleteSong(song)"></i>
 						</div>
 						<div class="row-4" @click.stop.prevent="">
 							<a href="javascript:;" v-for="(singer, index) in song.singers">{{singer}}<span v-if="index != song.singers.length - 1">/</span></a>
@@ -37,6 +37,9 @@
 				</div>
 				<div class="list-scroll">
 					<div class="scroll" :style="listScrollStyle" @mousedown.stop.prevent="listScrollDown" @mousemove.stop.prevent="listScrollMove($event)" @mouseup.stop.prevent="listScrollUp"></div>
+				</div>
+				<div v-if="$store.getters.PlayList.length == 0">
+					<font color="red">no music</font>
 				</div>
 			</div>
 			<div class="body-right">
@@ -190,6 +193,27 @@
 				let min = Number.parseInt(second / 60) || 0
 				let sec = Number.parseInt(second) % 60 || 0
 				return (min > 9? min: '0' + min) + ':' + (sec > 9? sec: '0' + sec)
+			},
+			// 从列表删除歌曲
+			deleteSong(song) {
+				let index = this.$store.getters.PlayList.indexOf(song)
+				if (index > -1) {
+					this.$store.dispatch('removeSongFromPlayList', index)
+					let plIdx = this.$store.getters.PlayIndex
+					if (index > plIdx) {
+						// ...
+					} else if (index == plIdx) {
+						if (this.$store.getters.PlayList.length == 0) {
+							// 删除的是最后一首歌
+							this.$store.dispatch('setStateIfListEmpty')
+						} else {
+							this.$store.dispatch('setPlayIndex', plIdx % this.$store.getters.PlayList.length)
+							this.listRowClick(this.$store.getters.PlayList[this.$store.getters.PlayIndex].id)
+						}
+					} else if (index < plIdx) {
+						this.$store.dispatch('setPlayIndex', plIdx - 1)
+					}
+				}
 			}
 		},
 		watch: {
@@ -347,9 +371,28 @@
 	    text-overflow: ellipsis;
 	}
 	/*操作*/
+	.list-row:hover .row-3 .ic {
+		display: inline-block;
+	}
 	.row-3 {
 		height: 28px;
 		width: 88px;
+		line-height: 28px;
+		text-align: right;
+		padding: 0 10px;
+	}
+	.ic {
+		display: none;
+		vertical-align: middle;
+		height: 16px;
+		width: 13px;
+		background: url(http://s2.music.126.net/style/web2/img/frame/playlist.png?8ba1b0af560f32b4631496f1f0f1749a) no-repeat 0 9999px;
+	}
+	.i-del {
+		background-position: -51px 0;
+	}
+	.i-del:hover {
+		background-position: -51px -20px;
 	}
 	/*歌手*/
 	.row-4 {

@@ -148,6 +148,28 @@ const audio = {
 	        // 暂时设置成playList里的值，duration在资源加载好后会获得真正的数据
 	        state.duration = state.playList[index].duration / 1000
 	        state.music = m
+		},
+		// 删除列表中的歌曲
+		removeSongFromPlayList(state, index) {
+			state.playList.splice(index, 1)
+		},
+		// 列表为空时的状态
+		setStateIfListEmpty(state) {
+			state.playList = []
+			state.playIndex = 0
+			// state.duration = 0
+			// state.isPlaying = false
+			// state.canplay = false
+			// state.currentTime = 0
+			// state.music = {
+	  //           "id": 0,
+	  //           "url": "",
+	  //           "name": "",
+	  //           "singers": [],
+	  //           "album": "",
+	  //           "img": "",
+	  //           "lyric": ""
+	  //       }
 		}
 	},
 	// 提交mutations
@@ -223,6 +245,14 @@ const audio = {
 		/*****************************playList改版******************************/
 		setMusicFormPlayList({commit}, index){
 			commit('setMusicFormPlayList', index)
+		},
+		// 删除列表中的歌曲
+		removeSongFromPlayList({commit}, index) {
+			commit('removeSongFromPlayList', index)
+		},
+		// 列表为空时的状态
+		setStateIfListEmpty({commit}) {
+			commit('setStateIfListEmpty')
 		}
 	},
 	getters: {
