@@ -90,7 +90,13 @@
 				// 加载
 				dataLoading: true,
 				// 请求数据中
-				apiRequesting: true
+				apiRequesting: true,
+				// 音乐url
+				musicUrlLric: {
+					id: 0,
+					url: '',
+					lyric: ''
+				}
 			}
 		},
 		components: {
@@ -145,6 +151,7 @@
 		},
 		methods: {
 			preMusic(){
+				if (this.$store.getters.PlayList.length == 0) { return }
 				let listLength = this.$store.getters.PlayList.length
 				let index = this.$store.getters.PlayIndex + listLength
 				this.$store.dispatch('setPlayIndex', --index % listLength)
@@ -158,6 +165,7 @@
 				this.$store.dispatch('togglePlay')
 			},
 			nextMusic() {
+				if (this.$store.getters.PlayList.length == 0) { return }
 				// 单曲的时候，邻近下一曲
 				if (this.loopType == 2) {
 					let listLength = this.$store.getters.PlayList.length
@@ -198,6 +206,7 @@
 			musicEnded(){
 				this.$store.dispatch('pause')
 				let listLength = this.$store.getters.PlayList.length
+				if (listLength == 0) { return }
 				
 				// 循环
 				if (this.loopType == 1) {
@@ -360,11 +369,25 @@
 						    music.lyric = lyric.data.lrc.lyric || ''
 
 						    this.$store.dispatch('setMusic', music)
+
+						    this.musicUrlLric = {
+								id: music.id || 0,
+						    	url: music.url || '',
+								lyric: music.lyric || ''
+							}
 						    this.apiRequesting = false
 					  	})).catch((error) => {
 					  		this.apiRequesting = false
 							console.log(error)
 					  	})
+					}
+
+					// music改变了，但实际上播放的歌曲没变，因为Music从list中加载会导致url丢失
+					if (newvalue.id && !newvalue.url) {
+						if (newvalue.id == this.musicUrlLric.id) {
+							newvalue.url = this.musicUrlLric.url
+							newvalue.lyric = this.musicUrlLric.lyric
+						}
 					}
 				},
 				deep: true
