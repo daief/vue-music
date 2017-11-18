@@ -137,6 +137,13 @@
                 console.log(err)
             })
         },
+        beforeCreate () {
+        	if (window.location.protocol == 'https:') {
+        		if (confirm("需要在http下查看效果（http://daief.coding.me/vue-music/）")) {
+        			window.location.href = "http://daief.coding.me/vue-music/"
+        		}
+        	}
+        },
         watch: {
             IsPlaying(nv, ov) {
                 // 如果正在播放歌曲，将歌曲名作为页面title

@@ -87,6 +87,10 @@
 			ResultCount (n) {
 				this.$store.dispatch('setTotalPage', Math.ceil(n / 30))
 				this.$store.dispatch('setCurrentPage', 1)
+			},
+			// 页数变化了
+			CurrentPage () {
+				window.scrollTo(0, 0)
 			}
 		}
 	}

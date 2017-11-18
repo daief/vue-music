@@ -177,7 +177,6 @@
 			// 页数变化了
 			CurrentPage () {
 				this.getPlayLists()
-				window.scrollTo(0, 0)
 			},
 			// 切换了分类
 			cat(n, o) {
