@@ -105,9 +105,13 @@
 							<div class="blist-column" 
 								v-for="(toplist, bListIndex) in $store.getters.BList.slice(0, 3)">
 								<div class="blist-column-top even-bg">
-									<img :src="toplist.img">
+									<router-link :to="{ name: 'Toplist', query: { id: toplist.id }}">
+										<img :src="toplist.img">
+									</router-link>
 									<div class="blist-top-right">
-										<span class="title">{{toplist.name}}</span>
+										<router-link :to="{ name: 'Toplist', query: { id: toplist.id }}" style="text-decoration: none;">
+											<span class="title">{{toplist.name}}</span>
+										</router-link>
 										<span class="play" title="播放" 
 											@click.stop.prevent="playAllTopList(toplist.tracks)"></span>
 										<span class="subscribe" title="Ծ‸Ծ"></span>
@@ -131,7 +135,11 @@
 										<i class="sub" title="收藏？不存在的~"></i>
 									</div>
 								</div>
-								<div class="blist-item blist-item-more odd-bg"><span>查看更多></span></div>
+								<div class="blist-item blist-item-more odd-bg">
+									<router-link :to="{ name: 'Toplist', query: { id: toplist.id }}">
+										<span>查看更多></span>
+									</router-link>			
+								</div>
 							</div>
 							<!-- v-for生成榜单end -->
 						</div>
@@ -628,6 +636,9 @@
 	    white-space: nowrap;
 	    word-wrap: normal;
 	}
+	.blist-top-right .title:hover {
+		text-decoration: underline;
+	}
 	.blist-top-right .play,
 	.blist-top-right .subscribe {
 		width: 22px;
@@ -702,9 +713,12 @@
 	.blist-item-more {
 		padding-right: 20px;
 		text-align: right;
-		cursor: pointer;
 	}
-	.blist-item-more:hover {
+	.blist-item-more a {
+		color: #111;
+		text-decoration: none;
+	}
+	.blist-item-more a:hover {
 		text-decoration: underline;
 	}
 	.blist-item .no {

@@ -62,7 +62,14 @@
 							<router-link :title="song.name"
 								:to="{ name: 'Song', params: { songId: song.id }}">{{song.name}}</router-link>
 						</td>
-						<td class="col-3">{{formatSecondTime(song.duration / 1000)}}</td>
+						<td class="col-3">
+							<div class="song-duration">
+								{{formatSecondTime(song.duration / 1000)}}
+							</div>
+							<div class="opt">
+								<a href="javascript:;" class="ic-add" title="添加歌曲到播放列表" @click="addSongToPlayList(song)"></a>
+							</div>
+						</td>
 						<td class="col-4">{{...song.singers}}</td>
 						<td class="col-5">{{song.album}}</td>
 					</tr>
@@ -179,6 +186,17 @@
 				for(let i = 0; i < this.listObj.tracks.length; i++) {
 					this.$store.dispatch('addSongToPlayList', this.listObj.tracks[i])
 				}
+				this.$store.dispatch('showTip', '已添加到列表')
+			},
+			// 添加歌曲到播放列表
+			addSongToPlayList(song) {
+				// 已经在播放当前歌曲
+				if (this.$store.getters.Music.id == song.id) {
+					this.$store.dispatch('showTip', '已正在播放')
+					return;
+				}
+				// 先添加到列表
+				this.$store.dispatch('addSongToPlayList', song)
 				this.$store.dispatch('showTip', '已添加到列表')
 			},
 			// 播放列表中的单曲
@@ -507,5 +525,24 @@
 	}
 	.li-pl:hover {
 	    background-position: 0 -128px;
+	}
+	.opt {
+		display: none;
+	}
+	.col-3:hover .song-duration {
+		display: none;
+	}
+	.col-3:hover .opt {
+		display: block;
+	}
+	.ic-add {
+		display: inline-block;
+		width: 13px;
+	    height: 13px;
+	    background: url(http://s2.music.126.net/style/web2/img/icon.png?a65799eaaf5f24cfb399cc7acc347ab9) no-repeat 0 9999px;
+	    background-position: 0 -700px;
+	}
+	.ic-add:hover {
+    	background-position: -22px -700px;
 	}
 </style>
