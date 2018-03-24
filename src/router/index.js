@@ -17,7 +17,6 @@ import SearchResult from '@/components/search/SearchResult'
 Vue.use(Router)
 
 const router = new Router({
-  base: '/vue-music/',
   routes: [
   	// 发现/默认推荐
     {
