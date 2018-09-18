@@ -1,5 +1,5 @@
 # 介绍
-学习使用 vue、vue-router、vuex，山寨一个网易云音乐的 pc 网页版。
+使用 vue、vue-router、vuex，山寨一个网易云音乐的 pc 网页版，仅用于个人学习，借此认识前端模块化编程、单页应用、webpack 资源打包等概念。
 - `NeteaseCloudMusicApi/` 是 api 服务，提供网易云音乐接口
 - `vue-music/` 前端项目代码部分
 
@@ -21,5 +21,3 @@ $ npm start
 
 <!-- 界面 -->
 ![](./preview/view.png)
-
-__仅用于学习。__
