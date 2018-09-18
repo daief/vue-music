@@ -19,4 +19,7 @@ $ cd vue-music && npm i
 $ npm start
 ```
 
-仅用于学习。
+<!-- 界面 -->
+![](./preview/view.png)
+
+__仅用于学习。__
