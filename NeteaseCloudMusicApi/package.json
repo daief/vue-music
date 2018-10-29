@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha -r intelli-espower-loader -t 20000 test",
-    "!precommit": "lint-staged"
+    "!precommit": "lint-staged",
+    "now": "now"
   },
   "lint-staged": {
     "*.js": [
@@ -25,6 +26,7 @@
     "apicache": "^0.9.0",
     "big-integer": "^1.6.17",
     "express": "^4.15.2",
+    "now": "^11.4.6",
     "request": "^2.81.0"
   },
   "devDependencies": {
