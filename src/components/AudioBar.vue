@@ -1,5 +1,22 @@
 <template>
   <div class="audio-bar" :class="{unlock}">
+    <!-- audio -->
+    <audio
+      id="player"
+      src="https://m10.music.126.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
+      preload
+			@loadstart="musicLoadStart"
+      @progress="musicProgress"
+			@durationchange="musicDurationChange"
+			@loadedmetadata="musicMetadata"
+			@canplay="musicCanplay"
+      @canplaythrough="musicCanplayThrough"
+			@timeupdate="musicTimeUpdate"
+      @waiting="musicWaiting"
+			@ended="musicEnded"
+			@error="musicError"
+    />
+
     <!-- 位置锁定 -->
     <div class="position-lock">
       <span class="ibs c-p ctr-lock" :class="{unlock}" @click="togglePositionLocked" />
@@ -7,20 +24,103 @@
 
     <!-- content -->
     <div class="wrap">
-
+      <!-- 播放、上下首按钮 -->
+			<div class="control-btns">
+				<span @click="clickPre" class="ibs c-p ctrl pre"/>
+				<span @click="clickTogglePlay" class="ibs c-p ctrl" :class="[audioBar.isPlaying ? 'pause' : 'play']" />
+				<span @click="clickNext" class="ibs c-p ctrl next"/>
+			</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue, Provide, Watch} from 'vue-property-decorator';
+import {Component, Vue } from 'vue-property-decorator';
+import {State} from 'vuex-class';
+import { AudioBarState } from '@/stores/audioBar';
 
 @Component
 export default class AudioBar extends Vue {
+  // states of store
+  @State public audioBar!: AudioBarState;
+
+  // data
   public unlock: boolean = false;
 
+  // methods
   public togglePositionLocked() {
     this.unlock = !this.unlock;
+  }
+
+  // --------------------- audio events
+  public musicLoadStart() {
+    // 开始寻找指定的音频或视频
+    console.log('loadStart');
+  }
+
+  public musicProgress() {
+    // 正在下载指定的音频或视频
+    console.log('progress');
+  }
+
+  public musicDurationChange() {
+    // 时长已改变
+    console.log('duration change');
+  }
+
+  public musicMetadata() {
+    // 元数据已加载
+    console.log('meta data');
+  }
+
+  public musicCanplay() {
+    // 可以播放
+    console.log('can play');
+  }
+
+  public musicCanplayThrough() {
+    // 可以一直不停地播放
+    console.log('can play through');
+  }
+
+  public musicTimeUpdate() {
+    // 时间改变
+    console.log('time update');
+  }
+
+  public musicWaiting() {
+    // 等待数据，并非错误
+    console.log('waiting');
+  }
+
+  public musicEnded() {
+    // 播放结束
+    console.log('end');
+  }
+
+  public musicError() {
+    // 加载错误
+    console.log('error');
+  }
+  // --------------------- audio events
+
+  public clickPre() {
+    console.log('pre');
+  }
+
+  public clickTogglePlay() {
+    console.log('toggle play');
+    this.$store.dispatch('audioBar/setIsPlaying', !this.audioBar.isPlaying);
+  }
+
+  public clickNext() {
+    console.log('next');
+  }
+
+  // life cycle
+  public mounted() {
+    const {dispatch} = this.$store;
+    dispatch('audioBar/setPlayer', document.getElementById('player'));
   }
 }
 </script>
@@ -35,6 +135,10 @@ export default class AudioBar extends Vue {
 		height: @bar-height;
     position: relative;
     transition: all .7s;
+
+    #player {
+      display: none;
+    }
 
     &.unlock {
       height: 7px;
@@ -105,6 +209,67 @@ export default class AudioBar extends Vue {
       margin: 0 auto;
       margin-top: @bar-height - 47px;
       position: relative;
+
+      @inner-h: 42px;
+
+      .control-btns {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 136px;
+        height: 36px;
+        padding-top: @inner-h - 36px;
+
+        .small() {
+          width: 28px;
+          height: 28px;
+          margin-left: 8px;
+          margin-right: 8px;
+        }
+
+        .main() {
+          height: 36px;
+          width: 36px;
+        }
+
+        .ctrl {
+          background: url(@img-playbar) no-repeat;
+
+          &.pre {
+            .small();
+            background-position: 0 -130px;
+            &:hover {
+              background-position: -30px -130px;
+            }
+          } // .pre
+
+          &.next {
+            .small();
+            background-position: -80px -130px;
+            &:hover {
+              background-position: -110px -130px;
+            }
+          } // .next
+
+          &.play {
+            .main();
+            background-position: 0px -204px;
+
+            &:hover {
+              background-position: -40px -204px;
+            }
+          } // .play
+
+          &.pause {
+            .main();
+            background-position: 0 -165px;
+
+            &:hover {
+              background-position: -40px -165px;
+            }
+          } // .pause
+        }
+      } // .control-btns
     } // .wrap
   } // .audio-bar
 </style>

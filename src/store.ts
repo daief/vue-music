@@ -1,16 +1,16 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { ModuleTree } from 'vuex';
+import { AudioBarState, audioBar } from './stores/audioBar';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
+export interface RootState {
+  audioBar: AudioBarState;
+}
 
-  },
-  mutations: {
-
-  },
-  actions: {
-
+export default new Vuex.Store<RootState>({
+  modules: {
+    audioBar,
   },
 });
+
