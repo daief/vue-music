@@ -1,8 +1,8 @@
-import { ActionTree } from 'vuex';
+import { ActionTree, MutationTree } from 'vuex';
 import { RootState } from '@/store';
 
 export interface AudioBarState {
-  player: HTMLAudioElement | null;
+  player: HTMLAudioElement;
   isPlaying: boolean;
   canPlay: boolean;
   currentTime: number;
@@ -12,22 +12,35 @@ export interface AudioBarState {
 export enum TYPES {
   SET_PLAYER = 'SET_PLAYER',
   SET_ISPLAYING = 'SET_ISPLAYING',
+  SET_CANPLAY = 'SET_CANPLAY',
+  SET_CURRENTTIME = 'SET_CURRENTTIME',
+  SET_DURATION = 'SET_DURATION',
 }
 
 const state: AudioBarState = {
-  player: null,
+  // aoid judging is player null, player must exist
+  player: null as any,
   isPlaying: false,
   canPlay: false,
   currentTime: 0,
   duration: 0,
 };
 
-const mutations = {
-  [TYPES.SET_PLAYER](s: AudioBarState, ele: HTMLAudioElement) {
+const mutations: MutationTree<AudioBarState> = {
+  [TYPES.SET_PLAYER](s, ele: HTMLAudioElement) {
     s.player = ele;
   },
-  [TYPES.SET_ISPLAYING](s: AudioBarState, status: boolean) {
+  [TYPES.SET_ISPLAYING](s, status: boolean) {
     s.isPlaying = status;
+  },
+  [TYPES.SET_CANPLAY](s, status: boolean) {
+    s.canPlay = status;
+  },
+  [TYPES.SET_CURRENTTIME](s, t: number) {
+    s.currentTime = t;
+  },
+  [TYPES.SET_DURATION](s, t: number) {
+    s.duration = t;
   },
 };
 
@@ -38,6 +51,30 @@ const actions: ActionTree<AudioBarState, RootState> = {
   },
   setIsPlaying({commit}, status) {
     commit(TYPES.SET_ISPLAYING, status);
+  },
+  setCanplay({commit}, status) {
+    commit(TYPES.SET_CANPLAY, status);
+  },
+  setCurrentTime({commit}, t) {
+    commit(TYPES.SET_CURRENTTIME, t);
+  },
+  setDuration({commit}, t) {
+    commit(TYPES.SET_DURATION, t);
+  },
+  play({commit, state: s}) {
+    commit(TYPES.SET_ISPLAYING, true);
+    s.player.play();
+  },
+  pause({commit, state: s}) {
+    commit(TYPES.SET_ISPLAYING, false);
+    s.player.pause();
+  },
+  togglePlay({state: s, dispatch}) {
+    if (s.isPlaying) {
+      dispatch('pause');
+    } else if (s.canPlay) {
+      dispatch('play');
+    }
   },
 };
 

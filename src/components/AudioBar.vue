@@ -3,7 +3,7 @@
     <!-- audio -->
     <audio
       id="player"
-      src="https://m10.music.126.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
+      src="https://m10.music.1261.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
       preload
 			@loadstart="musicLoadStart"
       @progress="musicProgress"
@@ -39,6 +39,9 @@ import {Component, Vue } from 'vue-property-decorator';
 import {State} from 'vuex-class';
 import { AudioBarState } from '@/stores/audioBar';
 
+// audio bar action
+const ABAction = (name: string) => `audioBar/${name}`;
+
 @Component
 export default class AudioBar extends Vue {
   // states of store
@@ -56,6 +59,7 @@ export default class AudioBar extends Vue {
   public musicLoadStart() {
     // 开始寻找指定的音频或视频
     console.log('loadStart');
+    this.$store.dispatch(ABAction('setCanplay'), false);
   }
 
   public musicProgress() {
@@ -66,6 +70,7 @@ export default class AudioBar extends Vue {
   public musicDurationChange() {
     // 时长已改变
     console.log('duration change');
+    this.$store.dispatch(ABAction('setDuration'), this.audioBar.player.duration);
   }
 
   public musicMetadata() {
@@ -76,6 +81,7 @@ export default class AudioBar extends Vue {
   public musicCanplay() {
     // 可以播放
     console.log('can play');
+    this.$store.dispatch(ABAction('setCanplay'), true);
   }
 
   public musicCanplayThrough() {
@@ -86,6 +92,7 @@ export default class AudioBar extends Vue {
   public musicTimeUpdate() {
     // 时间改变
     console.log('time update');
+    this.$store.dispatch(ABAction('setCurrentTime'), this.audioBar.player.currentTime);
   }
 
   public musicWaiting() {
@@ -110,7 +117,7 @@ export default class AudioBar extends Vue {
 
   public clickTogglePlay() {
     console.log('toggle play');
-    this.$store.dispatch('audioBar/setIsPlaying', !this.audioBar.isPlaying);
+    this.$store.dispatch(ABAction('togglePlay'));
   }
 
   public clickNext() {
@@ -119,8 +126,7 @@ export default class AudioBar extends Vue {
 
   // life cycle
   public mounted() {
-    const {dispatch} = this.$store;
-    dispatch('audioBar/setPlayer', document.getElementById('player'));
+    this.$store.dispatch(ABAction('setPlayer'), document.getElementById('player'));
   }
 }
 </script>
