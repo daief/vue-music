@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import AudioBar from '@/components/AudioBar.vue';
+import AudioBar from '@/components/AudioBar/index.vue';
 
 @Component({
   components: {
