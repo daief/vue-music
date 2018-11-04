@@ -50,6 +50,9 @@
         <!-- 进度条 -->
         <time-bar />
       </div>
+
+      <!-- volume -->
+      <volume />
     </div>
   </div>
 </template>
@@ -62,6 +65,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { AudioBarState } from '@/stores/audioBar';
 import TimeBar from './TimeBar/index.vue';
+import Volume from './Volume/index.vue';
 
 // audio bar action
 const ABAction = (name: string) => `audioBar/${name}`;
@@ -69,6 +73,7 @@ const ABAction = (name: string) => `audioBar/${name}`;
 @Component({
   components: {
     TimeBar,
+    Volume,
   },
 })
 export default class AudioBar extends Vue {

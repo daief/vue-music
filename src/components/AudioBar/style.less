@@ -1,6 +1,5 @@
 @import "~@/styles/variables.less";
 
-@img-playbar: "~@/assets/images/playbar.png";
 @bar-height: 53px;
 
 .audio-bar {
@@ -29,8 +28,8 @@
     left: 0;
     right: 67px;
     z-index: -1;
-    background-position: 0 5px;
-    background: url(@img-playbar) repeat-x;
+    .bg-pbar-x();
+    background-position: 0 0;
   }
 
   &::after {
@@ -41,8 +40,8 @@
     bottom: 0;
     right: 0;
     z-index: -1;
-    background-position: 0 5px;
-    background: url(@img-playbar) repeat-x;
+    .bg-pbar-x();
+    background-position: 0 0;
   }
 
   .position-lock {
@@ -51,12 +50,12 @@
     right: 15px;
     width: 52px;
     height: 67px;
-    background: url(@img-playbar) no-repeat 0 9999px;
+    .bg-pbar();
     background-position: 0 -380px;
     text-align: center;
 
     .ctr-lock {
-      background: url(@img-playbar) no-repeat 0 9999px;
+      .bg-pbar();
       background-position: -100px -380px;
       width: 18px;
       height: 18px;
@@ -107,7 +106,7 @@
       }
 
       .ctrl {
-        background: url(@img-playbar) no-repeat;
+        .bg-pbar();
 
         &.pre {
           .small();
