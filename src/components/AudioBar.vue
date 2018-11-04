@@ -3,7 +3,7 @@
     <!-- audio -->
     <audio
       id="player"
-      src="https://m10.music.1261.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
+      src="https://m10.music.126.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
       preload
 			@loadstart="musicLoadStart"
       @progress="musicProgress"
@@ -30,19 +30,47 @@
 				<span @click="clickTogglePlay" class="ibs c-p ctrl" :class="[audioBar.isPlaying ? 'pause' : 'play']" />
 				<span @click="clickNext" class="ibs c-p ctrl next"/>
 			</div>
+
+      <!-- 歌曲图片 -->
+      <div class="music-cover">
+        <img class="c-p" src="http://p1.music.126.net/gK0nqK8iiG1o6axkHmmqrQ==/109951163416312552.jpg?param=34y34" alt="">
+      </div>
+
+      <!-- 文本、进度条信息 -->
+      <div class="center">
+        <!-- 信息 -->
+        <div class="texts">
+          <span class="ibs c-p-line f-thide fs-12 song">{{'歌名'}}</span>
+          <div class="fs-12 f-thide singers">
+            <span class="ibs c-p-line singer">{{'singer1'}}</span>
+            <span class="ibs">/</span>
+            <span class="ibs c-p-line singer">{{'singer2'}}</span>
+          </div>
+        </div>
+        <!-- 进度条 -->
+        <time-bar />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue } from 'vue-property-decorator';
-import {State} from 'vuex-class';
+/**
+ * 底部播放条
+ */
+import { Component, Vue } from 'vue-property-decorator';
+import { State } from 'vuex-class';
 import { AudioBarState } from '@/stores/audioBar';
+import TimeBar from './TimeBar';
 
 // audio bar action
 const ABAction = (name: string) => `audioBar/${name}`;
 
-@Component
+@Component({
+  components: {
+    TimeBar,
+  },
+})
 export default class AudioBar extends Vue {
   // states of store
   @State public audioBar!: AudioBarState;
@@ -187,6 +215,7 @@ export default class AudioBar extends Vue {
       height: 67px;
       background: url(@img-playbar) no-repeat 0 9999px;
       background-position: 0 -380px;
+      text-align: center;
 
       .ctr-lock {
         background: url(@img-playbar) no-repeat 0 9999px;
@@ -215,6 +244,7 @@ export default class AudioBar extends Vue {
       margin: 0 auto;
       margin-top: @bar-height - 47px;
       position: relative;
+      display: flex;
 
       @inner-h: 42px;
 
@@ -276,6 +306,40 @@ export default class AudioBar extends Vue {
           } // .pause
         }
       } // .control-btns
+
+      .music-cover {
+        font-size: 0;
+        width: 34px;
+        height: 34px;
+        margin-top: 6px;
+        margin-right: 15px;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      } // .music-cover
+
+      .center {
+        width: 608px;
+
+        .texts {
+          height: 28px;
+          line-height: 28px;
+          display: flex;
+
+          .song {
+            color: #e8e8e8;
+            max-width: 300px;
+          }
+
+          .singers {
+            color: #9b9b9b;
+            max-width: 220px;
+            margin-left: 15px;
+          }
+        } // .texts
+      } // .center
     } // .wrap
   } // .audio-bar
 </style>

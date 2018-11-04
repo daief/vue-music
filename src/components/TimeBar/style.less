@@ -1,0 +1,57 @@
+@import "~@/styles/variables.less";
+
+.time-bar {
+  height: 12px;
+  display: flex;
+  align-items: center;
+
+  .br-5() {
+    border-radius: 5px;
+  }
+
+  .line {
+    .br-5();
+    flex: 1;
+    height: 9px;
+    background-color: #181716;
+    box-shadow: 0 0 0 3px #000 inset;
+    position: relative;
+
+    .ready {
+      .br-5();
+      position: absolute;
+      width: 30%; // TODO
+      height: 100%;
+      background-color: #535353;
+    }
+
+    .current {
+      .br-5();
+      position: absolute;
+      width: 20%; // TODO
+      height: 100%;
+      background-color: #c90500;
+
+      .drag-point {
+        @_w: 16px;
+
+        width: @_w;
+        height: @_w;
+        position: absolute;
+        top: 50%;
+        right: -(@_w / 2);
+        margin-top: -(@_w / 2);
+      }
+    }
+  } // .line
+
+  .counter {
+    text-align: center;
+    padding: 0 20px;
+    color: #797979;
+
+    .curr {
+      color: #a1a1a1;
+    }
+  } // .counter
+}

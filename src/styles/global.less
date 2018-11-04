@@ -6,3 +6,46 @@
 .c-p {
   cursor: pointer;
 }
+// change cursor hand & hover underline
+.c-p-line {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+// over hide & text ...
+.f-thide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+// define font-size
+.fs-12 {
+  font-size: 12px;
+}
+// a small component
+.drag-point {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: whitesmoke;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%;
+    border-radius: 50%;
+    background-color: #bb1d08;
+  }
+
+  &:hover {
+    background-color: #fff;
+    box-shadow: 0 0 2px 1px #fff;
+  }
+}
