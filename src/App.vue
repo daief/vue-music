@@ -4,7 +4,9 @@
       <!-- write header here <div class="header"></div> -->
       <router-view/>
     </div>
-    <audio-bar />
+    <div class="bottom">
+      <audio-bar id="audioBar" />
+    </div>
   </div>
 </template>
 
@@ -40,6 +42,17 @@ html, body { height: 100%; }
     flex: 1;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+  }
+
+  & > .bottom {
+    position: relative;
+
+    #audioBar {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      z-index: 100;
+    }
   }
 }
 </style>
