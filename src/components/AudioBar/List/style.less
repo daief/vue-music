@@ -1,0 +1,139 @@
+@import '~@/styles/variables.less';
+
+.list {
+  @w: 980px;
+  @h: 300px;
+  @head-h: 40px;
+
+  z-index: 2;
+  width: @w;
+  height: @h;
+  position: absolute;
+  top: -@h;
+  left: 50%;
+  margin-left: -@w / 2;
+
+  .row {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+
+    .r-left {
+      width: 520px;
+      height: 100%;
+      padding-left: 30px;
+    }
+
+    .r-right {
+      height: 100%;
+      width: @w - 520px;
+    }
+  }
+
+  .head {
+    height: @head-h;
+    background-color: #181818e6;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    .r-left {
+      position: relative;
+
+      h1 {
+        position: absolute;
+        height: @head-h;
+        line-height: @head-h;
+        margin: 0;
+        font-weight: bold;
+        color: #e2e2e2;
+      }
+
+      .i-clear {
+        position: absolute;
+        top: 50%;
+        margin-top: -7.5px;
+        right: 20px;
+        height: 15px;
+        line-height: 15px;
+        color: #ccc;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: -16px;
+          width: 13px;
+          height: 100%;
+          background: url(@iPlaylisticons) no-repeat;
+          background-position: -51px 0;
+        }
+
+        &:hover {
+          color: #e2e2e2;
+          &::before {
+            background-position: -51px -20px;
+          }
+        }
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 80%;
+        top: 10%;
+        right: 0;
+        background-color: #e2e2e2;
+        opacity: .2;
+      }
+    } // .r-left
+
+    .r-right {
+      h1 {
+        width: 90%;
+        height: @head-h;
+        line-height: @head-h;
+        text-align: center;
+        margin: 0 auto;
+        color: #fff;
+      }
+
+      .i-close {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right: 8px;
+        top: 5px;
+        background: url(@iPlaylisticons) no-repeat;
+        background-position: -195px 10px;
+
+        &:hover {
+          background-position: -195px -20px;
+        }
+      }
+    } // .r-right
+  } // .head
+
+  .body {
+    height: @h - @head-h;
+    overflow: hidden;
+    background: url('~@/assets/images/playlist_bg.png') repeat-y;
+    background-position: -1014px 0;
+
+    img.bg-msk {
+      position: absolute;
+      z-index: 0;
+      width: 100%;
+      height: auto;
+      top: -36px;
+      opacity: .2;
+    }
+
+    .r-left {
+      background-color: rgba(18, 18, 18, 0.5);;
+    }
+
+    .r-right {
+      background-color: rgba(18, 18, 18, 0.01);;
+    }
+  }
+}

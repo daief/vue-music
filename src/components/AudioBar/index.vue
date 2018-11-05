@@ -53,7 +53,16 @@
 
       <!-- volume -->
       <volume />
-    </div>
+
+      <!-- loop-type -->
+      <span class="ibs c-p i-loop order" />
+
+      <!-- list -->
+      <span class="ibs c-p fs-12 i-list">1111</span>
+      <list />
+    </div><!-- wrap -->
+
+
   </div>
 </template>
 
@@ -66,6 +75,7 @@ import { State } from 'vuex-class';
 import { AudioBarState } from '@/stores/audioBar';
 import TimeBar from './TimeBar/index.vue';
 import Volume from './Volume/index.vue';
+import List from './List/index.vue';
 
 // audio bar action
 const ABAction = (name: string) => `audioBar/${name}`;
@@ -74,6 +84,7 @@ const ABAction = (name: string) => `audioBar/${name}`;
   components: {
     TimeBar,
     Volume,
+    List,
   },
 })
 export default class AudioBar extends Vue {

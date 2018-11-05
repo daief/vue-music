@@ -177,5 +177,53 @@
         }
       } // .texts
     } // .center
+
+    .i-loop {
+      @w: 25px;
+      width: @w;
+      height: @w;
+      .bg-pbar();
+      margin: 0 2px;
+      margin-top: 11px;
+
+      &.order {
+        background-position: -3px -344px;
+        &:hover {
+          background-position: -33px -344px;
+        }
+      }
+
+      &.random {
+        background-position: -66px -248px;
+        &:hover {
+          background-position: -93px -248px;
+        }
+      }
+
+      &.one {
+        background-position: -66px -344px;
+        &:hover {
+          background-position: -93px -344px;
+        }
+      }
+    } // .i-loop
+
+    .i-list {
+      @w: 25px;
+      width: 38px;
+      height: @w;
+      line-height: @w + 1px;
+      .bg-pbar();
+      background-position: -42px -68px;
+      margin-top: 11px;
+      padding-left: @w - 4px;
+      color: #666;
+      text-align: center;
+      overflow-wrap: break-word;
+
+      &:hover {
+        background-position: -42px -98px;
+      }
+    } // .i-list
   } // .wrap
 } // .audio-bar
