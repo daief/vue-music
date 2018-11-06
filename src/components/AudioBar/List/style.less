@@ -21,7 +21,6 @@
     .r-left {
       width: 520px;
       height: 100%;
-      padding-left: 30px;
     }
 
     .r-right {
@@ -38,6 +37,7 @@
 
     .r-left {
       position: relative;
+      padding-left: 30px;
 
       h1 {
         position: absolute;
@@ -129,11 +129,140 @@
     }
 
     .r-left {
-      background-color: rgba(18, 18, 18, 0.5);;
-    }
+      z-index: 1;
+      background-color: rgba(18, 18, 18, 0.5);
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        // 整体风格
+        width: 6px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        // 滚动条里面小方块
+        border-radius: 4px;
+        cursor: pointer;
+        background: #504d4d;
+        border: 1px solid #a6a6a6;
+        opacity: 0.8;
+      }
+
+      &::-webkit-scrollbar-track {
+        // 滚动条里面轨道
+        border-radius: 10px;
+        background: #000;
+        opacity: .5;
+      }
+
+      ul.songs {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        @line-h: 28px;
+
+        li.song {
+          margin: 0;
+          padding: 0;
+          height: @line-h;
+          padding-left: 30px;
+          display: flex;
+          position: relative;
+
+          .col(@width) {
+            width: @width;
+            height: @line-h;
+            line-height: @line-h;
+          }
+
+          .song-name {
+            .col(256px);
+            color: #ccc;
+          } // .song-name
+
+          .icons {
+            .col(80px);
+
+            .i-wrap {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              display: none;
+
+              .ic {
+                width: 13px;
+                height: 16px;
+                margin-left: 7px;
+                background: url('~@/assets/images/playlisticons.png') no-repeat;
+
+                &.download {
+                  width: 14px;
+                  background-position: -57px -50px;
+                  &:hover {
+                    background-position: -80px -50px;
+                  }
+                }
+                &.delete {
+                  background-position: -51px 0;
+                  &:hover {
+                    background-position: -51px -20px;
+                  }
+                }
+              }
+            }
+          } // .icons
+
+          .singers {
+            .col(80px);
+            color: #9b9b9b;
+          } // .singers
+
+          .duration {
+            .col(45px);
+            color: #666;
+          } // .duration
+
+          .light-color() {
+            .song-name,
+            .singers,
+            .duration {
+              color: #fff;
+              transition: color .3s;
+            }
+          }
+
+          &.playing {
+            background-color: rgba(0, 0, 0, 0.3);
+            .light-color();
+            &::before {
+              content: "";
+              position: absolute;
+              left: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 10px;
+              height: 13px;
+              background: url('~@/assets/images/playlisticons.png') no-repeat;
+              background-position: -182px 0;
+            }
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            .light-color();
+            .i-wrap {
+              display: flex;
+            }
+          }
+        } // .song
+      } // .songs
+    } // .r-left
 
     .r-right {
-      background-color: rgba(18, 18, 18, 0.01);;
+      z-index: 1;
+      background-color: rgba(18, 18, 18, 0.01);
     }
   }
 }

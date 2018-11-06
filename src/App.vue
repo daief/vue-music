@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="content">
+    <div class="content smoth-scroll">
       <!-- write header here <div class="header"></div> -->
       <router-view/>
     </div>
@@ -41,7 +41,6 @@ html, body { height: 100%; }
   & > .content {
     flex: 1;
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
   }
 
   & > .bottom {
