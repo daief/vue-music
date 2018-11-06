@@ -23,3 +23,15 @@ export function formatSecond(second: number, isMilli: boolean = false) {
     .join(':');
 }
 
+/**
+ * 时分秒格式字符串转为毫秒数
+ * @param str 时分秒格式字符串
+ */
+export function format2millisecond(str: string) {
+  return str
+    .trim()
+    .split(':')
+    .map((s) => +s)
+    .reverse()
+    .reduce((pre, next) => pre + next * 60) * 1000;
+}
