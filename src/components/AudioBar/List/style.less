@@ -263,6 +263,45 @@
     .r-right {
       z-index: 1;
       background-color: rgba(18, 18, 18, 0.01);
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        // 整体风格
+        width: 6px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        // 滚动条里面小方块
+        border-radius: 4px;
+        cursor: pointer;
+        background: #504d4d;
+        border: 1px solid #a6a6a6;
+        opacity: 0.8;
+      }
+
+      &::-webkit-scrollbar-track {
+        // 滚动条里面轨道
+        border-radius: 10px;
+        background: #000;
+        opacity: .5;
+      }
+    } // .r-right
+
+    .lyric {
+      .line {
+        color: #989898;
+        word-wrap: break-word;
+        text-align: center;
+        line-height: 32px;
+        min-height: 32px;
+        margin: 0;
+
+        &.active {
+          color: #fff;
+          font-size: 14px;
+        }
+      } // .line
     }
-  }
+  } // .body
 }

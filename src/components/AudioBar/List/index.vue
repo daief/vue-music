@@ -45,8 +45,12 @@
           </li>
         </ul>
       </div>
-      <div class="r-right">
-
+      <div class="r-right smoth-scroll">
+        <div class="lyric">
+          <p class="line active" v-for="(line, i) in lyricArr" :key="i">
+            {{line.content}}
+          </p>
+        </div>
       </div>
     </div>
   </div>
