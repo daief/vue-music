@@ -3,7 +3,7 @@
     <!-- audio -->
     <audio
       id="player"
-      src="https://m10.music.126.net/20181101231425/c107b45496ff8eb7fc546e85a86a781b/ymusic/0b5c/1667/1b20/c7a8b01226aff9d1ac1159a7b0a2da27.mp3"
+      :src="songUrl && songUrl.url"
       preload
 			@loadstart="musicLoadStart"
       @progress="musicProgress"
@@ -58,7 +58,7 @@
       <span class="ibs c-p i-loop order" />
 
       <!-- list -->
-      <span class="ibs c-p fs-12 i-list">1111</span>
+      <span class="ibs c-p fs-12 i-list">{{audioBar.playList.length || 0}}</span>
       <list />
     </div><!-- wrap -->
 
@@ -70,12 +70,13 @@
 /**
  * 底部播放条
  */
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { AudioBarState, ABAction } from '@/stores/audioBar';
 import TimeBar from './TimeBar/index.vue';
 import Volume from './Volume/index.vue';
 import List from './List/index.vue';
+import { Song, SongUrl } from '@/interfaces';
 
 @Component({
   components: {
@@ -90,6 +91,8 @@ export default class AudioBar extends Vue {
 
   // data
   public unlock: boolean = false;
+
+  public songUrl: SongUrl | null = null;
 
   // methods
   public togglePositionLocked() {
@@ -165,9 +168,55 @@ export default class AudioBar extends Vue {
     console.log('next');
   }
 
-  // life cycle
+  /**
+   * 检查并获取歌曲链接
+   */
+  public checkAndFetchSongUrl(song: Song | null) {
+    if (song) {
+      const {id} = song;
+      this.$u.get(`/check/music?id=${id}`).then((res) => {
+        // 检查是否可用
+        if (res.failMark) {
+          // 接口状态失败
+          return {failMark: true, success: true};
+        } else {
+          return {success: res.success};
+        }
+      })
+      .then((checkRes) => {
+        if (checkRes.success) {
+          // 成功，通过接口获取 url
+          return this.$u.get(`/song/url?id=${id}`);
+        } else {
+          // 失败
+          return {failMark: true};
+        }
+      })
+      .then((res) => {
+        // 失败则通过拼接方式尝试获得 url
+        this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : {
+          url: `http://music.163.com/song/media/outer/url?id=${id}.mp3`,
+        };
+      });
+    } else {
+      this.songUrl = null;
+    }
+  }
+
+  // --------------------- life cycle
+  public beforeMount() {
+    this.checkAndFetchSongUrl(this.audioBar.song);
+  }
+
   public mounted() {
+    // 获取 audio 元素
     this.$store.dispatch(ABAction('setPlayer'), document.getElementById('player'));
+  }
+
+  @Watch('audioBar.song')
+  public onSongChange(val: Song | null) {
+    // 歌曲切换
+    this.checkAndFetchSongUrl(val);
   }
 }
 </script>

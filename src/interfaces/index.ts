@@ -75,3 +75,13 @@ export interface Lyric extends KVAny {
     userid: nstr,
   };
 }
+
+export interface SongUrl extends KVAny {
+  id?: nstr;
+  url: string;
+  br?: nstr;
+  size?: number;
+  md5?: string;
+  code?: number;
+  type?: string;
+}
