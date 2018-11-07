@@ -72,13 +72,10 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import { AudioBarState } from '@/stores/audioBar';
+import { AudioBarState, ABAction } from '@/stores/audioBar';
 import TimeBar from './TimeBar/index.vue';
 import Volume from './Volume/index.vue';
 import List from './List/index.vue';
-
-// audio bar action
-const ABAction = (name: string) => `audioBar/${name}`;
 
 @Component({
   components: {

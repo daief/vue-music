@@ -1,3 +1,7 @@
+import { instance } from './axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { HttpRes } from '@/interfaces';
+
 /**
  * 输入多个参数，一般用于根据多级 index 生成 key，返回字符串：param1-param2- ...
  * @param args 参数
@@ -34,4 +38,41 @@ export function format2millisecond(str: string) {
     .map((s) => +s)
     .reverse()
     .reduce((pre, next) => pre + next * 60) * 1000;
+}
+
+/**
+ * 处理 axios 请求结果
+ * @param p axios request response
+ */
+const dealAxiosResult = (p: Promise<AxiosResponse>): Promise<HttpRes> => p.then((res: AxiosResponse) => {
+  if (res.data.code === 200) {
+    return res.data || {};
+  } else {
+    return {
+      ...res.data,
+      failMark: true,
+    };
+  }
+}).catch((err) => ({
+  failMark: true,
+  httpError: err,
+}));
+
+/**
+ * axios post method
+ * @param url url
+ * @param data payload data
+ * @param config axios config
+ */
+export function post(url: string, data?: any, config?: AxiosRequestConfig): Promise<HttpRes> {
+  return dealAxiosResult(instance.post(url, data, config));
+}
+
+/**
+ * axios get method
+ * @param url url
+ * @param config axios config
+ */
+export function get(url: string, config?: AxiosRequestConfig): Promise<HttpRes> {
+  return dealAxiosResult(instance.get(url, config));
 }
