@@ -1,6 +1,6 @@
 import { instance } from './axios';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { HttpRes } from '@/interfaces';
+import { HttpRes, DelayResult } from '@/interfaces';
 
 /**
  * 输入多个参数，一般用于根据多级 index 生成 key，返回字符串：param1-param2- ...
@@ -75,4 +75,98 @@ export function post(url: string, data?: any, config?: AxiosRequestConfig): Prom
  */
 export function get(url: string, config?: AxiosRequestConfig): Promise<HttpRes> {
   return dealAxiosResult(instance.get(url, config));
+}
+
+/**
+ * 从对象中安全地取值
+ * @param obj 目标对象
+ * @param prop 属性
+ * @param defaultVal 默认返回值
+ */
+export function getProp(obj: any, prop: string, defaultVal: any): any {
+  if (obj && obj[prop]) {
+    return obj[prop];
+  } else {
+    return defaultVal;
+  }
+}
+
+/**
+ * 误差检查函数
+ * @param left 数值1
+ * @param right 数值2
+ */
+export function withinErrorMargin(left: number, right: number): boolean {
+  return Math.abs(left - right) < Number.EPSILON * Math.pow(2, 2);
+}
+
+/**
+ * 将元素在指定时长内滚动到指定位置
+ * @param el html 元素
+ * @param duration 时长
+ * @param y 目标位置
+ */
+export function controlScroll(el: HTMLElement, duration: number, y: number): () => void {
+  let {scrollTop} = el;
+  const deltY = y - scrollTop;
+
+  let lastTime = 0;
+  let canContinue = true;
+
+  const loop = (now: number) => {
+    if (lastTime === 0) {
+      lastTime = now;
+    }
+    const deltTime = now - lastTime;
+    const perMoveY = withinErrorMargin(deltTime, 0) ? 0 : deltY / (duration / 1000) * (deltTime / 1000);
+    scrollTop += perMoveY;
+
+    el.scrollTo({
+      left: 0,
+      top: scrollTop,
+      behavior: 'instant',
+    });
+
+    if (Math.abs(el.scrollTop - y) >= 6 && canContinue) {
+      lastTime = now;
+      window.requestAnimationFrame(loop);
+    }
+  };
+
+  window.requestAnimationFrame(loop);
+
+  return function clear() {
+    canContinue =  false;
+  };
+}
+
+/**
+ * promise 封装的 setTimeout，delay(...).promise.then(...)
+ * @param func 回调
+ * @param millisecond 毫秒数
+ * @param options 传递给回调的参数
+ */
+export function delay(func: (...args: any[]) => any, millisecond: number, options?: any): DelayResult {
+  let timer = 0;
+  let reject: any = null;
+  const promise = new Promise((resolve, tmpReject) => {
+    reject = tmpReject;
+    timer = window.setTimeout(() => {
+      resolve(func(options));
+    }, millisecond);
+  });
+
+  return {
+    get promise() {
+      return promise;
+    },
+    cancel() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = 0;
+        reject(new Error('timer is cancelled'));
+        reject = null;
+      }
+    },
+  };
 }

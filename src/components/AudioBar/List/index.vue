@@ -7,19 +7,18 @@
         <span class="ibs c-p-line i-clear">清除</span>
       </div>
       <div class="r-right">
-        <h1 class="fs-14 f-thide">歌曲名称</h1>
+        <h1 class="fs-14 f-thide">{{$u.getProp(audioBar.song, 'name', '歌词')}}</h1>
         <span class="ibs c-p i-close" />
       </div>
     </div>
     <!-- list body -->
     <div class="body row">
-      <img class="bg-msk" src="https://music.163.com/api/img/blur/109951163028865730" >
+      <img class="bg-msk" :src="`https://music.163.com/api/img/blur/${$u.getProp(audioBar.song, 'album', {}).pic_str || $u.getProp(audioBar.song, 'album', {}).pic}`" >
       <div class="r-left smoth-scroll">
         <ul class="songs">
-          <!-- TODO -->
           <li
             class="song c-p"
-            :class="{playing: item.id === 1}"
+            :class="{playing: item.id === $u.getProp(audioBar.song, 'id', 0)}"
             v-for="item in audioBar.playList"
             :key="item.id"
           >
@@ -46,9 +45,9 @@
           </li>
         </ul>
       </div>
-      <div class="r-right smoth-scroll">
+      <div class="r-right smoth-scroll" ref="elLyricsContainer" @scroll="handleLyricScroll">
         <div class="lyric">
-          <p class="line active" v-for="(line, i) in LyricArr" :key="i">
+          <p class="line" :class="{active: LyricIndex === i}" v-for="(line, i) in LyricArr" :key="i">
             {{line.content}}
           </p>
         </div>
@@ -61,7 +60,7 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { AudioBarState, ABAction } from '@/stores/audioBar';
-import { Song, Lyric } from '@/interfaces';
+import { Song, Lyric, DelayResult } from '@/interfaces';
 
 interface LrcTime {
   formatTime: string;
@@ -76,6 +75,13 @@ export default class List extends Vue {
 
   public lyric: Lyric | null = null;
 
+  // 歌词自动滚动动画的控制
+  private lyricScroller: Function | null = null;
+
+  // 是否关闭自动滚动
+  private isCloseAutoScrollLyric: boolean = false;
+  private isCloseAutoScrollLyricTimer: DelayResult | null = null;
+
   // 获取默认歌词数组
   get LyricArr(): LrcTime[] {
     const {lyric} = this;
@@ -86,6 +92,20 @@ export default class List extends Vue {
   get TLyricArr(): LrcTime[] {
     const {lyric} = this;
     return this.getLyricArr(lyric && lyric.tlyric ? lyric.tlyric.lyric : undefined);
+  }
+
+  // active 歌词的行
+  get LyricIndex(): number {
+    const {currentTime} = this.audioBar;
+    // time offset second
+    const timeOffSet = 1.3;
+    for (let index = this.LyricArr.length - 1; index >= 0; index--) {
+      const element = this.LyricArr[index];
+      if ((currentTime + timeOffSet) * 1000 >= element.millisecond) {
+        return index;
+      }
+    }
+    return -1;
   }
 
   // 解析歌词字符串为歌词数组
@@ -112,15 +132,52 @@ export default class List extends Vue {
     }
   }
 
+  // 歌词滚动事件处理
+  public handleLyricScroll() {
+    this.isCloseAutoScrollLyric = true;
+    if (this.isCloseAutoScrollLyricTimer) {
+      this.isCloseAutoScrollLyricTimer.cancel();
+    }
+    // 1.5s 后恢复自动滚动
+    this.isCloseAutoScrollLyricTimer = this.$u.delay(() => {
+      this.isCloseAutoScrollLyric = false;
+    }, 1500);
+    // cancel
+    this.isCloseAutoScrollLyricTimer.promise.catch(() => void 0);
+  }
+
+
+
   public beforeMount() {
     // first fetch lyric
     this.fetchLyric(this.audioBar.song);
   }
 
+  // mounted() {
+  //   setTimeout(() => {
+  //     const clear = this.$u.controlScroll(this.$refs.elLyricsContainer as any, 4000, 200)
+  //     setTimeout(() => {
+  //       clear()
+  //     }, 1000);
+  //   }, 2000);
+  // }
+
   @Watch('audioBar.song')
   public onSongChange(val: Song | null) {
     // 歌曲切换
     this.fetchLyric(val);
+  }
+
+  @Watch('LyricIndex')
+  public onLyricIndexChange(val: number) {
+    // TODO 多行优化
+    const LINE_HEIGHT = 32;
+    const elContainer = this.$refs.elLyricsContainer as HTMLDivElement;
+    const scrollMax = elContainer.scrollHeight - elContainer.clientHeight;
+    const target = (val - 3) * LINE_HEIGHT;
+    if (0 < target && target <= scrollMax && !this.isCloseAutoScrollLyric) {
+      this.lyricScroller = this.$u.controlScroll(elContainer, 300, target);
+    }
   }
 }
 </script>

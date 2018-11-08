@@ -18,6 +18,7 @@ export interface Album extends KVAny {
   name: string;
   picUrl: string;
   pic: number;
+  pic_str?: string;
 }
 
 /**
@@ -76,6 +77,9 @@ export interface Lyric extends KVAny {
   };
 }
 
+/**
+ * 歌曲 url 接口结果
+ */
 export interface SongUrl extends KVAny {
   id?: nstr;
   url: string;
@@ -84,4 +88,12 @@ export interface SongUrl extends KVAny {
   md5?: string;
   code?: number;
   type?: string;
+}
+
+/**
+ * delay 方法返回结果
+ */
+export interface DelayResult {
+  readonly promise: Promise<any>;
+  cancel: () => void;
 }

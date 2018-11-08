@@ -3,7 +3,7 @@
     <!-- audio -->
     <audio
       id="player"
-      :src="songUrl && songUrl.url"
+      :src="$u.getProp(songUrl, 'url', '')"
       preload
 			@loadstart="musicLoadStart"
       @progress="musicProgress"
@@ -33,18 +33,19 @@
 
       <!-- 歌曲图片 -->
       <div class="music-cover">
-        <img class="c-p" src="http://p1.music.126.net/gK0nqK8iiG1o6axkHmmqrQ==/109951163416312552.jpg?param=34y34" alt="">
+        <img class="c-p" :src="`${$u.getProp(audioBar.song, 'album', {}).picUrl}?param=34y34`" alt="">
       </div>
 
       <!-- 文本、进度条信息 -->
       <div class="center">
         <!-- 信息 -->
         <div class="texts">
-          <span class="ibs c-p-line f-thide fs-12 song">{{'歌名'}}</span>
+          <span class="ibs c-p-line f-thide fs-12 song">{{$u.getProp(audioBar.song, 'name', '')}}</span>
           <div class="fs-12 f-thide singers">
-            <span class="ibs c-p-line singer">{{'singer1'}}</span>
-            <span class="ibs">/</span>
-            <span class="ibs c-p-line singer">{{'singer2'}}</span>
+            <template v-for="(singer, si) in $u.getProp(audioBar.song, 'artists', [])">
+              <span class="ibs c-p-line singer" :key="$u.generateKey(si)">{{singer.name}}</span>
+              <span class="ibs" :key="$u.generateKey(si, si)">{{si !== $u.getProp(audioBar.song, 'artists', []).length - 1 ? '/' : null}}</span>
+            </template>
           </div>
         </div>
         <!-- 进度条 -->
@@ -58,7 +59,7 @@
       <span class="ibs c-p i-loop order" />
 
       <!-- list -->
-      <span class="ibs c-p fs-12 i-list">{{audioBar.playList.length || 0}}</span>
+      <span class="ibs c-p fs-12 i-list">{{audioBar.playList.length}}</span>
       <list />
     </div><!-- wrap -->
 
@@ -135,7 +136,6 @@ export default class AudioBar extends Vue {
 
   public musicTimeUpdate() {
     // 时间改变
-    console.log('time update');
     this.$store.dispatch(ABAction('setCurrentTime'), this.audioBar.player.currentTime);
   }
 

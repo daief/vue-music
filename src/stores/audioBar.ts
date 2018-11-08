@@ -32,7 +32,7 @@ const state: AudioBarState = {
   duration: 0,
   playList: inBuiltList,
   // 当前播放歌曲
-  song: inBuiltList[0],
+  song: inBuiltList[1],
 };
 
 const mutations: MutationTree<AudioBarState> = {
