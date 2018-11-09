@@ -100,13 +100,27 @@ export function withinErrorMargin(left: number, right: number): boolean {
   return Math.abs(left - right) < Number.EPSILON * Math.pow(2, 2);
 }
 
+export interface ControlScrollParam {
+  el: HTMLElement;
+  duration: number;
+  y: number;
+  endCall?: () => void;
+}
+
 /**
- * 将元素在指定时长内滚动到指定位置
+ * 将元素在指定时长内滚动到指定位置(y轴)
  * @param el html 元素
  * @param duration 时长
  * @param y 目标位置
  */
-export function controlScroll(el: HTMLElement, duration: number, y: number): () => void {
+export function controlScroll(param: ControlScrollParam): () => void {
+  const {
+    el,
+    duration,
+    y,
+    endCall = () => void 0,
+  } = param;
+
   let {scrollTop} = el;
   const deltY = y - scrollTop;
 
@@ -130,6 +144,9 @@ export function controlScroll(el: HTMLElement, duration: number, y: number): () 
     if (Math.abs(el.scrollTop - y) >= 6 && canContinue) {
       lastTime = now;
       window.requestAnimationFrame(loop);
+    } else {
+      // end or cancel
+      endCall();
     }
   };
 

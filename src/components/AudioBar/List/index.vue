@@ -76,11 +76,13 @@ export default class List extends Vue {
   public lyric: Lyric | null = null;
 
   // 歌词自动滚动动画的控制
-  private lyricScroller: Function | null = null;
+  private lyricScroller: (() => void) | null = null;
 
   // 是否关闭自动滚动
   private isCloseAutoScrollLyric: boolean = false;
   private isCloseAutoScrollLyricTimer: DelayResult | null = null;
+  // 是否正在自动滚动
+  private isAutoScrollLyric: boolean = false;
 
   // 获取默认歌词数组
   get LyricArr(): LrcTime[] {
@@ -132,35 +134,51 @@ export default class List extends Vue {
     }
   }
 
+  // 滚动歌词到指定（？激活）行
+  public scrollLyricToActive(line?: number) {
+    // TODO 多行优化
+    const actualLine = line !== undefined ? line : this.LyricIndex;
+    const LINE_HEIGHT = 32;
+    const elContainer = this.$refs.elLyricsContainer as HTMLDivElement;
+    const scrollMax = elContainer.scrollHeight - elContainer.clientHeight;
+    let target = (actualLine - 3) * LINE_HEIGHT;
+    target = 0 < target ? target : 0;
+    target = target <= scrollMax ? target : scrollMax;
+    // 正在播放且可以自动滚动
+    if (!this.isCloseAutoScrollLyric && this.audioBar.isPlaying) {
+      this.isAutoScrollLyric = true;
+      this.lyricScroller = this.$u.controlScroll({
+        el: elContainer,
+        duration: 300,
+        y: target,
+        endCall: () => {
+          this.isAutoScrollLyric = false;
+        },
+      });
+    }
+  }
+
   // 歌词滚动事件处理
   public handleLyricScroll() {
+    if (this.isAutoScrollLyric) { return; }
+    // 主动滚动时屏蔽自动滚动
     this.isCloseAutoScrollLyric = true;
     if (this.isCloseAutoScrollLyricTimer) {
       this.isCloseAutoScrollLyricTimer.cancel();
     }
-    // 1.5s 后恢复自动滚动
+    // 2.5s 后恢复自动滚动且滚动到指定行
     this.isCloseAutoScrollLyricTimer = this.$u.delay(() => {
       this.isCloseAutoScrollLyric = false;
-    }, 1500);
+      this.scrollLyricToActive();
+    }, 2500);
     // cancel
     this.isCloseAutoScrollLyricTimer.promise.catch(() => void 0);
   }
-
-
 
   public beforeMount() {
     // first fetch lyric
     this.fetchLyric(this.audioBar.song);
   }
-
-  // mounted() {
-  //   setTimeout(() => {
-  //     const clear = this.$u.controlScroll(this.$refs.elLyricsContainer as any, 4000, 200)
-  //     setTimeout(() => {
-  //       clear()
-  //     }, 1000);
-  //   }, 2000);
-  // }
 
   @Watch('audioBar.song')
   public onSongChange(val: Song | null) {
@@ -170,14 +188,7 @@ export default class List extends Vue {
 
   @Watch('LyricIndex')
   public onLyricIndexChange(val: number) {
-    // TODO 多行优化
-    const LINE_HEIGHT = 32;
-    const elContainer = this.$refs.elLyricsContainer as HTMLDivElement;
-    const scrollMax = elContainer.scrollHeight - elContainer.clientHeight;
-    const target = (val - 3) * LINE_HEIGHT;
-    if (0 < target && target <= scrollMax && !this.isCloseAutoScrollLyric) {
-      this.lyricScroller = this.$u.controlScroll(elContainer, 300, target);
-    }
+    this.scrollLyricToActive(val);
   }
 }
 </script>
