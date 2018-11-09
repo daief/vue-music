@@ -9,6 +9,8 @@ export interface AudioBarState {
   canPlay: boolean;
   currentTime: number;
   duration: number;
+  bufferedTime: number;
+  isWaiting: boolean;
   playList: Song[];
   song: Song | null;
 }
@@ -19,6 +21,8 @@ export enum TYPES {
   SET_CANPLAY = 'SET_CANPLAY',
   SET_CURRENTTIME = 'SET_CURRENTTIME',
   SET_DURATION = 'SET_DURATION',
+  SET_BUFFEREDTIME = 'SET_BUFFEREDTIME',
+  SET_ISWAITING = 'SET_ISWAITING',
   SET_PLAYLIST = 'SET_PLAYLIST',
   SET_SONG = 'SET_SONG',
 }
@@ -30,6 +34,8 @@ const state: AudioBarState = {
   canPlay: false,
   currentTime: 0,
   duration: 0,
+  bufferedTime: 0,
+  isWaiting: false,
   playList: inBuiltList,
   // 当前播放歌曲
   song: inBuiltList[1],
@@ -50,6 +56,12 @@ const mutations: MutationTree<AudioBarState> = {
   },
   [TYPES.SET_DURATION](s, t: number) {
     s.duration = t;
+  },
+  [TYPES.SET_BUFFEREDTIME](s, v: number) {
+    s.bufferedTime = v;
+  },
+  [TYPES.SET_ISWAITING](s, v: boolean) {
+    s.isWaiting = v;
   },
   [TYPES.SET_PLAYLIST](s, list: Song[]) {
     s.playList = list;
@@ -76,6 +88,12 @@ const actions: ActionTree<AudioBarState, RootState> = {
   setDuration({commit}, t) {
     commit(TYPES.SET_DURATION, t);
   },
+  setBufferedTime({commit}, t) {
+    commit(TYPES.SET_BUFFEREDTIME, t);
+  },
+  setIsWaiting({commit}, v) {
+    commit(TYPES.SET_ISWAITING, v);
+  },
   setPlayList({commit}, t) {
     commit(TYPES.SET_PLAYLIST, t);
   },
@@ -84,18 +102,26 @@ const actions: ActionTree<AudioBarState, RootState> = {
   },
   // ---------------------------- setter end
   play({commit, state: s}) {
-    commit(TYPES.SET_ISPLAYING, true);
-    s.player.play();
+    s.player.play().catch(() => void 0).then(() => {
+      commit(TYPES.SET_ISPLAYING, true);
+    });
   },
   pause({commit, state: s}) {
-    commit(TYPES.SET_ISPLAYING, false);
     s.player.pause();
+    commit(TYPES.SET_ISPLAYING, false);
   },
   togglePlay({state: s, dispatch}) {
     if (s.isPlaying) {
       dispatch('pause');
     } else if (s.canPlay) {
       dispatch('play');
+    }
+  },
+  // 设置缓冲情况
+  setPlayerBuffered({dispatch, state: s}) {
+    const {player} = s;
+    if (player.readyState === 4) {
+      dispatch('setBufferedTime', player.buffered.end(0));
     }
   },
 };

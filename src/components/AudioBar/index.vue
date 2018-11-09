@@ -102,14 +102,15 @@ export default class AudioBar extends Vue {
 
   // --------------------- audio events
   public musicLoadStart() {
+    console.log('musicLoadStart');
     // 开始寻找指定的音频或视频
-    console.log('loadStart');
     this.$store.dispatch(ABAction('setCanplay'), false);
   }
 
   public musicProgress() {
     // 正在下载指定的音频或视频
-    console.log('progress');
+    console.log('musicProgress');
+    this.$store.dispatch(ABAction('setPlayerBuffered'));
   }
 
   public musicDurationChange() {
@@ -126,7 +127,9 @@ export default class AudioBar extends Vue {
   public musicCanplay() {
     // 可以播放
     console.log('can play');
+    this.$store.dispatch(ABAction('setIsWaiting'), false);
     this.$store.dispatch(ABAction('setCanplay'), true);
+    this.$store.dispatch(ABAction('setPlayerBuffered'));
   }
 
   public musicCanplayThrough() {
@@ -142,6 +145,7 @@ export default class AudioBar extends Vue {
   public musicWaiting() {
     // 等待数据，并非错误
     console.log('waiting');
+    this.$store.dispatch(ABAction('setIsWaiting'), true);
   }
 
   public musicEnded() {
@@ -214,9 +218,11 @@ export default class AudioBar extends Vue {
   }
 
   @Watch('audioBar.song')
-  public onSongChange(val: Song | null) {
-    // 歌曲切换
-    this.checkAndFetchSongUrl(val);
+  public onSongChange(val: Song | null, old: Song | null) {
+    if (val && (old && val.id !== old.id)) {
+      // 歌曲切换
+      this.checkAndFetchSongUrl(val);
+    }
   }
 }
 </script>
