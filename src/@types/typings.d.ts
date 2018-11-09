@@ -12,3 +12,9 @@ declare module 'vue/types/vue' {
     $u: typeof $u;
   }
 }
+
+declare global {
+  const config: {
+    API_SERVER: string,
+  };
+}
