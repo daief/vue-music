@@ -56,11 +56,11 @@
       <volume />
 
       <!-- loop-type -->
-      <span class="ibs c-p i-loop order" />
+      <span class="ibs c-p i-loop" :class="loopType" @click="handleClickLoopType"/>
 
       <!-- list -->
-      <span class="ibs c-p fs-12 i-list">{{audioBar.playList.length}}</span>
-      <list />
+      <span class="ibs c-p fs-12 i-list" @click="handleToggleShowList">{{audioBar.playList.length}}</span>
+      <list v-show="audioBar.isShowList" />
     </div><!-- wrap -->
 
 
@@ -79,6 +79,8 @@ import Volume from './Volume/index.vue';
 import List from './List/index.vue';
 import { Song, SongUrl } from '@/interfaces';
 
+type ILoopType = 'order' | 'random' | 'one';
+
 @Component({
   components: {
     TimeBar,
@@ -94,6 +96,8 @@ export default class AudioBar extends Vue {
   public unlock: boolean = false;
 
   public songUrl: SongUrl | null = null;
+
+  public loopType: ILoopType = 'order';
 
   // methods
   public togglePositionLocked() {
@@ -158,6 +162,21 @@ export default class AudioBar extends Vue {
     console.log('error');
   }
   // --------------------- audio events
+
+  /**
+   * 切换播放模式
+   */
+  public handleClickLoopType() {
+    const types: ILoopType[] = ['order', 'random', 'one'];
+    this.loopType = types[(types.indexOf(this.loopType) + 1) % types.length];
+  }
+
+  /**
+   * 切换歌单面板展示与否
+   */
+  public handleToggleShowList() {
+    this.$store.dispatch(ABAction('toggleIsShowList'));
+  }
 
   public clickPre() {
     console.log('pre');

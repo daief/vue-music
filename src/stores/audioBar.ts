@@ -13,6 +13,7 @@ export interface AudioBarState {
   isWaiting: boolean;
   playList: Song[];
   song: Song | null;
+  isShowList: boolean;
 }
 
 export enum TYPES {
@@ -25,6 +26,7 @@ export enum TYPES {
   SET_ISWAITING = 'SET_ISWAITING',
   SET_PLAYLIST = 'SET_PLAYLIST',
   SET_SONG = 'SET_SONG',
+  SET_ISSHOWLIST = 'SET_ISSHOWLIST',
 }
 
 const state: AudioBarState = {
@@ -39,6 +41,7 @@ const state: AudioBarState = {
   playList: inBuiltList,
   // 当前播放歌曲
   song: inBuiltList[1],
+  isShowList: false,
 };
 
 const mutations: MutationTree<AudioBarState> = {
@@ -68,6 +71,9 @@ const mutations: MutationTree<AudioBarState> = {
   },
   [TYPES.SET_SONG](s, v: Song) {
     s.song = v;
+  },
+  [TYPES.SET_ISSHOWLIST](s, v: boolean) {
+    s.isShowList = v;
   },
 };
 
@@ -100,6 +106,9 @@ const actions: ActionTree<AudioBarState, RootState> = {
   setSong({commit}, v) {
     commit(TYPES.SET_SONG, v);
   },
+  setIsShowList({commit}, v) {
+    commit(TYPES.SET_ISSHOWLIST, v);
+  },
   // ---------------------------- setter end
   play({commit, state: s}) {
     s.player.play().catch(() => void 0).then(() => {
@@ -122,6 +131,14 @@ const actions: ActionTree<AudioBarState, RootState> = {
     const {player} = s;
     if (player.readyState === 4) {
       dispatch('setBufferedTime', player.buffered.end(0));
+    }
+  },
+  // 切换歌单面板显示隐藏
+  toggleIsShowList({dispatch, state: s}) {
+    if (s.isShowList) {
+      dispatch('setIsShowList', false);
+    } else {
+      dispatch('setIsShowList', true);
     }
   },
 };
