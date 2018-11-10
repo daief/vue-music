@@ -14,6 +14,7 @@ export interface AudioBarState {
   playList: Song[];
   song: Song | null;
   isShowList: boolean;
+  isShowVolume: boolean;
 }
 
 export enum TYPES {
@@ -27,6 +28,7 @@ export enum TYPES {
   SET_PLAYLIST = 'SET_PLAYLIST',
   SET_SONG = 'SET_SONG',
   SET_ISSHOWLIST = 'SET_ISSHOWLIST',
+  SET_ISSHOWVOLUME = 'SET_ISSHOWVOLUME',
 }
 
 const state: AudioBarState = {
@@ -42,6 +44,7 @@ const state: AudioBarState = {
   // 当前播放歌曲
   song: inBuiltList[1],
   isShowList: false,
+  isShowVolume: false,
 };
 
 const mutations: MutationTree<AudioBarState> = {
@@ -75,9 +78,12 @@ const mutations: MutationTree<AudioBarState> = {
   [TYPES.SET_ISSHOWLIST](s, v: boolean) {
     s.isShowList = v;
   },
+  [TYPES.SET_ISSHOWVOLUME](s, v: boolean) {
+    s.isShowVolume = v;
+  },
 };
 
-const actions: ActionTree<AudioBarState, RootState> = {
+const setterActions: ActionTree<AudioBarState, RootState> = {
   // get audio DOM
   setPlayer({commit}, ele) {
     commit(TYPES.SET_PLAYER, ele);
@@ -109,7 +115,13 @@ const actions: ActionTree<AudioBarState, RootState> = {
   setIsShowList({commit}, v) {
     commit(TYPES.SET_ISSHOWLIST, v);
   },
+  setIsShowVolumet({commit}, v) {
+    commit(TYPES.SET_ISSHOWVOLUME, v);
+  },
   // ---------------------------- setter end
+};
+
+const actions: ActionTree<AudioBarState, RootState> = {
   play({commit, state: s}) {
     s.player.play().catch(() => void 0).then(() => {
       commit(TYPES.SET_ISPLAYING, true);
@@ -141,13 +153,24 @@ const actions: ActionTree<AudioBarState, RootState> = {
       dispatch('setIsShowList', true);
     }
   },
+  // 切换音量控制面板显示隐藏
+  toggleIsShowVolume({dispatch, state: s}) {
+    if (s.isShowVolume) {
+      dispatch('setIsShowVolumet', false);
+    } else {
+      dispatch('setIsShowVolumet', true);
+    }
+  },
 };
 
 export const audioBar = {
   namespaced: true,
   state,
   mutations,
-  actions,
+  actions: {
+    ...setterActions,
+    ...actions,
+  },
 };
 
 // audio bar action
