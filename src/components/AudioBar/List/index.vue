@@ -17,6 +17,7 @@
       <div class="r-left smoth-scroll">
         <ul class="songs">
           <li
+            :id="`song-${item.id}`"
             class="song c-p"
             :class="{playing: item.id === $u.getProp(audioBar.song, 'id', 0)}"
             v-for="item in audioBar.playList"
@@ -137,6 +138,12 @@ export default class List extends Vue {
   // 滚动歌词到指定（？激活）行
   public scrollLyricToActive(line?: number) {
     // TODO 多行优化
+    // 不满足滚动的条件
+    // 关闭、歌曲未播放、面板未显示
+    const {audioBar} = this;
+    if (this.isCloseAutoScrollLyric || !audioBar.isPlaying || !audioBar.isShowList) {
+      return;
+    }
     const actualLine = line !== undefined ? line : this.LyricIndex;
     const LINE_HEIGHT = 32;
     const elContainer = this.$refs.elLyricsContainer as HTMLDivElement;
@@ -144,18 +151,16 @@ export default class List extends Vue {
     let target = (actualLine - 3) * LINE_HEIGHT;
     target = 0 < target ? target : 0;
     target = target <= scrollMax ? target : scrollMax;
-    // 正在播放且可以自动滚动
-    if (!this.isCloseAutoScrollLyric && this.audioBar.isPlaying) {
-      this.isAutoScrollLyric = true;
-      this.lyricScroller = this.$u.controlScroll({
-        el: elContainer,
-        duration: 300,
-        y: target,
-        endCall: () => {
-          this.isAutoScrollLyric = false;
-        },
-      });
-    }
+    // 执行滚动
+    this.isAutoScrollLyric = true;
+    this.lyricScroller = this.$u.controlScroll({
+      el: elContainer,
+      duration: 300,
+      y: target,
+      endCall: () => {
+        this.isAutoScrollLyric = false;
+      },
+    });
   }
 
   // 歌词滚动事件处理
@@ -180,15 +185,29 @@ export default class List extends Vue {
     this.fetchLyric(this.audioBar.song);
   }
 
+  // 歌曲切换
   @Watch('audioBar.song')
   public onSongChange(val: Song | null) {
-    // 歌曲切换
     this.fetchLyric(val);
   }
 
+  // 歌曲播放行索引变化
   @Watch('LyricIndex')
   public onLyricIndexChange(val: number) {
     this.scrollLyricToActive(val);
+  }
+
+  // 面板显示、隐藏状态变化
+  @Watch('audioBar.isShowList')
+  public onIsShowListChange(val: boolean) {
+    if (val) {
+      // 显示了，1. 滚动到当前歌曲，2. 滚动到当前歌词
+      this.scrollLyricToActive();
+      const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
+      if (elSong) {
+        elSong.scrollIntoView(false);
+      }
+    }
   }
 }
 </script>

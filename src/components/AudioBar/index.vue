@@ -60,7 +60,10 @@
 
       <!-- list -->
       <span class="ibs c-p fs-12 i-list" @click="handleToggleShowList">{{audioBar.playList.length}}</span>
-      <list v-show="audioBar.isShowList" />
+
+      <transition name="transition-fade">
+        <list v-show="audioBar.isShowList"/>
+      </transition>
     </div><!-- wrap -->
 
 
