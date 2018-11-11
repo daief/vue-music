@@ -22,6 +22,7 @@
             :class="{playing: item.id === $u.getProp(audioBar.song, 'id', 0)}"
             v-for="item in audioBar.playList"
             :key="item.id"
+            @click="handleClickSong(item.id)"
           >
             <!-- song name -->
             <div class="song-name f-thide">{{ item.name }}</div>
@@ -178,6 +179,11 @@ export default class List extends Vue {
     }, 2500);
     // cancel
     this.isCloseAutoScrollLyricTimer.promise.catch(() => void 0);
+  }
+
+  // 点击列表单曲，切换歌曲并播放
+  public handleClickSong(id: number) {
+    this.$store.dispatch(ABAction('listSongIdAndPlay'), id);
   }
 
   public beforeMount() {

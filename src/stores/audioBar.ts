@@ -165,7 +165,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
   listPre({dispatch, state: s}) {
     const {song, playList} = s;
     if (song) {
-      const i = playList.findIndex((s) => s.id === song.id);
+      const i = playList.findIndex((tmpSong) => tmpSong.id === song.id);
       const {length} = playList;
       dispatch('setSong', length > 0 ? playList[(length + i - 1) % length] : song);
     }
@@ -174,7 +174,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
   listNext({dispatch, state: s}) {
     const {song, playList} = s;
     if (song) {
-      const i = playList.findIndex((s) => s.id === song.id);
+      const i = playList.findIndex((tmpSong) => tmpSong.id === song.id);
       const {length} = playList;
       dispatch('setSong', length > 0 ? playList[(length + i + 1) % length] : song);
     }
@@ -186,6 +186,17 @@ const actions: ActionTree<AudioBarState, RootState> = {
       const {length} = playList;
       const rd = Math.floor(Math.random() * length);
       dispatch('setSong', length > 0 ? playList[rd] : song);
+    }
+  },
+  // 设置歌曲为 id 并播放
+  listSongIdAndPlay({dispatch, state: s}, id: number) {
+    const {playList, player} = s;
+    const song = playList.find((tmpSong) => tmpSong.id === id);
+    if (song) {
+      dispatch('setSong', song).then(() => {
+        player.load();
+        player.addEventListener('canplay', () => { dispatch('play'); }, { once: true });
+      });
     }
   },
 };
