@@ -26,9 +26,9 @@
     <div class="wrap">
       <!-- 播放、上下首按钮 -->
 			<div class="control-btns">
-				<span @click="clickPre" class="ibs c-p ctrl pre"/>
-				<span @click="clickTogglePlay" class="ibs c-p ctrl" :class="[audioBar.isPlaying ? 'pause' : 'play']" />
-				<span @click="clickNext" class="ibs c-p ctrl next"/>
+				<span @click="handleClickPre" class="ibs c-p ctrl pre"/>
+				<span @click="handleClickTogglePlay" class="ibs c-p ctrl" :class="[audioBar.isPlaying ? 'pause' : 'play']" />
+				<span @click="handleClickNext" class="ibs c-p ctrl next"/>
 			</div>
 
       <!-- 歌曲图片 -->
@@ -100,7 +100,7 @@ export default class AudioBar extends Vue {
 
   public songUrl: SongUrl | null = null;
 
-  public loopType: ILoopType = 'order';
+  public loopType: ILoopType = this.$u.local.getLocalLoopType();
 
   // methods
   public togglePositionLocked() {
@@ -157,12 +157,13 @@ export default class AudioBar extends Vue {
 
   public musicEnded() {
     // 播放结束
-    console.log('end');
+    this.$store.dispatch(ABAction('setCanplay'), false);
+    this.handleClickNext();
   }
 
-  public musicError() {
+  public musicError(e: any) {
     // 加载错误
-    console.log('error');
+    console.log('error', e);
   }
   // --------------------- audio events
 
@@ -172,6 +173,7 @@ export default class AudioBar extends Vue {
   public handleClickLoopType() {
     const types: ILoopType[] = ['order', 'random', 'one'];
     this.loopType = types[(types.indexOf(this.loopType) + 1) % types.length];
+    this.$u.local.setLocal(this.$u.local.KEYS.LOOP_TYPE, this.loopType);
   }
 
   /**
@@ -181,17 +183,38 @@ export default class AudioBar extends Vue {
     this.$store.dispatch(ABAction('toggleIsShowList'));
   }
 
-  public clickPre() {
-    console.log('pre');
+  // 上一首
+  public handleClickPre() {
+    const {loopType, $store, audioBar} = this;
+    if (['order', 'one'].includes(loopType)) {
+      $store.dispatch(ABAction('listPre'));
+    } else if (loopType === 'random') {
+      $store.dispatch(ABAction('listRandom'));
+    }
+
+    audioBar.player.load();
+    if (audioBar.isPlaying) {
+      audioBar.player.addEventListener('canplay', () => { $store.dispatch(ABAction('play')); }, { once: true });
+    }
   }
 
-  public clickTogglePlay() {
-    console.log('toggle play');
+  public handleClickTogglePlay() {
     this.$store.dispatch(ABAction('togglePlay'));
   }
 
-  public clickNext() {
-    console.log('next');
+  // 下一首
+  public handleClickNext() {
+    const {loopType, $store, audioBar} = this;
+    if (['order', 'one'].includes(loopType)) {
+      $store.dispatch(ABAction('listNext'));
+    } else if (loopType === 'random') {
+      $store.dispatch(ABAction('listRandom'));
+    }
+
+    audioBar.player.load();
+    if (audioBar.isPlaying) {
+      audioBar.player.addEventListener('canplay', () => { $store.dispatch(ABAction('play')); }, { once: true });
+    }
   }
 
   /**
@@ -215,14 +238,19 @@ export default class AudioBar extends Vue {
           return this.$u.get(`/song/url?id=${id}`);
         } else {
           // 失败
-          return {failMark: true};
+          return {failMark: true, success: false};
         }
       })
       .then((res) => {
-        // 失败则通过拼接方式尝试获得 url
-        this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : {
-          url: `http://music.163.com/song/media/outer/url?id=${id}.mp3`,
-        };
+        // url 请求失败则通过拼接方式尝试获得 url
+        if (res.success === false) {
+          // 获取 url 失败，无权限等
+          // TODO 提示
+        } else {
+          this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : {
+            url: `http://music.163.com/song/media/outer/url?id=${id}.mp3`,
+          };
+        }
       });
     } else {
       this.songUrl = null;

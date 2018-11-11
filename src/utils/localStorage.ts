@@ -32,6 +32,11 @@ class Dataer {
     return /^0\.\d+$/.test(rs) ? +rs : 0.75;
   }
 
+  public getLocalLoopType() {
+    const rs = this.getLocal(this.KEYS.LOOP_TYPE);
+    const types = ['order', 'random', 'one'];
+    return types.indexOf(rs) > -1 ? rs : types[0];
+  }
 
   private localKey(key: string) {
     return `${key}-${this.VER}`;

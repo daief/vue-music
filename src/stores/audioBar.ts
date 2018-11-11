@@ -42,7 +42,7 @@ const state: AudioBarState = {
   isWaiting: false,
   playList: inBuiltList,
   // 当前播放歌曲
-  song: inBuiltList[1],
+  song: inBuiltList[0],
   isShowList: false,
   isShowVolume: false,
 };
@@ -159,6 +159,33 @@ const actions: ActionTree<AudioBarState, RootState> = {
       dispatch('setIsShowVolumet', false);
     } else {
       dispatch('setIsShowVolumet', true);
+    }
+  },
+  // 列表上一首
+  listPre({dispatch, state: s}) {
+    const {song, playList} = s;
+    if (song) {
+      const i = playList.findIndex((s) => s.id === song.id);
+      const {length} = playList;
+      dispatch('setSong', length > 0 ? playList[(length + i - 1) % length] : song);
+    }
+  },
+  // 列表下一首
+  listNext({dispatch, state: s}) {
+    const {song, playList} = s;
+    if (song) {
+      const i = playList.findIndex((s) => s.id === song.id);
+      const {length} = playList;
+      dispatch('setSong', length > 0 ? playList[(length + i + 1) % length] : song);
+    }
+  },
+  // 列表随机
+  listRandom({dispatch, state: s}) {
+    const {song, playList} = s;
+    if (song) {
+      const {length} = playList;
+      const rd = Math.floor(Math.random() * length);
+      dispatch('setSong', length > 0 ? playList[rd] : song);
     }
   },
 };
