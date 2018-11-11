@@ -111,6 +111,10 @@ export default class TimeBar extends Vue {
     this.allLength = rects.width;
   }
 
+  public beforeDestroy() {
+    window.removeEventListener('mousemove', this.handleSliderMouseMove);
+    window.removeEventListener('mouseup', this.handleSliderMouseUp);
+  }
 }
 </script>
 

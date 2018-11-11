@@ -229,14 +229,20 @@ export default class AudioBar extends Vue {
     }
   }
 
+  public initPlayer() {
+    // 获取 audio 元素
+    const elAudio = document.getElementById('player') as HTMLAudioElement;
+    this.$store.dispatch(ABAction('setPlayer'), elAudio);
+    elAudio.volume = this.$u.local.getLocalVolume();
+  }
+
   // --------------------- life cycle
   public beforeMount() {
     this.checkAndFetchSongUrl(this.audioBar.song);
   }
 
   public mounted() {
-    // 获取 audio 元素
-    this.$store.dispatch(ABAction('setPlayer'), document.getElementById('player'));
+    this.initPlayer();
   }
 
   @Watch('audioBar.song')

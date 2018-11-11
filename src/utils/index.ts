@@ -2,6 +2,8 @@ import { instance } from './axios';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { HttpRes, DelayResult } from '@/interfaces';
 
+export * from './localStorage';
+
 /**
  * 输入多个参数，一般用于根据多级 index 生成 key，返回字符串：param1-param2- ...
  * @param args 参数
