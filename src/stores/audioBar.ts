@@ -233,6 +233,11 @@ const actions: ActionTree<AudioBarState, RootState> = {
       });
     }
   },
+  // 关闭所有框框，列表、音量、以及未来的其他
+  closeAllModal({commit}) {
+    commit(TYPES.SET_ISSHOWLIST, false);
+    commit(TYPES.SET_ISSHOWVOLUME, false);
+  },
 };
 
 export const audioBar = {

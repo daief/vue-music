@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="content smoth-scroll">
+    <div class="content smoth-scroll" @click="handleClickCloseAllModal">
       <!-- write header here <div class="header"></div> -->
       <router-view/>
     </div>
@@ -13,6 +13,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AudioBar from '@/components/AudioBar/index.vue';
+import { ABAction } from '@/stores/audioBar';
 
 @Component({
   components: {
@@ -20,6 +21,9 @@ import AudioBar from '@/components/AudioBar/index.vue';
   },
 })
 export default class App extends Vue {
+  public handleClickCloseAllModal() {
+    this.$store.dispatch(ABAction('closeAllModal'));
+  }
 }
 </script>
 

@@ -105,6 +105,9 @@ export default class AudioBar extends Vue {
   // methods
   public togglePositionLocked() {
     this.unlock = !this.unlock;
+    if (this.unlock) {
+      this.$store.dispatch(ABAction('closeAllModal'));
+    }
   }
 
   // --------------------- audio events
