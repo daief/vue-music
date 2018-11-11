@@ -134,9 +134,14 @@ export default class AudioBar extends Vue {
   public musicCanplay() {
     // 可以播放
     console.log('can play');
-    this.$store.dispatch(ABAction('setIsWaiting'), false);
-    this.$store.dispatch(ABAction('setCanplay'), true);
-    this.$store.dispatch(ABAction('setPlayerBuffered'));
+    const {$store, audioBar} = this;
+    $store.dispatch(ABAction('setIsWaiting'), false);
+    $store.dispatch(ABAction('setCanplay'), true);
+    $store.dispatch(ABAction('setPlayerBuffered'));
+
+    if (audioBar.isPlaying) {
+      $store.dispatch(ABAction('play'));
+    }
   }
 
   public musicCanplayThrough() {
@@ -157,8 +162,9 @@ export default class AudioBar extends Vue {
 
   public musicEnded() {
     // 播放结束
+    console.log('ended');
     this.$store.dispatch(ABAction('setCanplay'), false);
-    this.handleClickNext();
+    this.handleClickNext(undefined, true);
   }
 
   public musicError(e: any) {
@@ -192,10 +198,7 @@ export default class AudioBar extends Vue {
       $store.dispatch(ABAction('listRandom'));
     }
 
-    audioBar.player.load();
-    if (audioBar.isPlaying) {
-      audioBar.player.addEventListener('canplay', () => { $store.dispatch(ABAction('play')); }, { once: true });
-    }
+    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {play: audioBar.isPlaying});
   }
 
   public handleClickTogglePlay() {
@@ -203,18 +206,18 @@ export default class AudioBar extends Vue {
   }
 
   // 下一首
-  public handleClickNext() {
+  public handleClickNext(e?: MouseEvent, autoNext: boolean = false) {
     const {loopType, $store, audioBar} = this;
-    if (['order', 'one'].includes(loopType)) {
+    if (autoNext && loopType === 'one') {
+      // ended 事件调用，单曲播放
+      // do nothing
+    } else if (['order', 'one'].includes(loopType)) {
       $store.dispatch(ABAction('listNext'));
     } else if (loopType === 'random') {
       $store.dispatch(ABAction('listRandom'));
     }
 
-    audioBar.player.load();
-    if (audioBar.isPlaying) {
-      audioBar.player.addEventListener('canplay', () => { $store.dispatch(ABAction('play')); }, { once: true });
-    }
+    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {play: audioBar.isPlaying});
   }
 
   /**

@@ -4,18 +4,18 @@
     <div class="head row">
       <div class="r-left">
         <h1 class="fs-14">播放列表({{audioBar.playList.length || 0}})</h1>
-        <span class="ibs c-p-line i-clear">清除</span>
+        <span class="ibs c-p-line i-clear" @click="handleClickDeleteAll">清除</span>
       </div>
       <div class="r-right">
         <h1 class="fs-14 f-thide">{{$u.getProp(audioBar.song, 'name', '歌词')}}</h1>
-        <span class="ibs c-p i-close" />
+        <span class="ibs c-p i-close" @click="handleClickCloseListPanel" />
       </div>
     </div>
     <!-- list body -->
     <div class="body row">
       <img class="bg-msk" :src="`https://music.163.com/api/img/blur/${$u.getProp(audioBar.song, 'album', {}).pic_str || $u.getProp(audioBar.song, 'album', {}).pic}`" >
       <div class="r-left smoth-scroll">
-        <ul class="songs">
+        <ul v-if="audioBar.playList.length > 0" class="songs">
           <li
             :id="`song-${item.id}`"
             class="song c-p"
@@ -29,7 +29,7 @@
             <!-- operations -->
             <div class="icons">
               <div class="i-wrap">
-                <span class="ibs c-p ic delete" />
+                <span class="ibs c-p ic delete" @click="handleClickDeleteSong($event, item.id)" />
                 <span class="ibs c-p ic download" />
               </div>
             </div>
@@ -46,6 +46,11 @@
             </div>
           </li>
         </ul>
+
+        <!-- no songs -->
+        <div v-else class="songs-empty">
+          <p class="tip1"><span class="ibs i-face" />你还没有添加任何歌曲。</p>
+        </div>
       </div>
       <div class="r-right smoth-scroll" ref="elLyricsContainer" @scroll="handleLyricScroll">
         <div class="lyric">
@@ -184,6 +189,22 @@ export default class List extends Vue {
   // 点击列表单曲，切换歌曲并播放
   public handleClickSong(id: number) {
     this.$store.dispatch(ABAction('listSongIdAndPlay'), id);
+  }
+
+  // 点击列表单曲删除，若是当前歌曲进行切换
+  public handleClickDeleteSong(e: MouseEvent, id: number) {
+    e.stopPropagation();
+    this.$store.dispatch(ABAction('deleteListSongIdAndPlay'), id);
+  }
+
+  // 清空播放列表
+  public handleClickDeleteAll() {
+    this.$store.dispatch(ABAction('setPlayList'), []);
+  }
+
+  // 关闭列表面板
+  public handleClickCloseListPanel() {
+    this.$store.dispatch(ABAction('toggleIsShowList'));
   }
 
   public beforeMount() {

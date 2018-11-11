@@ -123,8 +123,11 @@ const setterActions: ActionTree<AudioBarState, RootState> = {
 
 const actions: ActionTree<AudioBarState, RootState> = {
   play({commit, state: s}) {
-    s.player.play().catch(() => void 0).then(() => {
+    s.player.play().then((e) => {
       commit(TYPES.SET_ISPLAYING, true);
+    }).catch((e) => {
+      // tslint:disable no-console
+      console.warn('player play err', e);
     });
   },
   pause({commit, state: s}) {
@@ -176,7 +179,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
     if (song) {
       const i = playList.findIndex((tmpSong) => tmpSong.id === song.id);
       const {length} = playList;
-      dispatch('setSong', length > 0 ? playList[(length + i + 1) % length] : song);
+      return dispatch('setSong', length > 0 ? playList[(length + i + 1) % length] : song);
     }
   },
   // 列表随机
@@ -188,14 +191,45 @@ const actions: ActionTree<AudioBarState, RootState> = {
       dispatch('setSong', length > 0 ? playList[rd] : song);
     }
   },
+  // 歌曲切换时控制是否连续播放
+  ctrlAudioLoadAndPlay({dispatch, state: s}, payload: {
+    load?: boolean
+    play?: boolean,
+  }) {
+    const {player} = s;
+    const {load, play} = {load: true, play: true, ...payload};
+    console.log(load, play);
+    if (!player) {
+      return;
+    }
+    if (load) {
+      player.load();
+    }
+    if (play) {
+      dispatch('play');
+    }
+  },
   // 设置歌曲为 id 并播放
   listSongIdAndPlay({dispatch, state: s}, id: number) {
-    const {playList, player} = s;
+    const {playList} = s;
     const song = playList.find((tmpSong) => tmpSong.id === id);
     if (song) {
       dispatch('setSong', song).then(() => {
-        player.load();
-        player.addEventListener('canplay', () => { dispatch('play'); }, { once: true });
+        dispatch('ctrlAudioLoadAndPlay');
+      });
+    }
+  },
+  // 删除列表歌曲，
+  deleteListSongIdAndPlay({dispatch, state: s}, id: number) {
+    const {playList, song, isPlaying} = s;
+    const targetIdx = playList.findIndex((tmpSong) => tmpSong.id === id);
+    if (targetIdx > -1) {
+      playList.splice(targetIdx, 1);
+      dispatch('setPlayList', [...playList]);
+    }
+    if (song && song.id === id) {
+      dispatch('listNext').then(() => {
+        dispatch('ctrlAudioLoadAndPlay', isPlaying);
       });
     }
   },
