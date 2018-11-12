@@ -94,7 +94,7 @@ export default class List extends Vue {
 
   public lyric: Lyric | null = null;
 
-  public isShowViewSong: boolean = true;
+  public isShowViewSong: boolean = false;
 
   // 歌词自动滚动动画的控制
   private lyricScroller: (() => void) | null = null;
@@ -185,10 +185,13 @@ export default class List extends Vue {
 
   // 滚动到当前歌曲
   public scrollToPlayingSong() {
-    const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
-    if (elSong) {
-      elSong.scrollIntoView(false);
-    }
+    // async
+    this.$u.delay(() => {
+      const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
+      if (elSong) {
+        elSong.scrollIntoView(false);
+      }
+    }, 10);
   }
 
   // 歌词滚动事件处理
