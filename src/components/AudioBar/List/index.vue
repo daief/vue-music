@@ -4,7 +4,8 @@
     <div class="head row">
       <div class="r-left">
         <h1 class="fs-14">播放列表({{audioBar.playList.length || 0}})</h1>
-        <span class="ibs c-p-line i-clear" @click="handleClickDeleteAll">清除</span>
+        <span class="ibs c-p-line ic switch" @click="handleClickSwitchViewSong">切换</span>
+        <span class="ibs c-p-line ic clear" @click="handleClickDeleteAll">清除</span>
       </div>
       <div class="r-right">
         <h1 class="fs-14 f-thide">{{$u.getProp(audioBar.song, 'name', '歌词')}}</h1>
@@ -14,7 +15,7 @@
     <!-- list body -->
     <div class="body row">
       <img class="bg-msk" :src="`https://music.163.com/api/img/blur/${$u.getProp(audioBar.song, 'album', {}).pic_str || $u.getProp(audioBar.song, 'album', {}).pic}`" >
-      <div class="r-left smoth-scroll">
+      <div v-show="!isShowViewSong" class="r-left smoth-scroll">
         <ul v-if="audioBar.playList.length > 0" class="songs">
           <li
             :id="`song-${item.id}`"
@@ -52,6 +53,12 @@
           <p class="tip1"><span class="ibs i-face" />你还没有添加任何歌曲。</p>
         </div>
       </div>
+      <!-- show view song -->
+      <div v-show="isShowViewSong" class="r-left smoth-scroll">
+        <view-song :show="isShowViewSong" />
+      </div>
+
+
       <div class="r-right smoth-scroll" ref="elLyricsContainer" @scroll="handleLyricScroll">
         <div class="lyric">
           <p class="line" :class="{active: LyricIndex === i}" v-for="(line, i) in LyricArr" :key="i">
@@ -68,6 +75,7 @@ import {Vue, Component, Watch} from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { AudioBarState, ABAction } from '@/stores/audioBar';
 import { Song, Lyric, DelayResult } from '@/interfaces';
+import ViewSong from '@/components/AudioBar/List/ViewSong/index.vue';
 
 interface LrcTime {
   formatTime: string;
@@ -75,12 +83,18 @@ interface LrcTime {
   content: string;
 }
 
-@Component
+@Component({
+  components: {
+    ViewSong,
+  },
+})
 export default class List extends Vue {
 
   @State public audioBar!: AudioBarState;
 
   public lyric: Lyric | null = null;
+
+  public isShowViewSong: boolean = true;
 
   // 歌词自动滚动动画的控制
   private lyricScroller: (() => void) | null = null;
@@ -169,6 +183,14 @@ export default class List extends Vue {
     });
   }
 
+  // 滚动到当前歌曲
+  public scrollToPlayingSong() {
+    const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
+    if (elSong) {
+      elSong.scrollIntoView(false);
+    }
+  }
+
   // 歌词滚动事件处理
   public handleLyricScroll() {
     if (this.isAutoScrollLyric) { return; }
@@ -195,6 +217,15 @@ export default class List extends Vue {
   public handleClickDeleteSong(e: MouseEvent, id: number) {
     e.stopPropagation();
     this.$store.dispatch(ABAction('deleteListSongIdAndPlay'), id);
+  }
+
+  // 切换音频可视化面板
+  public handleClickSwitchViewSong() {
+    this.isShowViewSong = !this.isShowViewSong;
+    if (!this.isShowViewSong) {
+      // 滚动歌曲
+      this.scrollToPlayingSong();
+    }
   }
 
   // 清空播放列表
@@ -230,10 +261,7 @@ export default class List extends Vue {
     if (val) {
       // 显示了，1. 滚动到当前歌曲，2. 滚动到当前歌词
       this.scrollLyricToActive();
-      const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
-      if (elSong) {
-        elSong.scrollIntoView(false);
-      }
+      this.scrollToPlayingSong();
     }
   }
 }

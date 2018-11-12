@@ -48,30 +48,40 @@
         color: #e2e2e2;
       }
 
-      .i-clear {
+      .ic {
         position: absolute;
         top: 50%;
         margin-top: -7.5px;
-        right: 20px;
         height: 15px;
         line-height: 15px;
         color: #ccc;
 
-        &::before {
-          content: "";
-          position: absolute;
-          left: -16px;
-          width: 13px;
-          height: 100%;
-          background: url(@iPlaylisticons) no-repeat;
-          background-position: -51px 0;
+        &.switch {
+          right: 75px;
         }
+
+        &.clear {
+          right: 20px;
+
+          &::before {
+            content: "";
+            position: absolute;
+            left: -16px;
+            width: 13px;
+            height: 100%;
+            background: url(@iPlaylisticons) no-repeat;
+            background-position: -51px 0;
+          }
+
+          &:hover {
+            &::before {
+              background-position: -51px -20px;
+            }
+          }
+        } // .clear
 
         &:hover {
           color: #e2e2e2;
-          &::before {
-            background-position: -51px -20px;
-          }
         }
       }
 

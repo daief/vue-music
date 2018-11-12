@@ -3,6 +3,7 @@
     <!-- audio -->
     <audio
       id="player"
+      crossOrigin="anonymous"
       :src="$u.getProp(songUrl, 'url', '')"
       preload
 			@loadstart="musicLoadStart"
