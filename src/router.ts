@@ -1,17 +1,31 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Discover from './views/Discover/index.vue';
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      redirect: '/discover',
+      name: 'discover',
+      component: Discover,
+      children: [
+        {
+          path: '/discover',
+          name: 'discover/home',
+          component: Home,
+        },
+        {
+          path: '/discover/toplist',
+          name: 'discover/toplist',
+          component: Home,
+        },
+      ],
     },
     {
       path: '/about',

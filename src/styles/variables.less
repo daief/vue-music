@@ -3,6 +3,8 @@
 @iPlaybar: "~@/assets/images/playbar.png";
 @iPlaylisticons: "~@/assets/images/playlisticons.png";
 
+@main-red: #c20002;
+
 .bg-pbar() {
   background: url(@iPlaybar) no-repeat 0 9999px;
 }
@@ -13,4 +15,18 @@
 
 .bg-pbar-y() {
   background: url(@iPlaybar) repeat-y 0 9999px;
+}
+
+// reset tag a
+.set-a(@color: #aaa, @h-color: @color, @a-color: @color, @t-decoration: none) {
+  color: @color;
+  text-decoration: @t-decoration;
+
+  &:hover {
+    color: @h-color;
+  }
+
+  &:active {
+    color: @a-color;
+  }
 }

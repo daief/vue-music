@@ -2,6 +2,7 @@
   <div id="app">
     <div class="content smoth-scroll" @click="handleClickCloseAllModal">
       <!-- write header here <div class="header"></div> -->
+      <header-bar />
       <router-view/>
     </div>
     <div class="bottom">
@@ -13,11 +14,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AudioBar from '@/components/AudioBar/index.vue';
+import HeaderBar from '@/components/HeaderBar/index.vue';
 import { ABAction } from '@/stores/audioBar';
 
 @Component({
   components: {
     AudioBar,
+    HeaderBar,
   },
 })
 export default class App extends Vue {
