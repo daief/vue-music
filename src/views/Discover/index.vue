@@ -1,8 +1,5 @@
 <template>
-  <div class="home">
-    <h1>Discover</h1>
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script lang="ts">

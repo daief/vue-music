@@ -18,11 +18,16 @@ export default new Router({
         {
           path: '/discover',
           name: 'discover/home',
-          component: Home,
+          component: () => import('./views/Discover/Recommend/index.vue'),
         },
         {
           path: '/discover/toplist',
           name: 'discover/toplist',
+          component: Home,
+        },
+        {
+          path: '/discover/playlist',
+          name: 'discover/playlist',
           component: Home,
         },
       ],

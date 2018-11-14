@@ -97,3 +97,17 @@ export interface DelayResult {
   readonly promise: Promise<any>;
   cancel: () => void;
 }
+
+/**
+ * Banner
+ */
+export interface Banner extends KVAny {
+  imageUrl: string;
+  targetId: nstr;
+  adid: null | nstr;
+  targetType: number;
+  titleColor: string;
+  typeTitle: string;
+  url: null | string;
+  exclusive: boolean;
+}
