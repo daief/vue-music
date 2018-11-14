@@ -21,7 +21,8 @@
         />
       </div>
 
-
+      <span class="ibs c-p switch pre" @click="handleClickSwitch(false)" />
+      <span class="ibs c-p switch next" @click="handleClickSwitch(true)" />
     </div>
   </div>
 </template>
@@ -291,6 +292,15 @@ export default class Recommend extends Vue {
   }
 
   /**
+   * 切换 banner 上下
+   */
+  public handleClickSwitch(next: boolean) {
+    const {activeIdx, bannerList} = this;
+    this.activeIdx = (activeIdx + (next ? 1 : -1) + bannerList.length) % bannerList.length;
+    this.startTimer();
+  }
+
+  /**
    * 计时轮播
    */
   public startTimer() {
@@ -311,6 +321,10 @@ export default class Recommend extends Vue {
       }
     });
   }
+
+  public beforeDestroy() {
+    window.clearInterval(this.timer);
+  }
 }
 </script>
 
@@ -321,6 +335,7 @@ export default class Recommend extends Vue {
   @h: 336px;
 
   height: @h;
+  transition: all .3s;
 
   .wrap {
     width: @content-width;
@@ -391,6 +406,50 @@ export default class Recommend extends Vue {
         }
       }
     } // .dots
+
+    .switch {
+      position: absolute;
+
+      &.pre, &.next {
+        width: 37px;
+        height: 63px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          top: 20px;
+        }
+      }
+
+      &.pre {
+        left: -68px;
+        &::before {
+          left: 12px;
+          border-top: 2px solid #ffffff;
+          border-left: 2px solid #ffffff;
+          transform: rotate(-45deg);
+
+        }
+      }
+
+      &.next {
+        right: -68px;
+        &::before {
+          left: 3px;
+          border-top: 2px solid #ffffff;
+          border-right: 2px solid #ffffff;
+          transform: rotate(45deg);
+        }
+      }
+    } // .switch
   } // .wrap
 }
 </style>
