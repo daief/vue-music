@@ -395,7 +395,6 @@ export default class Recommend extends Vue {
         bottom: 0;
         opacity: 0;
         transition: all .3s;
-        pointer-events: none;
 
         img {
           display: block;
@@ -404,7 +403,7 @@ export default class Recommend extends Vue {
         }
 
         &.active {
-          pointer-events: auto;
+          z-index: 5;
           opacity: 1;
         }
       } // .item
