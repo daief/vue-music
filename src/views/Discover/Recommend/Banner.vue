@@ -265,13 +265,15 @@ export default class Recommend extends Vue {
       return new Promise((resolve) => {
         // 使用小图取色
         (window as any).RGBaster.colors(`${url}?param=365y168`, {
-          exclude: [ 'rgb(255,255,255)', 'rgb(0,0,0)' ],
+          exclude: [ 'rgb(255,255,255)',  'rgb(0,0,0)' ],
           success: (payload: any) => {
             // payload.dominant 是主色，RGB形式表示
             // payload.secondary 是次色，RGB形式表示
             // payload.palette 是调色板，含多个主要颜色，数组
-            const {secondary} = payload;
-            resolve(secondary || '#fff');
+            const {dominant, secondary} = payload;
+            // 取深色
+            const rs = this.judgeTintColor(dominant, secondary) ? secondary : dominant;
+            resolve(rs || '#fff');
           },
         });
       });
@@ -308,6 +310,17 @@ export default class Recommend extends Vue {
     this.timer = window.setInterval(() => {
       this.activeIdx = (this.activeIdx + 1) % this.bannerList.length;
     }, 2700);
+  }
+
+  /**
+   * 简单比较颜色深浅
+   */
+  public judgeTintColor(left: string, right: string) {
+    const getY = (rgb: string) => {
+      const [r, g, b] = rgb.replace(/rgb\(/, '').replace(')', '').split(',').map((c) => (+c));
+      return r * 0.299 + g * 0.578 + b * 0.114;
+    };
+    return getY(left) >= getY(right);
   }
 
   public beforeMount() {
