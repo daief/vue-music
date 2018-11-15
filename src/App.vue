@@ -26,14 +26,8 @@ import { ABAction } from '@/stores/audioBar';
   },
 })
 export default class App extends Vue {
-  public minHeight: number = 0;
-
   public handleClickCloseAllModal() {
     this.$store.dispatch(ABAction('closeAllModal'));
-  }
-
-  public mounted() {
-    this.minHeight = document.documentElement.clientHeight;
   }
 }
 </script>

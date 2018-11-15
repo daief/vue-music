@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex, { ModuleTree } from 'vuex';
+import Vuex from 'vuex';
 import { AudioBarState, audioBar } from './stores/audioBar';
 
 Vue.use(Vuex);

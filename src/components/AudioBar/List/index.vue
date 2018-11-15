@@ -108,7 +108,7 @@ export default class List extends Vue {
   // 获取默认歌词数组
   get LyricArr(): LrcTime[] {
     const {lyric} = this;
-    return this.getLyricArr(this.lyric ? this.lyric.lrc.lyric : undefined);
+    return this.getLyricArr(lyric ? lyric.lrc.lyric : undefined);
   }
 
   // 获取翻译歌词数组
@@ -164,6 +164,7 @@ export default class List extends Vue {
     if (this.isCloseAutoScrollLyric || !audioBar.isPlaying || !audioBar.isShowList) {
       return;
     }
+    if (this.lyricScroller) { this.lyricScroller(); }
     const actualLine = line !== undefined ? line : this.LyricIndex;
     const LINE_HEIGHT = 32;
     const elContainer = this.$refs.elLyricsContainer as HTMLDivElement;
