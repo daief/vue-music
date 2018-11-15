@@ -3,9 +3,10 @@
     <div class="wrap">
       <ul class="list">
         <li
-          class="item"
+          class="item c-p"
           v-for="(item, i) in bannerList" :key="item.targetId"
           :class="{active: i === activeIdx}"
+          @click="handleClickBanner(i)"
         >
           <img :src="item.imageUrl" crossorigin="anonymous">
         </li>
@@ -23,6 +24,9 @@
 
       <span class="ibs c-p switch pre" @click="handleClickSwitch(false)" />
       <span class="ibs c-p switch next" @click="handleClickSwitch(true)" />
+
+      <!-- download -->
+      <router-link to="/download"><div class="download c-p" /></router-link>
     </div>
   </div>
 </template>
@@ -323,6 +327,23 @@ export default class Recommend extends Vue {
     return getY(left) >= getY(right);
   }
 
+  /**
+   * 点击 banner
+   */
+  public handleClickBanner(index: number) {
+    const {targetType, targetId, url} = this.bannerList[index];
+    const {$router} = this;
+
+    switch (targetType) {
+      case 1: return $router.push(`/dicover/song/${targetId}`);
+      case 10: return $router.push(`/dicover/album/${targetId}`);
+      case 1004: return $router.push(`/dicover/mv/${targetId}`);
+      case 4001: return $router.push(`/activity/${targetId}`);
+      case 3000: return window.open(url!);
+      default: break;
+    }
+  }
+
   public beforeMount() {
     this.$u.get('/banner').then((res) => {
       if (!res.failMark) {
@@ -374,6 +395,7 @@ export default class Recommend extends Vue {
         bottom: 0;
         opacity: 0;
         transition: all .3s;
+        pointer-events: none;
 
         img {
           display: block;
@@ -382,6 +404,7 @@ export default class Recommend extends Vue {
         }
 
         &.active {
+          pointer-events: auto;
           opacity: 1;
         }
       } // .item
@@ -463,6 +486,14 @@ export default class Recommend extends Vue {
         }
       }
     } // .switch
+
+    .download {
+      @down-bg: '~@/assets/images/download.png';
+      width: @content-width - 730px;
+      height: @h;
+      background: url(@down-bg) no-repeat 0 0;
+      background-size: 100% 404px;
+    } // .download
   } // .wrap
 }
 </style>

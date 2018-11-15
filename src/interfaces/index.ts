@@ -103,8 +103,9 @@ export interface DelayResult {
  */
 export interface Banner extends KVAny {
   imageUrl: string;
-  targetId: nstr;
   adid: null | nstr;
+  targetId: nstr;
+  // 10: album, 1004: mv, 1: song, 4001: activity, 3000: 跳 url
   targetType: number;
   titleColor: string;
   typeTitle: string;
