@@ -97,7 +97,7 @@ export default class AudioBar extends Vue {
   @State public audioBar!: AudioBarState;
 
   // data
-  public unlock: boolean = false;
+  public unlock: boolean = this.$u.local.getLocalUnLockStatus();
 
   public songUrl: SongUrl | null = null;
 
@@ -105,7 +105,9 @@ export default class AudioBar extends Vue {
 
   // methods
   public togglePositionLocked() {
-    this.unlock = !this.unlock;
+    const {$u, unlock} = this;
+    this.unlock = !unlock;
+    this.$u.local.setLocal($u.local.KEYS.UN_LOCK, this.unlock);
     if (this.unlock) {
       this.$store.dispatch(ABAction('closeAllModal'));
     }
