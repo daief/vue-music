@@ -4,7 +4,7 @@
       <ul class="list">
         <li
           class="item c-p"
-          v-for="(item, i) in bannerList" :key="item.targetId"
+          v-for="(item, i) in bannerList" :key="item.imageUrl"
           :class="{active: i === activeIdx}"
           @click="handleClickBanner(i)"
         >
@@ -16,7 +16,7 @@
       <div class="dots">
         <span
           class="ibs c-p dot"
-          v-for="(item, i) in bannerList" :key="item.targetId"
+          v-for="(item, i) in bannerList" :key="item.imageUrl"
           :class="{active: i === activeIdx}"
           @click="handleClickDot(i)"
         />

@@ -2,7 +2,13 @@
   <div class="recommend">
     <banner />
     <div style="height: 700px">
-      <play-list-card />
+      <play-list-card
+        src="https://p2.music.126.net/vrOG0hAhslI4djtZdMgE6g==/6044015418094303.jpg"
+        :count="1000"
+        title="titletitletitletitletitletitletitletitle"
+        :show-name="false"
+        name="name"
+      />
     </div>
   </div>
 </template>
