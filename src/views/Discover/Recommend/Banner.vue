@@ -314,11 +314,11 @@ export default class Recommend extends Vue {
     this.$u.get('/banner').then((res) => {
       if (!res.failMark) {
         this.bannerList = res.banners;
-        this.activeIdx = 0;
-        // get theme colors
-        this.setThemeColors(this.bannerList);
-        this.startTimer();
       }
+      this.activeIdx = 0;
+      // get theme colors
+      this.setThemeColors(this.bannerList);
+      this.startTimer();
     });
   }
 
