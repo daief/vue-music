@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div class="content smoth-scroll" @click="handleClickCloseAllModal">
-      <!-- write header here <div class="header"></div> -->
       <header-bar />
-      <router-view/>
+      <router-view />
+      <bottom-footer />
     </div>
     <div class="bottom">
       <audio-bar id="audioBar" />
@@ -15,17 +15,25 @@
 import { Component, Vue } from 'vue-property-decorator';
 import AudioBar from '@/components/AudioBar/index.vue';
 import HeaderBar from '@/components/HeaderBar/index.vue';
+import BottomFooter from '@/components/BottomFooter/index.vue';
 import { ABAction } from '@/stores/audioBar';
 
 @Component({
   components: {
     AudioBar,
     HeaderBar,
+    BottomFooter,
   },
 })
 export default class App extends Vue {
+  public minHeight: number = 0;
+
   public handleClickCloseAllModal() {
     this.$store.dispatch(ABAction('closeAllModal'));
+  }
+
+  public mounted() {
+    this.minHeight = document.documentElement.clientHeight;
   }
 }
 </script>
@@ -48,6 +56,7 @@ html, body { height: 100%; }
   & > .content {
     flex: 1;
     overflow-y: scroll;
+    position: relative;
   }
 
   & > .bottom {

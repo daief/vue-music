@@ -1,6 +1,9 @@
 <template>
   <div class="recommend">
     <banner />
+    <div style="height: 700px">
+
+    </div>
   </div>
 </template>
 
