@@ -2,17 +2,18 @@
   <div class="play-list-card ibs">
     <div class="wrap">
       <img :src="src" alt="">
-      <router-link to="/discover/playlist" class="mask" />
+      <router-link :to="playLink" class="mask" />
       <div class="bar">
         <span class="ibs ic listen" />
-        <span class="ibs count">{{count}}</span>
+        <span class="ibs count">{{CountStr}}</span>
+        <!-- TODO -->
         <span class="ibs c-p ic play" />
       </div>
     </div>
 
     <p class="title fs-14">
       <router-link
-        to="/discover/playlist"
+        :to="playLink"
         class="c-p-line"
         :class="{
           'text-wrap': !showName,
@@ -51,6 +52,11 @@ export default class PlayListCard extends Vue {
   @Prop({
     type: String,
     required: true,
+  }) public playLink!: string;
+
+  @Prop({
+    type: String,
+    required: true,
   }) public title!: string;
 
   @Prop({
@@ -62,6 +68,11 @@ export default class PlayListCard extends Vue {
     type: String,
     default: '',
   }) public name!: string;
+
+  get CountStr() {
+    const count = Math.floor(this.count);
+    return count >= 10000 ? `${Math.floor(count / 10000)}万` : count;
+  }
 }
 </script>
 
@@ -101,7 +112,7 @@ export default class PlayListCard extends Vue {
       z-index: 2;
       background: url('~@/assets/images/coverall.png') no-repeat 0 -537px;
 
-      span {
+      span.ibs, a.ibs {
         color: #ccc;
         float: left;
 

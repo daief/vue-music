@@ -1,4 +1,6 @@
 @content-width: 980px;
+@left-width: 730px;
+@right-width: @content-width - @left-width;
 
 @iPlaybar: "~@/assets/images/playbar.png";
 @iPlaylisticons: "~@/assets/images/playlisticons.png";
@@ -30,6 +32,7 @@
   &:hover {
     color: @h-color;
     text-decoration: underline;
+    text-decoration-color: @h-color;
   }
 
   &:active {
@@ -41,4 +44,22 @@
   &:hover {
     text-decoration: none;
   }
+}
+
+.vertical-1-line(@color) {
+  content: "";
+  background-color: @color;
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.horizontal-1-line(@color) {
+  content: "";
+  background-color: @color;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
 }

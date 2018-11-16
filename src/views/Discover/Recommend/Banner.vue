@@ -383,7 +383,7 @@ export default class Recommend extends Vue {
       margin: 0;
       padding: 0;
       height: @h;
-      width: 730px;
+      width: @left-width;
       position: relative;
 
 
@@ -414,7 +414,7 @@ export default class Recommend extends Vue {
       height: 20px;
       bottom: 0;
       left: 0;
-      width: 730px;
+      width: @left-width;
       text-align: center;
 
       .dot {
@@ -488,7 +488,7 @@ export default class Recommend extends Vue {
 
     .download {
       @down-bg: '~@/assets/images/download.png';
-      width: @content-width - 730px;
+      width: @right-width;
       height: @h;
       background: url(@down-bg) no-repeat 0 0;
       background-size: 100% 404px;

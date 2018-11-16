@@ -9,13 +9,19 @@
     display: flex;
     flex-wrap: nowrap;
     background-color: #fff;
+    position: relative;
+
+    &::after {
+      .vertical-1-line(#dfdfdf);
+      left: @left-width;
+    }
 
     .left {
-      width: 730px;
+      width: @left-width;
     } // .left
 
     .right {
-      width: @content-width - 730px;
+      width: @right-width;
     } // .right
   } // .body
 } // .recommend

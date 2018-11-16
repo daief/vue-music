@@ -99,6 +99,7 @@ export default class UTitle extends Vue {
     right: 0;
     .more {
       .set-a(#666);
+      margin-right: 3px;
     }
   }
 } // .u-title
