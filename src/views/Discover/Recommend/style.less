@@ -1,5 +1,21 @@
 @import '~@/styles/variables.less';
 
 .recommend {
+  background-color: whitesmoke;
 
-}
+  .body {
+    width: @content-width;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: #fff;
+
+    .left {
+      width: 730px;
+    } // .left
+
+    .right {
+      width: @content-width - 730px;
+    } // .right
+  } // .body
+} // .recommend

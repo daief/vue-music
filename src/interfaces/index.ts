@@ -40,10 +40,10 @@ export interface Song extends KVAny {
   cd: nstr;
   position: nstr;
   source: {
-    title: string
-    link: string
-    fid: nstr
-    fdata: nstr,
+    title: string;
+    link: string;
+    fid: nstr;
+    fdata: nstr;
   } | null;
 }
 
@@ -60,20 +60,20 @@ export interface HttpRes extends KVAny {
  */
 export interface Lyric extends KVAny {
   lrc: {
-    version: nstr
-    lyric: string,
+    version: nstr;
+    lyric: string;
   };
   tlyric: {
-    version: nstr
-    lyric: string,
+    version: nstr;
+    lyric: string;
   };
   transUser?: {
-    demand?: nstr
-    id: nstr
-    nickname: string
-    status: number
-    uptime: number
-    userid: nstr,
+    demand?: nstr;
+    id: nstr;
+    nickname: string;
+    status: number;
+    uptime: number;
+    userid: nstr;
   };
 }
 
@@ -111,4 +111,20 @@ export interface Banner extends KVAny {
   typeTitle: string;
   url: null | string;
   exclusive: boolean;
+}
+
+/**
+ * 歌单列表 Item
+ */
+export interface PlayListItem {
+  id: nstr;
+  type: nstr;
+  name: string;
+  copywriter: string;
+  picUrl: string;
+  canDislike: boolean;
+  playCount: number;
+  trackCount: number;
+  highQuality: boolean;
+  alg: string;
 }
