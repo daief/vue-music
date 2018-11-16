@@ -190,7 +190,9 @@ export default class List extends Vue {
     this.$u.delay(() => {
       const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
       if (elSong) {
-        elSong.scrollIntoView(false);
+        elSong.scrollIntoView({
+          behavior: 'instant',
+        });
       }
     }, 10);
   }
