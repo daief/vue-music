@@ -128,3 +128,112 @@ export interface PlayListItem {
   highQuality: boolean;
   alg: string;
 }
+
+/**
+ * 歌单描述
+ */
+export interface PlayList extends KVAny {
+  subscribers: User[];
+  subscribed: boolean;
+  creator: User;
+  tracks: PlayListTrack[];
+  trackIds: Array<{
+    id: number;
+    v: number;
+  }>;
+  description: string;
+  playCount: number;
+  trackCount: number;
+  coverImgUrl: string;
+  tags: string[];
+  status: number;
+  createTime: number;
+  updateTime: number;
+  commentThreadId: string;
+  highQuality: boolean;
+  privacy: number;
+  newImported: boolean;
+  specialType: number;
+  trackUpdateTime: number;
+  coverImgId: number;
+  userId: number;
+  ordered: boolean;
+  cloudTrackCount: number;
+  subscribedCount: number;
+  adType: number;
+  trackNumberUpdateTime: number;
+  name: string;
+  id: number;
+  shareCount: number;
+  coverImgId_str: string;
+  commentCount: number;
+}
+
+/**
+ * 歌单中的 track
+ */
+export interface PlayListTrack {
+  name: string;
+  id: number;
+  pst: number;
+  t: number;
+  ar: Artist[];
+  alia: string[];
+  pop: number;
+  st: number;
+  rt: any;
+  fee: number;
+  v: number;
+  crbt: any;
+  cf: any;
+  al: Album;
+  dt: number;
+  cd: string;
+  no: number;
+  rtUrl: any;
+  ftype: number;
+  rtUrls: any[];
+  djId: number;
+  copyright: number;
+  s_id: number;
+  rtype: number;
+  rurl: number;
+  mst: number;
+  cp: number;
+  mv: number;
+  publishTime: number;
+}
+
+/**
+ * XXX 初步猜测用户类型
+ */
+export interface User extends KVAny {
+  defaultAvatar: boolean;
+  province: number;
+  authStatus: number;
+  followed: boolean;
+  avatarUrl: string;
+  accountStatus: number;
+  gender: number;
+  city: number;
+  birthday: number;
+  userId: number;
+  userType: number;
+  nickname: string;
+  signature: string;
+  description: string;
+  detailDescription: string;
+  avatarImgId: number;
+  backgroundImgId: number;
+  backgroundUrl: string;
+  authority: number;
+  mutual: boolean;
+  expertTags: any;
+  experts: any;
+  djStatus: number;
+  vipType: number;
+  remarkName: any;
+  avatarImgIdStr: string;
+  backgroundImgIdStr: string;
+  avatarImgId_str: string;
+}

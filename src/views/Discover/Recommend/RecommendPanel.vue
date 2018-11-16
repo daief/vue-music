@@ -29,6 +29,7 @@
       <play-list-card
         v-for="item in Max8Item"
         :key="item.id"
+        :id="item.id"
         class="card"
         :src="item.picUrl"
         :count="item.playCount"
@@ -176,12 +177,12 @@ export default class RecommendPanel extends Vue {
   }
 
   public mounted() {
-    // this.$u.get('')
-    //   .then(res => {
-    //     if (res.failMark) {
-    //       this.cardList = res.result || this.cardList
-    //     }
-    //   })
+    this.$u.get('/personalized')
+      .then((res) => {
+        if (res.failMark) {
+          this.cardList = res.result || this.cardList;
+        }
+      });
   }
 }
 </script>

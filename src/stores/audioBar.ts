@@ -1,7 +1,8 @@
 import { ActionTree, MutationTree } from 'vuex';
 import { RootState } from '@/store';
-import { Song } from '@/interfaces';
+import { Song, PlayList } from '@/interfaces';
 import { inBuiltList } from './inBuiltList';
+import { get } from '@/utils';
 
 export interface AudioBarState {
   player: HTMLAudioElement;
@@ -30,6 +31,11 @@ export enum TYPES {
   SET_ISSHOWLIST = 'SET_ISSHOWLIST',
   SET_ISSHOWVOLUME = 'SET_ISSHOWVOLUME',
 }
+
+/**
+ * 是否正在拉取歌单详情，一个目的用于防止连续点击
+ */
+let isFetchingPlaylist: boolean = false;
 
 const state: AudioBarState = {
   // aoid judging is player null, player must exist
@@ -237,6 +243,43 @@ const actions: ActionTree<AudioBarState, RootState> = {
   closeAllModal({commit}) {
     commit(TYPES.SET_ISSHOWLIST, false);
     commit(TYPES.SET_ISSHOWVOLUME, false);
+  },
+  // XXX 开始播放一个新的列表，暂时默认为普通歌单
+  startPlayNewList({commit, dispatch}, payload: {
+    id: number;
+    type?: string
+  }) {
+    if (isFetchingPlaylist) { return; }
+    isFetchingPlaylist = true;
+    const {id} = payload;
+    get(`/playlist/detail?id=${id}`)
+      .then((res) => {
+        if (!res.failMark) {
+          const list: PlayList = res.playlist;
+          const songL: Song[] = (list.tracks || []).map((track) => ({
+            album: track.al,
+            alias: track.alia,
+            artists: track.ar,
+            duration: track.dt,
+            id: track.id,
+            mvid: track.mv,
+            name: track.name,
+            cd: track.cd,
+            position: track.pst,
+            source: null,
+          }));
+          if (songL.length > 0) {
+            // 设置新列表
+            commit(TYPES.SET_PLAYLIST, songL);
+            // 播放第一首
+            dispatch('setSong', songL[0]).then(() => {
+              dispatch('ctrlAudioLoadAndPlay');
+            });
+          }
+        }
+
+        isFetchingPlaylist = false;
+      });
   },
 };
 

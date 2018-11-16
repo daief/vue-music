@@ -7,7 +7,7 @@
         <span class="ibs ic listen" />
         <span class="ibs count">{{CountStr}}</span>
         <!-- TODO -->
-        <span class="ibs c-p ic play" />
+        <span class="ibs c-p ic play" title="播放" @click="handleClickPlay" />
       </div>
     </div>
 
@@ -19,14 +19,14 @@
           'text-wrap': !showName,
           'f-thide ellipsis': showName
         }"
+        :title="title"
       >
         {{title}}
       </router-link>
     </p>
     <p v-if="showName" class="creator">
       by
-      <router-link to="/" class="name f-thide">{{name}}</router-link>
-
+      <router-link to="/" class="name f-thide" :title="name">{{name}}</router-link>
     </p>
   </div>
 </template>
@@ -36,9 +36,15 @@
  * 常规展示歌单的 item
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { ABAction } from '@/stores/audioBar';
 
 @Component
 export default class PlayListCard extends Vue {
+  @Prop({
+    type: Number,
+    required: true,
+  }) public id!: number;
+
   @Prop({
     type: String,
     required: true,
@@ -72,6 +78,14 @@ export default class PlayListCard extends Vue {
   get CountStr() {
     const count = Math.floor(this.count);
     return count >= 10000 ? `${Math.floor(count / 10000)}万` : count;
+  }
+
+  /**
+   * 点击播放歌单
+   */
+  public handleClickPlay() {
+    // 拉取歌单并播放第一首
+    this.$store.dispatch(ABAction('startPlayNewList'), {id: this.id});
   }
 }
 </script>
