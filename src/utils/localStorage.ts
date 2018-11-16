@@ -1,9 +1,13 @@
+import { Song } from '@/interfaces';
 
 enum K {
   VOLUME = 'VOLUME',
   LOOP_TYPE = 'LOOP_TYPE',
   SONG_LIST = 'SONG_LIST',
   UN_LOCK = 'UN_LOCK',
+  PLAY_LIST = 'PLAY_LIST',
+  // 当前播放歌曲
+  PLAY_SONG = 'PLAY_SONG',
 }
 
 class Dataer {
@@ -51,6 +55,22 @@ class Dataer {
   public getLocalUnLockStatus() {
     const rs = this.getLocal(this.KEYS.UN_LOCK);
     return rs === true ? true : false;
+  }
+
+  /**
+   * 获取本地存储的歌单列表
+   */
+  public getLocalPlayList() {
+    const rs = this.getLocal(this.KEYS.PLAY_LIST);
+    return rs instanceof Array ? rs : [];
+  }
+
+  /**
+   * 获取本地存储的正在播放歌曲
+   */
+  public getLocalPlaySong() {
+    const rs: Song = this.getLocal(this.KEYS.PLAY_SONG);
+    return rs ? rs : null;
   }
 
   private localKey(key: string) {

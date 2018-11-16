@@ -2,7 +2,7 @@ import { ActionTree, MutationTree } from 'vuex';
 import { RootState } from '@/store';
 import { Song, PlayList } from '@/interfaces';
 import { inBuiltList } from './inBuiltList';
-import { get } from '@/utils';
+import { get, local, delay } from '@/utils';
 
 export interface AudioBarState {
   player: HTMLAudioElement;
@@ -37,6 +37,10 @@ export enum TYPES {
  */
 let isFetchingPlaylist: boolean = false;
 
+const localPlayList = local.getLocalPlayList();
+const initList = localPlayList.length > 0 ? localPlayList : inBuiltList;
+const localPlaySong: Song | null = local.getLocalPlaySong();
+
 const state: AudioBarState = {
   // aoid judging is player null, player must exist
   player: null as any,
@@ -46,9 +50,9 @@ const state: AudioBarState = {
   duration: 0,
   bufferedTime: 0,
   isWaiting: false,
-  playList: inBuiltList,
+  playList: initList,
   // 当前播放歌曲
-  song: inBuiltList[0],
+  song: localPlaySong ? localPlaySong : initList[0],
   isShowList: false,
   isShowVolume: false,
 };
@@ -76,9 +80,13 @@ const mutations: MutationTree<AudioBarState> = {
     s.isWaiting = v;
   },
   [TYPES.SET_PLAYLIST](s, list: Song[]) {
+    // 设置歌单列表时存储于本地，加入下次事件循环
+    delay(() => local.setLocal(local.KEYS.PLAY_LIST, list), 10);
     s.playList = list;
   },
   [TYPES.SET_SONG](s, v: Song) {
+    // 切换歌曲时存储于本地
+    delay(() => local.setLocal(local.KEYS.PLAY_SONG, v), 10);
     s.song = v;
   },
   [TYPES.SET_ISSHOWLIST](s, v: boolean) {
