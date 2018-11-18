@@ -26,7 +26,7 @@
     </p>
     <p v-if="showName" class="creator">
       by
-      <router-link to="/" class="name f-thide" :title="name">{{name}}</router-link>
+      <router-link :to="playLink" class="name f-thide" :title="name">{{name}}</router-link>
     </p>
   </div>
 </template>
