@@ -1,6 +1,6 @@
 import { ActionTree, MutationTree } from 'vuex';
 import { RootState } from '@/store';
-import { Song, PlayList } from '@/interfaces';
+import { Song, PlayList, PlayListTrack } from '@/interfaces';
 import { inBuiltList } from './inBuiltList';
 import { get, local, delay } from '@/utils';
 
@@ -259,35 +259,73 @@ const actions: ActionTree<AudioBarState, RootState> = {
   }) {
     if (isFetchingPlaylist) { return; }
     isFetchingPlaylist = true;
-    const {id} = payload;
-    get(`/playlist/detail?id=${id}`)
-      .then((res) => {
-        if (!res.failMark) {
-          const list: PlayList = res.playlist;
-          const songL: Song[] = (list.tracks || []).map((track) => ({
-            album: track.al,
-            alias: track.alia,
-            artists: track.ar,
-            duration: track.dt,
-            id: track.id,
-            mvid: track.mv,
-            name: track.name,
-            cd: track.cd,
-            position: track.pst,
-            source: null,
-          }));
-          if (songL.length > 0) {
-            // 设置新列表
-            commit(TYPES.SET_PLAYLIST, songL);
-            // 播放第一首
-            dispatch('setSong', songL[0]).then(() => {
-              dispatch('ctrlAudioLoadAndPlay');
-            });
-          }
-        }
-
-        isFetchingPlaylist = false;
-      });
+    const {id, type} = payload;
+    let promise: Promise<any>;
+    switch (type) {
+      case 'ALBUM': {
+        promise = get(`/album?id=${id}`)
+          .then((res) => {
+            if (!res.failMark) {
+              const list: PlayListTrack[] = res.songs;
+              const songL: Song[] = (list || []).map((track) => ({
+                album: track.al,
+                alias: track.alia,
+                artists: track.ar,
+                duration: track.dt,
+                id: track.id,
+                mvid: track.mv,
+                name: track.name,
+                cd: track.cd,
+                position: track.pst,
+                source: null,
+              }));
+              console.log(songL);
+              if (songL.length > 0) {
+                // 设置新列表
+                commit(TYPES.SET_PLAYLIST, songL);
+                // 播放第一首
+                dispatch('setSong', songL[0]).then(() => {
+                  dispatch('ctrlAudioLoadAndPlay');
+                });
+              }
+            }
+          });
+        break;
+      }
+      case 'PLAY_LIST':
+      default: {
+        promise = get(`/playlist/detail?id=${id}`)
+          .then((res) => {
+            if (!res.failMark) {
+              const list: PlayList = res.playlist;
+              const songL: Song[] = (list.tracks || []).map((track) => ({
+                album: track.al,
+                alias: track.alia,
+                artists: track.ar,
+                duration: track.dt,
+                id: track.id,
+                mvid: track.mv,
+                name: track.name,
+                cd: track.cd,
+                position: track.pst,
+                source: null,
+              }));
+              if (songL.length > 0) {
+                // 设置新列表
+                commit(TYPES.SET_PLAYLIST, songL);
+                // 播放第一首
+                dispatch('setSong', songL[0]).then(() => {
+                  dispatch('ctrlAudioLoadAndPlay');
+                });
+              }
+            }
+          });
+        break;
+      }
+    }
+    promise.then(() => {
+      isFetchingPlaylist = false;
+    });
   },
 };
 
