@@ -126,11 +126,13 @@ export function controlScroll(param: ControlScrollParam): () => void {
   let {scrollTop} = el;
   const deltY = y - scrollTop;
 
+  let start = 0;
   let lastTime = 0;
   let canContinue = true;
 
   const loop = (now: number) => {
     if (lastTime === 0) {
+      start = now;
       lastTime = now;
     }
     const deltTime = now - lastTime;
@@ -143,7 +145,12 @@ export function controlScroll(param: ControlScrollParam): () => void {
       behavior: 'instant',
     });
 
-    if (Math.abs(el.scrollTop - y) >= 6 && canContinue) {
+    if (
+      Math.abs(el.scrollTop - y) >= 6
+      // 滚动时长已经结束，多给 50ms
+      && now - start <= duration + 50
+      && canContinue
+    ) {
       lastTime = now;
       window.requestAnimationFrame(loop);
     } else {
