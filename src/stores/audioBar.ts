@@ -262,6 +262,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
     const {id, type} = payload;
     let promise: Promise<any>;
     switch (type) {
+      // XXX 后续其他类型一致统一处理
       case 'ALBUM': {
         promise = get(`/album?id=${id}`)
           .then((res) => {
@@ -279,7 +280,6 @@ const actions: ActionTree<AudioBarState, RootState> = {
                 position: track.pst,
                 source: null,
               }));
-              console.log(songL);
               if (songL.length > 0) {
                 // 设置新列表
                 commit(TYPES.SET_PLAYLIST, songL);

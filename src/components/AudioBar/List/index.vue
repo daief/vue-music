@@ -133,14 +133,28 @@ export default class List extends Vue {
 
   // 解析歌词字符串为歌词数组
   public getLyricArr(lyric: string | undefined): LrcTime[] {
-    return (lyric || '').split(/[\n\r]/).map((str) => {
-      const res = /^\[(\d+:\d+\.?\d+)\](.*)/.exec(str.trim());
-      return (res ? {
-        formatTime: res[1],
-        millisecond: this.$u.format2millisecond(res[1]),
-        content: res[2],
-      } : undefined) as any;
-    }).filter((v) => v !== undefined);
+    const result: LrcTime[] = [];
+
+    (lyric || '').split(/[\n\r]/).map((str) => {
+      const reg = /\[(\d+:\d+\.?\d+)\]/g;
+      const content = str.trim().replace(reg, '');
+      let res: null | string[] = null;
+
+      while (true) {
+        res = reg.exec(str.trim());
+        if (!res) {
+          break;
+        }
+
+        result.push({
+          formatTime: res[1],
+          millisecond: this.$u.format2millisecond(res[1]),
+          content,
+        });
+      }
+    });
+
+    return result.sort((a, b) => a.millisecond - b.millisecond);
   }
 
   // 获取歌词
