@@ -416,6 +416,7 @@ export default class Recommend extends Vue {
       left: 0;
       width: @left-width;
       text-align: center;
+      z-index: 6;
 
       .dot {
         width: 20px;
