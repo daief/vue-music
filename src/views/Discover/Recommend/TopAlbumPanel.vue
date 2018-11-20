@@ -11,10 +11,11 @@
       <div class="wrap">
         <div class="cards">
           <div
-            v-for="(lists, i) in albumCards"
+            v-for="(lists, i) in AlbumCards"
             :key="i"
             class="row"
             :class="`r-${i + 1}`"
+            :style="CardStyles[i]"
           >
             <album-card
               class="small"
@@ -28,6 +29,8 @@
             />
           </div>
         </div>
+        <span class="ibs c-p arrow left" @click="doScroll(true)" />
+        <span class="ibs c-p arrow right" @click="doScroll(false)" />
       </div>
     </div>
   </div>
@@ -738,20 +741,63 @@ export default class TopAlbumPanel extends Vue {
 
   public toggle: boolean = false;
 
-  get albumCards() {
+  public cardMove: number = 0;
+  public isScrolling: boolean = false;
+
+  get AlbumCards() {
     const {albumList, toggle} = this;
-    const startIdxs = toggle ? [5, 0, 5] : [0, 5, 0];
+    const startIdxs = toggle ? [0, 5, 0] : [5, 0, 5];
 
     return startIdxs.map((start) => albumList.slice(start, start + 5));
   }
 
+  get CardStyles() {
+    return [0, 0, 0].map((val) => ({
+      transform: `translateX(${val + this.cardMove}%)`,
+    }));
+  }
+
+  /**
+   * 滚动专辑列表
+   */
+  public doScroll(left: boolean) {
+    if (this.isScrolling) { return; }
+
+    this.isScrolling = true;
+    const delt = (left ? 1 : -1) * 100;
+    const duration = 900;
+    let startTime = 0;
+    let lastTime = 0;
+
+    const loop = (now: number) => {
+      if (lastTime === 0) {
+        startTime = lastTime = now;
+      }
+      const deltTime = now - lastTime;
+      const perMove = this.$u.withinErrorMargin(deltTime, 0) ? 0 : delt / (duration / 1000) * (deltTime / 1000);
+      this.cardMove += perMove;
+
+      if (Math.abs(this.cardMove) >= 100 || now - startTime >= duration) {
+        // end
+        this.isScrolling = false;
+        this.toggle = !this.toggle;
+        this.cardMove = 0;
+      } else {
+        lastTime = now;
+        window.requestAnimationFrame(loop);
+      }
+    };
+
+    window.requestAnimationFrame(loop);
+  }
+
   public mounted() {
-    // this.$u.get('/top/album?offset=0&limit=10')
-    //   .then((res) => {
-    //     if (!res.failMark) {
-    //       this.albumList = res.albums || this.albumList;
-    //     }
-    //   });
+    this.$u.get('/top/album?offset=0&limit=10')
+      .then((res) => {
+        if (!res.failMark) {
+          this.albumList = res.albums || this.albumList;
+        }
+      });
   }
 }
 </script>
@@ -766,6 +812,7 @@ export default class TopAlbumPanel extends Vue {
     height: 184px;
     background: #f5f5f5;
     border: 1px solid #fff;
+    position: relative;
 
     .cards {
       width: 645px;
@@ -796,6 +843,32 @@ export default class TopAlbumPanel extends Vue {
         }
       } // .row
     } // .cards
+
+    .arrow {
+      position: absolute;
+      top: 71px;
+      width: 17px;
+      height: 17px;
+      background: url('~@/assets/images/indexpage.png') no-repeat;
+
+      &.left {
+        left: 4px;
+        background-position: -260px -75px;
+
+        &:hover {
+          background-position: -280px -75px;
+        }
+      }
+
+      &.right {
+        right: 4px;
+        background-position: -300px -75px;
+
+        &:hover {
+          background-position: -320px -75px;
+        }
+      }
+    } // .arrow
   } // .wrap
 } // .top-album-panel
 </style>
