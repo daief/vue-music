@@ -5,13 +5,7 @@
     <div class="body">
       <div class="left">
         <recommend-panel />
-        <album-card
-          :id="73914415"
-          src="http://p3.music.126.net/_ul8hOejiAJu3g2stTqJ4A==/109951163661990135.jpg?param=130y130"
-          play-link="/discover/playlist/${item.id}"
-          name="name"
-          :artists="[{name: 'xxxx'}, {name: 'xxxx2'}]"
-        />
+        <top-album-panel />
       </div>
       <div class="right">
         right
@@ -25,12 +19,14 @@ import {Vue, Component} from 'vue-property-decorator';
 import AlbumCard from '@/components/AlbumCard/index.vue';
 import Banner from './Banner.vue';
 import RecommendPanel from './RecommendPanel.vue';
+import TopAlbumPanel from './TopAlbumPanel.vue';
 
 @Component({
   components: {
     Banner,
     AlbumCard,
     RecommendPanel,
+    TopAlbumPanel,
   },
 })
 export default class Recommend extends Vue {

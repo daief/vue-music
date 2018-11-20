@@ -11,14 +11,66 @@ export interface KVAny {
 type nstr = number | string;
 
 /**
- * 专辑类型
+ * 简单专辑类型
  */
-export interface Album extends KVAny {
+export interface SimpleAlbum extends KVAny {
   id: nstr;
   name: string;
   picUrl: string;
   pic: number;
   pic_str?: string;
+}
+
+/**
+ * 专辑艺术家（作家）
+ */
+export interface AlbumArtist extends KVAny {
+  img1v1Id: number;
+  topicPerson: number;
+  picUrl: string;
+  trans: string;
+  musicSize: number;
+  alias: string[];
+  briefDesc: string;
+  albumSize: number;
+  picId: number;
+  img1v1Url: string;
+  name: string;
+  id: number;
+  picId_str?: string;
+  transNames?: string[];
+  img1v1Id_str: string;
+}
+
+/**
+ * 简单专辑类型
+ */
+export interface Album extends KVAny {
+  songs: any[];
+  paid: boolean;
+  onSale: boolean;
+  tags: string;
+  status: number;
+  picUrl: string;
+  company: string;
+  alias: string[];
+  briefDesc: string;
+  commentThreadId: string;
+  publishTime: number;
+  picId: number;
+  copyrightId: number;
+  artist: AlbumArtist;
+  artists: AlbumArtist [];
+  subType: string;
+  description: string;
+  blurPicUrl: string;
+  companyId: number;
+  pic: number;
+  name: string;
+  id: number;
+  type: string;
+  size: number;
+  picId_str: string;
 }
 
 /**
@@ -30,7 +82,7 @@ export interface Artist extends KVAny {
 }
 
 export interface Song extends KVAny {
-  album: Album;
+  album: SimpleAlbum;
   alias: string[];
   artists: Artist[];
   duration: nstr;
@@ -186,7 +238,7 @@ export interface PlayListTrack {
   v: number;
   crbt: any;
   cf: any;
-  al: Album;
+  al: SimpleAlbum;
   dt: number;
   cd: string;
   no: number;

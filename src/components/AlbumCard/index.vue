@@ -1,7 +1,7 @@
 <template>
   <div class="album-card ibs">
     <div class="wrap">
-      <img :src="src" alt="">
+      <img :src="src" class="ibs" alt="">
       <router-link :to="playLink" class="mask" />
       <span class="ibs c-p play" @click="handleClickPlay" />
     </div>
@@ -90,13 +90,18 @@ export default class AlbumCard extends Vue {
     height: 130px;
     position: relative;
 
+    img {
+      width: auto;
+      height: 100%;
+    }
+
     .mask {
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
       left: 0;
-      background: url('~@/assets/images/coverall.png') no-repeat 0 0;
+      background: url('~@/assets/images/coverall.png') no-repeat;
       background-position: 0 -845px;
     } // .mask
 
@@ -145,7 +150,20 @@ export default class AlbumCard extends Vue {
       display: inline-block;
       vertical-align: text-bottom;
     }
-  }
-}
+  } // .wrap
+
+  // small size
+  &.small {
+    width: 118px;
+
+    .wrap {
+      height: 100px;
+
+      .mask {
+        background-position: 0 -570px;
+      } // .mask
+    } // .wrap
+  } // .album-card.small
+} // .album-card
 </style>
 

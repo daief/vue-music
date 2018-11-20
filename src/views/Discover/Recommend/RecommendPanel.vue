@@ -179,7 +179,7 @@ export default class RecommendPanel extends Vue {
   public mounted() {
     this.$u.get('/personalized')
       .then((res) => {
-        if (res.failMark) {
+        if (!res.failMark) {
           this.cardList = res.result || this.cardList;
         }
       });
@@ -192,6 +192,7 @@ export default class RecommendPanel extends Vue {
 
 .recommend-panel {
   padding: 20px;
+  padding-bottom: 0;
 
   .tags {
     height: 33px;
@@ -222,7 +223,7 @@ export default class RecommendPanel extends Vue {
       }
     }
   }
-} // .u-title
+}
 </style>
 
 
