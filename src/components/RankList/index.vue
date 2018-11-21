@@ -44,6 +44,14 @@
           <span class="ibs c-p icon collect" title="收藏" />
         </div>
       </div>
+      <div class="item dark last">
+        <router-link
+          :to="Link"
+          class="ibs more f-thide"
+        >
+          查看跟多>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>

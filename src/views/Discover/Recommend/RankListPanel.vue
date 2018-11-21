@@ -8,7 +8,7 @@
     />
 
     <div class="ranks">
-      <rank-list class="rank" v-for="type in TopTypes" :key="type" :top-type="type" />
+      <rank-list class="rank" v-for="type in resultTypes" :key="type" :top-type="type" />
     </div>
   </div>
 </template>
@@ -21,19 +21,11 @@ import {Vue, Component} from 'vue-property-decorator';
 import RankList from '@/components/RankList/index.vue';
 import UTitle from '@/components/UTitle/index.vue';
 
-
-@Component({
-  components: {
-    RankList,
-    UTitle,
-  },
-})
-export default class RankListPanel extends Vue {
-  get TopTypes() {
-    const types: string[] = Array.from({length: 24}).map((_, i) => `${i}`);
-    const l = types.length;
-    const rds: number[] = [];
-    while (true) {
+function getTopTypes(): string[] {
+  const types: string[] = Array.from({length: 24}).map((_, i) => `${i}`);
+  const l = types.length;
+  const rds: number[] = [];
+  while (true) {
       const rd1 = Math.floor(Math.random() * l);
       if (!rds.includes(rd1)) {
         rds.push(rd1);
@@ -42,8 +34,22 @@ export default class RankListPanel extends Vue {
         break;
       }
     }
-    return rds.map((i) => types[i]);
-  }
+  return rds.map((i) => types[i]);
+}
+
+/**
+ * 每次页面只变换一次
+ */
+const resultTypes = getTopTypes();
+
+@Component({
+  components: {
+    RankList,
+    UTitle,
+  },
+})
+export default class RankListPanel extends Vue {
+  public resultTypes = resultTypes;
 }
 </script>
 
