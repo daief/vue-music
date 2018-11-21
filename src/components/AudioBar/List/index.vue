@@ -281,6 +281,7 @@ export default class List extends Vue {
     if (val) {
       // 显示了，1. 滚动到当前歌曲，2. 滚动到当前歌词
       this.scrollLyricToActive();
+      // TDDO bug 元素在底部时整个父级错位了
       this.scrollToPlayingSong();
     }
   }
