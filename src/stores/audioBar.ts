@@ -33,6 +33,25 @@ export enum TYPES {
 }
 
 /**
+ * 将 track 对象转换为 Song 对象
+ * @param track
+ */
+export function track2Song(track: PlayListTrack): Song {
+  return {
+    album: track.al,
+    alias: track.alia,
+    artists: track.ar,
+    duration: track.dt,
+    id: track.id,
+    mvid: track.mv,
+    name: track.name,
+    cd: track.cd,
+    position: track.pst,
+    source: null,
+  };
+}
+
+/**
  * 是否正在拉取歌单详情，一个目的用于防止连续点击
  */
 let isFetchingPlaylist: boolean = false;
@@ -212,7 +231,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
   }) {
     const {player} = s;
     const {load, play} = {load: true, play: true, ...payload};
-    console.log(load, play);
+
     if (!player) {
       return;
     }
@@ -223,7 +242,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
       dispatch('play');
     }
   },
-  // 设置歌曲为 id 并播放
+  // 列表中设置歌曲为 id 并播放
   listSongIdAndPlay({dispatch, state: s}, id: number) {
     const {playList} = s;
     const song = playList.find((tmpSong) => tmpSong.id === id);
@@ -268,18 +287,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
           .then((res) => {
             if (!res.failMark) {
               const list: PlayListTrack[] = res.songs;
-              const songL: Song[] = (list || []).map((track) => ({
-                album: track.al,
-                alias: track.alia,
-                artists: track.ar,
-                duration: track.dt,
-                id: track.id,
-                mvid: track.mv,
-                name: track.name,
-                cd: track.cd,
-                position: track.pst,
-                source: null,
-              }));
+              const songL: Song[] = (list || []).map(track2Song);
               if (songL.length > 0) {
                 // 设置新列表
                 commit(TYPES.SET_PLAYLIST, songL);
@@ -298,18 +306,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
           .then((res) => {
             if (!res.failMark) {
               const list: PlayList = res.playlist;
-              const songL: Song[] = (list.tracks || []).map((track) => ({
-                album: track.al,
-                alias: track.alia,
-                artists: track.ar,
-                duration: track.dt,
-                id: track.id,
-                mvid: track.mv,
-                name: track.name,
-                cd: track.cd,
-                position: track.pst,
-                source: null,
-              }));
+              const songL: Song[] = (list.tracks || []).map(track2Song);
               if (songL.length > 0) {
                 // 设置新列表
                 commit(TYPES.SET_PLAYLIST, songL);
@@ -326,6 +323,27 @@ const actions: ActionTree<AudioBarState, RootState> = {
     promise.then(() => {
       isFetchingPlaylist = false;
     });
+  },
+  // 添加歌曲到列表
+  addSongToList({commit, state: s}, obj: PlayListTrack | Song) {
+    const isSong = (x: PlayListTrack | Song): x is Song => (x as Song).duration !== undefined;
+    const song: Song = isSong(obj) ? obj : track2Song(obj);
+
+    const {playList} = s;
+    if (playList.find((tmpSong) => tmpSong.id === song.id)) {
+      // song exists in list
+    } else {
+      const newList = [...playList, song];
+      commit(TYPES.SET_PLAYLIST, newList);
+    }
+  },
+  // 播放歌曲并加入到列表
+  playANewSong({dispatch, state: s}, obj: PlayListTrack | Song) {
+    dispatch('addSongToList', obj)
+      .then(() => {
+        // play
+        dispatch('listSongIdAndPlay', obj.id);
+      });
   },
 };
 

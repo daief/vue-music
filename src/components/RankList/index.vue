@@ -13,7 +13,7 @@
           {{getListProp('name', '')}}
         </router-link>
         <div class="icons">
-          <span class="ibs c-p icon play" title="播放全部" />
+          <span class="ibs c-p icon play" title="播放全部" @click="handleClickPlayAll" />
           <span class="ibs c-p icon collect" title="收藏" />
         </div>
       </div>
@@ -39,8 +39,8 @@
           {{item.name}}
         </router-link>
         <div class="ops">
-          <span class="ibs c-p icon play" title="播放" />
-          <span class="ibs c-p icon add" title="添加" />
+          <span class="ibs c-p icon play" title="播放" @click="handleClickSingleSong(item)" />
+          <span class="ibs c-p icon add" title="添加" @click="handleClickAddSong(item)" />
           <span class="ibs c-p icon collect" title="收藏" />
         </div>
       </div>
@@ -62,6 +62,7 @@
  */
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import { PlayList, PlayListTrack } from '@/interfaces';
+import { ABAction } from '@/stores/audioBar';
 
 @Component
 export default class RankList extends Vue {
@@ -85,6 +86,30 @@ export default class RankList extends Vue {
 
   public getListProp(prop: string, d: any) {
     return this.$u.getProp(this.playList, prop, d);
+  }
+
+  /**
+   * 播放全部歌单
+   */
+  public handleClickPlayAll() {
+    const id = this.getListProp('id', '');
+    if (id) {
+      this.$store.dispatch(ABAction('startPlayNewList'), { id });
+    }
+  }
+
+  /**
+   * 点击播放单首歌曲
+   */
+  public handleClickSingleSong(track: PlayListTrack) {
+    this.$store.dispatch(ABAction('playANewSong'), track);
+  }
+
+  /**
+   * 点击添加歌曲
+   */
+  public handleClickAddSong(track: PlayListTrack) {
+    this.$store.dispatch(ABAction('addSongToList'), track);
   }
 
   public mounted() {
