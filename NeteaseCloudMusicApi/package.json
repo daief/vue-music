@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha -r intelli-espower-loader -t 20000 app.test.js --exit",
-    "now": "now"
+    "now": "now --regions bru"
   },
   "keywords": [
     "网易云音乐",
