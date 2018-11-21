@@ -38,7 +38,7 @@ const createRequest = (method, url, data, options) => {
 
         let headers = {'User-Agent': chooseUserAgent(options.ua)}
         if(method.toUpperCase() == 'POST') headers['Content-Type'] = 'application/x-www-form-urlencoded'
-        if(url.includes('music.163.com')) headers['Referer'] = 'http://music.163.com'
+        if(url.includes('music.163.com')) headers['Referer'] = 'https://music.163.com'
         // headers['X-Real-IP'] = '118.88.88.88'
 
         if(typeof(options.cookie) === 'object')
@@ -55,12 +55,12 @@ const createRequest = (method, url, data, options) => {
         else if(options.crypto == 'linuxapi'){
             data = encrypt.linuxapi({'method': method, url: url.replace(/\w*api/,'api'), 'params': data})
             headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
-            url = 'http://music.163.com/api/linux/forward'
+            url = 'https://music.163.com/api/linux/forward'
         }
 
         const answer = {status: 500, body: {}, cookie: []}
         request(
-            {method: method, url: url, headers: headers, body: queryString.stringify(data), proxy: options.proxy}, 
+            {method: method, url: url, headers: headers, body: queryString.stringify(data), proxy: options.proxy},
             (err, res, body) => {
                 if(err){
                     answer.status = 502
@@ -80,7 +80,7 @@ const createRequest = (method, url, data, options) => {
                     answer.status = (100 < answer.status && answer.status < 600) ? answer.status : 400
                     if(answer.status == 200)
                         resolve(answer)
-                    else                  
+                    else
                         reject(answer)
                 }
             }

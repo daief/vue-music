@@ -2,12 +2,12 @@
 
 module.exports = (query, request) => {
     return request(
-        'GET', `http://music.163.com/playlist?id=${query.id}`, {},
+        'GET', `https://music.163.com/playlist?id=${query.id}`, {},
         {ua: 'pc', cookie: query.cookie, proxy: query.proxy}
     )
     .then(response => {
         try{
-            const pattern = /<div class="cver u-cover u-cover-3">[\s\S]*?<img src="([^"]+)">[\s\S]*?<a class="sname f-fs1 s-fc0" href="([^"]+)"[^>]*>([^<]+?)<\/a>[\s\S]*?<a class="nm nm f-thide s-fc3" href="([^"]+)"[^>]*>([^<]+?)<\/a>/g; 
+            const pattern = /<div class="cver u-cover u-cover-3">[\s\S]*?<img src="([^"]+)">[\s\S]*?<a class="sname f-fs1 s-fc0" href="([^"]+)"[^>]*>([^<]+?)<\/a>[\s\S]*?<a class="nm nm f-thide s-fc3" href="([^"]+)"[^>]*>([^<]+?)<\/a>/g;
             let result, playlists = []
             while((result = pattern.exec(response.body)) != null){
                 playlists.push({
