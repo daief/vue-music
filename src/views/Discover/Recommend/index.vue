@@ -6,6 +6,7 @@
       <div class="left">
         <recommend-panel />
         <top-album-panel />
+        <rank-list-panel />
       </div>
       <div class="right">
         right
@@ -20,6 +21,7 @@ import AlbumCard from '@/components/AlbumCard/index.vue';
 import Banner from './Banner.vue';
 import RecommendPanel from './RecommendPanel.vue';
 import TopAlbumPanel from './TopAlbumPanel.vue';
+import RankListPanel from './RankListPanel.vue';
 
 @Component({
   components: {
@@ -27,6 +29,7 @@ import TopAlbumPanel from './TopAlbumPanel.vue';
     AlbumCard,
     RecommendPanel,
     TopAlbumPanel,
+    RankListPanel,
   },
 })
 export default class Recommend extends Vue {

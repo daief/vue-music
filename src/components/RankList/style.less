@@ -1,0 +1,143 @@
+.rank-list {
+  padding-bottom: 0;
+  background-color: #f4f4f4;
+
+  .dark {
+    background-color: #e8e8e8;
+  }
+
+  .top {
+    display: flex;
+    padding: 20px;
+    padding-bottom: 0;
+    height: 100px;
+
+    .mask {
+      width: 80px;
+      height: 80px;
+
+      .cover {
+        width: 100%;
+        height: 100%;
+      }
+    } // .mask
+
+    .right {
+      margin: 6px 0 0 10px;
+
+      .name {
+        margin: 0;
+        font-weight: bold;
+        .set-a(#000);
+        width: 100px;
+      }
+
+      .icons {
+        margin-top: 10px;
+
+        .icon {
+          width: 22px;
+          height: 22px;
+          margin-right: 10px;
+          background: url('~@/assets/images/indexpage.png') no-repeat;
+
+          &.play {
+            background-position: -267px -205px;
+
+            &:hover {
+              background-position: -267px -235px;
+            }
+          }
+
+          &.collect {
+            background-position: -300px -205px;
+
+            &:hover {
+              background-position: -300px -235px;
+            }
+          }
+        }
+      }
+    } // .right
+  } // .top
+
+  .item {
+    @h: 32px;
+
+    height: @h;
+    line-height: @h;
+    position: relative;
+    white-space: nowrap;
+    padding-left: 12px;
+
+    .rank {
+      vertical-align: top;
+      width: 35px;
+      color: #666;
+      text-align: center;
+    }
+
+    .name {
+      width: 160px;
+      .set-a(#000);
+    }
+
+    .ops {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: @h;
+      width: 82px;
+      display: none;
+
+      .icon {
+        width: 17px;
+        height: 17px;
+        margin-right: 10px;
+        vertical-align: middle;
+        background: url('~@/assets/images/indexpage.png') no-repeat;
+
+        &.play {
+          background-position: -267px -268px;
+
+          &:hover {
+            background-position: -267px -288px;
+          }
+        }
+
+        &.add {
+          background: url('~@/assets/images/icon.png') no-repeat;
+          background-position: 0 -698px;
+
+          &:hover {
+            background-position: -22px -698px;
+          }
+        }
+
+        &.collect {
+          background-position: -297px -268px;
+
+          &:hover {
+            background-position: -297px -288px;
+          }
+        }
+      }
+    }
+
+    &.top3 {
+      .rank {
+        color: #c10d0c;
+      }
+    }
+
+    &:hover {
+      .name {
+        width: 90px;
+      }
+
+      .ops {
+        display: block;
+      }
+    }
+  } // .list
+} // .rank-list
