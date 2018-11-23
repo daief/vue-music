@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <div class="content smoth-scroll" @click="handleClickCloseAllModal">
+    <div
+      class="content smoth-scroll"
+      @click="handleClickCloseAllModal"
+      @scroll="throttleScroll"
+      ref="content"
+    >
       <header-bar />
       <router-view />
       <bottom-footer />
@@ -8,6 +13,10 @@
     <div class="bottom">
       <audio-bar id="audioBar" />
     </div>
+
+    <transition name="transition-fade">
+      <back-top :scroll-el="$refs.content" v-show="showBackTop" />
+    </transition>
   </div>
 </template>
 
@@ -16,18 +25,39 @@ import { Component, Vue } from 'vue-property-decorator';
 import AudioBar from '@/components/AudioBar/index.vue';
 import HeaderBar from '@/components/HeaderBar/index.vue';
 import BottomFooter from '@/components/BottomFooter/index.vue';
+import BackTop from '@/components/BackTop/index.vue';
 import { ABAction } from '@/stores/audioBar';
+import throttle from 'lodash/throttle';
 
 @Component({
   components: {
     AudioBar,
     HeaderBar,
     BottomFooter,
+    BackTop,
   },
 })
 export default class App extends Vue {
+  public showBackTop: boolean = false;
+
+  public throttleScroll: any;
+
+  constructor() {
+    super();
+
+    this.throttleScroll = throttle(this.handleScroll, 100);
+  }
+
   public handleClickCloseAllModal() {
     this.$store.dispatch(ABAction('closeAllModal'));
+  }
+
+  public handleScroll(e: any) {
+    if (e.target.scrollTop >= 300) {
+      this.showBackTop = true;
+    } else {
+      this.showBackTop = false;
+    }
   }
 }
 </script>

@@ -810,6 +810,11 @@
   resolved "http://registry.npm.taobao.org/@types/chai/download/@types/chai-4.1.7.tgz#1b8e33b61a8c09cbe1f85133071baa0dbf9fa71a"
   integrity sha1-G44zthqMCcvh+FEzBxuqDb+fpxo=
 
+"@types/lodash@^4.14.118":
+  version "4.14.118"
+  resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.118.tgz#247bab39bfcc6d910d4927c6e06cbc70ec376f27"
+  integrity sha1-JHurOb/MbZENSSfG4Gy8cOw3byc=
+
 "@types/mocha@^5.2.4":
   version "5.2.5"
   resolved "http://registry.npm.taobao.org/@types/mocha/download/@types/mocha-5.2.5.tgz#8a4accfc403c124a0bafe8a9fc61a05ec1032073"
