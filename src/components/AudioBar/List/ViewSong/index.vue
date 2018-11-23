@@ -32,7 +32,13 @@ export default class ViewSong extends Vue {
     if (!this.audioBar.player) {
       return false;
     }
-    this.audioContext = new AudioContext();
+
+    try {
+      this.audioContext = new AudioContext();
+    } catch (_) {
+      return;
+    }
+
     this.analyser = this.audioContext.createAnalyser();
     const audioSrc = this.audioContext.createMediaElementSource(this.audioBar.player);
 
