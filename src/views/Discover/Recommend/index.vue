@@ -10,6 +10,8 @@
       </div>
       <div class="right">
         right
+        <br>
+        <clock />
       </div>
     </div>
   </div>
@@ -18,6 +20,7 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import AlbumCard from '@/components/AlbumCard/index.vue';
+import Clock from '@/components/Clock/index.vue';
 import Banner from './Banner.vue';
 import RecommendPanel from './RecommendPanel.vue';
 import TopAlbumPanel from './TopAlbumPanel.vue';
@@ -30,6 +33,7 @@ import RankListPanel from './RankListPanel.vue';
     RecommendPanel,
     TopAlbumPanel,
     RankListPanel,
+    Clock,
   },
 })
 export default class Recommend extends Vue {
