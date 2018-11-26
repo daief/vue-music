@@ -220,6 +220,22 @@
       color: #666;
       text-align: center;
       overflow-wrap: break-word;
+      position: relative;
+
+      .message {
+        position: absolute;
+        top: -61px;
+        left: -65px;
+        clear: both;
+        width: 152px;
+        height: 49px;
+        z-index: 10;
+        background: url('~@/assets/images/playbar.png') no-repeat;
+        background-position: 0 -287px;
+        text-align: center;
+        color: #fff;
+        line-height: 37px;
+      }
 
       &:hover {
         background-position: -42px -98px;

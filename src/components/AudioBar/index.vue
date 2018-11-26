@@ -60,7 +60,10 @@
       <span class="ibs c-p i-loop" :class="loopType" @click="handleClickLoopType"/>
 
       <!-- list -->
-      <span class="ibs c-p fs-12 i-list" @click="handleToggleShowList">{{audioBar.playList.length}}</span>
+      <span class="ibs c-p fs-12 i-list" @click="handleToggleShowList">
+        {{audioBar.playList.length}}
+        <span v-show="audioBar.isShowMessage" class="message">{{audioBar.message}}</span>
+      </span>
 
       <transition name="transition-fade">
         <list v-show="audioBar.isShowList"/>
@@ -115,31 +118,26 @@ export default class AudioBar extends Vue {
 
   // --------------------- audio events
   public musicLoadStart() {
-    console.log('musicLoadStart');
     // 开始寻找指定的音频或视频
     this.$store.dispatch(ABAction('setCanplay'), false);
   }
 
   public musicProgress() {
     // 正在下载指定的音频或视频
-    console.log('musicProgress');
     this.$store.dispatch(ABAction('setPlayerBuffered'));
   }
 
   public musicDurationChange() {
     // 时长已改变
-    console.log('duration change');
     this.$store.dispatch(ABAction('setDuration'), this.audioBar.player.duration);
   }
 
   public musicMetadata() {
     // 元数据已加载
-    console.log('meta data');
   }
 
   public musicCanplay() {
     // 可以播放
-    console.log('can play');
     const {$store, audioBar} = this;
     $store.dispatch(ABAction('setIsWaiting'), false);
     $store.dispatch(ABAction('setCanplay'), true);
@@ -152,7 +150,6 @@ export default class AudioBar extends Vue {
 
   public musicCanplayThrough() {
     // 可以一直不停地播放
-    console.log('can play through');
   }
 
   public musicTimeUpdate() {
@@ -162,20 +159,18 @@ export default class AudioBar extends Vue {
 
   public musicWaiting() {
     // 等待数据，并非错误
-    console.log('waiting');
     this.$store.dispatch(ABAction('setIsWaiting'), true);
   }
 
   public musicEnded() {
     // 播放结束
-    console.log('ended');
     this.$store.dispatch(ABAction('setCanplay'), false);
     this.handleClickNext(undefined, true);
   }
 
   public musicError(e: any) {
     // 加载错误
-    console.log('error', e);
+    this.$store.dispatch(ABAction('pause'));
   }
   // --------------------- audio events
 
@@ -251,14 +246,15 @@ export default class AudioBar extends Vue {
         }
       })
       .then((res) => {
-        // url 请求失败则通过拼接方式尝试获得 url
-        if (res.success === false) {
-          // 获取 url 失败，无权限等
-          // TODO 提示
+        // `http://music.163.com/song/media/outer/url?id=${id}.mp3`
+        this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : { url: undefined };
+        if (this.songUrl && this.songUrl.url) {
+          // success
         } else {
-          this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : {
-            url: `http://music.163.com/song/media/outer/url?id=${id}.mp3`,
-          };
+          // 获取 url 失败，无权限等、提示
+          this.$store.dispatch(ABAction('showMessage'), '播放失败，从列表移除。');
+          // TODO 暂时从列表删除处理
+          this.$store.dispatch(ABAction('deleteListSongIdAndPlay'), song.id);
         }
       });
     } else {

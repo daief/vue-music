@@ -1,6 +1,6 @@
 import { ActionTree, MutationTree } from 'vuex';
 import { RootState } from '@/store';
-import { Song, PlayList, PlayListTrack } from '@/interfaces';
+import { Song, PlayList, PlayListTrack, DelayResult } from '@/interfaces';
 import { inBuiltList } from './inBuiltList';
 import { get, local, delay } from '@/utils';
 
@@ -16,6 +16,8 @@ export interface AudioBarState {
   song: Song | null;
   isShowList: boolean;
   isShowVolume: boolean;
+  isShowMessage: boolean;
+  message: string;
 }
 
 export enum TYPES {
@@ -30,6 +32,8 @@ export enum TYPES {
   SET_SONG = 'SET_SONG',
   SET_ISSHOWLIST = 'SET_ISSHOWLIST',
   SET_ISSHOWVOLUME = 'SET_ISSHOWVOLUME',
+  SET_ISSHOWMESSAGE = 'SET_ISSHOWMESSAGE',
+  SET_MESSAGE = 'SET_MESSAGE',
 }
 
 /**
@@ -56,6 +60,8 @@ export function track2Song(track: PlayListTrack): Song {
  */
 let isFetchingPlaylist: boolean = false;
 
+let showMessageTimer: DelayResult | null = null;
+
 const localPlayList = local.getLocalPlayList();
 const initList = localPlayList.length > 0 ? localPlayList : inBuiltList;
 const localPlaySong: Song | null = local.getLocalPlaySong();
@@ -74,6 +80,8 @@ const state: AudioBarState = {
   song: localPlaySong ? localPlaySong : initList[0],
   isShowList: false,
   isShowVolume: false,
+  isShowMessage: false,
+  message: '',
 };
 
 const mutations: MutationTree<AudioBarState> = {
@@ -114,6 +122,12 @@ const mutations: MutationTree<AudioBarState> = {
   [TYPES.SET_ISSHOWVOLUME](s, v: boolean) {
     s.isShowVolume = v;
   },
+  [TYPES.SET_ISSHOWMESSAGE](s, v: boolean) {
+    s.isShowMessage = v;
+  },
+  [TYPES.SET_MESSAGE](s, v: string) {
+    s.message = v;
+  },
 };
 
 const setterActions: ActionTree<AudioBarState, RootState> = {
@@ -150,6 +164,12 @@ const setterActions: ActionTree<AudioBarState, RootState> = {
   },
   setIsShowVolumet({commit}, v) {
     commit(TYPES.SET_ISSHOWVOLUME, v);
+  },
+  setIsShowMessage({commit}, v) {
+    commit(TYPES.SET_ISSHOWMESSAGE, v);
+  },
+  setMessage({commit}, v) {
+    commit(TYPES.SET_MESSAGE, v);
   },
   // ---------------------------- setter end
 };
@@ -338,12 +358,28 @@ const actions: ActionTree<AudioBarState, RootState> = {
     }
   },
   // 播放歌曲并加入到列表
-  playANewSong({dispatch, state: s}, obj: PlayListTrack | Song) {
+  playANewSong({dispatch}, obj: PlayListTrack | Song) {
     dispatch('addSongToList', obj)
       .then(() => {
         // play
         dispatch('listSongIdAndPlay', obj.id);
+
+        dispatch('showMessage', '已开始播放');
       });
+  },
+  // 弹出弹窗并自动关闭
+  showMessage({dispatch}, msg: string) {
+    if (showMessageTimer) {
+      showMessageTimer.cancel();
+    }
+
+    dispatch('setIsShowMessage', true);
+    dispatch('setMessage', msg);
+
+    showMessageTimer = delay(() => {
+      dispatch('setIsShowMessage', false);
+    }, 3000);
+    showMessageTimer.promise.catch(() => {/* */});
   },
 };
 

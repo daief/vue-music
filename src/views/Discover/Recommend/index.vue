@@ -9,8 +9,6 @@
         <rank-list-panel />
       </div>
       <div class="right">
-        right
-        <br>
         <clock />
       </div>
     </div>

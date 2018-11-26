@@ -198,7 +198,7 @@ export default class List extends Vue {
     });
   }
 
-  // 滚动到当前歌曲
+  // TODO (滚动到列表底部的歌曲的BUG) 滚动到当前歌曲
   public scrollToPlayingSong() {
     // async
     this.$u.delay(() => {
