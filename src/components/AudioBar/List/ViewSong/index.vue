@@ -54,7 +54,7 @@ export default class ViewSong extends Vue {
 
   public startDraw() {
     if (!this.isInited) { return; }
-    const {analyser, canvasContext, WIDTH, HEIGHT} = this;
+    const {analyser} = this;
     const dataArray = new Uint8Array(analyser.fftSize);
     const loop = () => {
       if (!this.show || !this.audioBar.isShowList) {
@@ -65,29 +65,40 @@ export default class ViewSong extends Vue {
       analyser.getByteTimeDomainData(dataArray);
       // analyser.getByteFrequencyData(dataArray)
 
-      canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
-      canvasContext.strokeStyle = '#aaa';
-      canvasContext.beginPath();
+      // draw
+      this.drawWave(dataArray);
+      // draw end -----
 
-      const sliceWidth = WIDTH / analyser.fftSize;
-
-      let x = 0;
-      for (let i = 0; i < analyser.fftSize; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = v * HEIGHT / 2;
-        if (i === 0) {
-          canvasContext.moveTo(x, y);
-        } else {
-          canvasContext.lineTo(x, y);
-        }
-        x += sliceWidth;
-      }
-      canvasContext.lineTo(WIDTH, HEIGHT / 2);
-      canvasContext.stroke();
       requestAnimationFrame(loop);
     };
 
     loop();
+  }
+
+  /**
+   * 普通波形
+   */
+  public drawWave(dataArray: Uint8Array) {
+    const {analyser, canvasContext, WIDTH, HEIGHT} = this;
+    canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
+    canvasContext.strokeStyle = '#aaa';
+    canvasContext.beginPath();
+
+    const sliceWidth = WIDTH / analyser.fftSize;
+
+    let x = 0;
+    for (let i = 0; i < analyser.fftSize; i++) {
+      const v = dataArray[i] / 128.0;
+      const y = v * HEIGHT / 2;
+      if (i === 0) {
+        canvasContext.moveTo(x, y);
+      } else {
+        canvasContext.lineTo(x, y);
+      }
+      x += sliceWidth;
+    }
+    canvasContext.lineTo(WIDTH, HEIGHT / 2);
+    canvasContext.stroke();
   }
 
   public mounted() {
