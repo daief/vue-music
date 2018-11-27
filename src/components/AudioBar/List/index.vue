@@ -69,10 +69,13 @@
 
       <!-- right part -->
       <div class="r-right smoth-scroll" ref="elLyricsContainer" @scroll="handleLyricScroll">
-        <div class="lyric">
+        <div v-if="LyricArr.length > 0" class="lyric">
           <p class="line" :class="{active: LyricIndex === i}" v-for="(line, i) in LyricArr" :key="i">
             {{line.content}}
           </p>
+        </div>
+        <div v-else class="no-lyric">
+          <p>纯音乐，无歌词</p>
         </div>
       </div>
     </div>
@@ -92,6 +95,17 @@ interface LrcTime {
   content: string;
 }
 
+const emptyLyric: Lyric = {
+  tlyric: {
+    lyric: '',
+    version: '',
+  },
+  lrc: {
+    lyric: '',
+    version: '',
+  },
+};
+
 @Component({
   components: {
     ViewSong,
@@ -101,7 +115,7 @@ export default class List extends Vue {
 
   @State public audioBar!: AudioBarState;
 
-  public lyric: Lyric | null = null;
+  public lyric: Lyric  = emptyLyric;
 
   public isShowViewSong: boolean = false;
 
@@ -171,10 +185,10 @@ export default class List extends Vue {
     if (song) {
       this.$u.get(`/lyric?id=${song.id}`)
         .then((res) => {
-          this.lyric = res.failMark ? null : res as any;
+          this.lyric = res.failMark || res.nolyric === true ? emptyLyric : res as any;
         });
     } else {
-      this.lyric = null;
+      this.lyric = emptyLyric;
     }
   }
 
