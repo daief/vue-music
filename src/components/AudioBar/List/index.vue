@@ -16,8 +16,16 @@
     <div class="body row">
       <img class="bg-msk" :src="`https://music.163.com/api/img/blur/${$u.getProp(audioBar.song, 'album', {}).pic_str || $u.getProp(audioBar.song, 'album', {}).pic}`" >
       <div v-show="!isShowViewSong" class="r-left smoth-scroll">
-        <ul v-if="audioBar.playList.length > 0" class="songs">
-          <li
+
+        <!-- song list -->
+        <RecycleScroller
+          v-if="audioBar.playList.length > 0"
+          class="songs"
+          :items="audioBar.playList"
+          :item-height="28"
+        >
+          <div
+            slot-scope="{ item }"
             :id="`song-${item.id}`"
             class="song c-p"
             :class="{playing: item.id === $u.getProp(audioBar.song, 'id', 0)}"
@@ -45,8 +53,8 @@
             <div class="duration">
               {{$u.formatSecond(item.duration, true)}}
             </div>
-          </li>
-        </ul>
+          </div>
+        </RecycleScroller>
 
         <!-- no songs -->
         <div v-else class="songs-empty">
@@ -58,7 +66,7 @@
         <view-song :show="isShowViewSong" />
       </div>
 
-
+      <!-- right part -->
       <div class="r-right smoth-scroll" ref="elLyricsContainer" @scroll="handleLyricScroll">
         <div class="lyric">
           <p class="line" :class="{active: LyricIndex === i}" v-for="(line, i) in LyricArr" :key="i">

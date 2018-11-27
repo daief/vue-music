@@ -143,36 +143,15 @@
       background-color: rgba(18, 18, 18, 0.5);
       overflow-y: scroll;
 
-      &::-webkit-scrollbar {
-        // 整体风格
-        width: 6px;
-        height: 6px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        // 滚动条里面小方块
-        border-radius: 4px;
-        cursor: pointer;
-        background: #504d4d;
-        border: 1px solid #a6a6a6;
-        opacity: 0.8;
-      }
-
-      &::-webkit-scrollbar-track {
-        // 滚动条里面轨道
-        border-radius: 10px;
-        background: #000;
-        opacity: .5;
-      }
-
-      ul.songs {
+      .songs {
         margin: 0;
         padding: 0;
         list-style: none;
+        height: 100%;
 
         @line-h: 28px;
 
-        li.song {
+        .song {
           margin: 0;
           padding: 0;
           height: @line-h;
