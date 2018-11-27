@@ -1,40 +1,9 @@
-import { ActionTree, MutationTree } from 'vuex';
+import { ActionTree  } from 'vuex';
 import { RootState } from '@/store';
-import { Song, PlayList, PlayListTrack, DelayResult } from '@/interfaces';
-import { inBuiltList } from './inBuiltList';
-import { get, local, delay } from '@/utils';
-
-export interface AudioBarState {
-  player: HTMLAudioElement;
-  isPlaying: boolean;
-  canPlay: boolean;
-  currentTime: number;
-  duration: number;
-  bufferedTime: number;
-  isWaiting: boolean;
-  playList: Song[];
-  song: Song | null;
-  isShowList: boolean;
-  isShowVolume: boolean;
-  isShowMessage: boolean;
-  message: string;
-}
-
-export enum TYPES {
-  SET_PLAYER = 'SET_PLAYER',
-  SET_ISPLAYING = 'SET_ISPLAYING',
-  SET_CANPLAY = 'SET_CANPLAY',
-  SET_CURRENTTIME = 'SET_CURRENTTIME',
-  SET_DURATION = 'SET_DURATION',
-  SET_BUFFEREDTIME = 'SET_BUFFEREDTIME',
-  SET_ISWAITING = 'SET_ISWAITING',
-  SET_PLAYLIST = 'SET_PLAYLIST',
-  SET_SONG = 'SET_SONG',
-  SET_ISSHOWLIST = 'SET_ISSHOWLIST',
-  SET_ISSHOWVOLUME = 'SET_ISSHOWVOLUME',
-  SET_ISSHOWMESSAGE = 'SET_ISSHOWMESSAGE',
-  SET_MESSAGE = 'SET_MESSAGE',
-}
+import { Song, PlayList, PlayListTrack, DelayResult  } from '@/interfaces';
+import { get, delay } from '@/utils';
+import { AudioBarState } from './state';
+import { TYPES } from './mutations';
 
 /**
  * 将 track 对象转换为 Song 对象
@@ -62,75 +31,7 @@ let isFetchingPlaylist: boolean = false;
 
 let showMessageTimer: DelayResult | null = null;
 
-const localPlayList = local.getLocalPlayList();
-const initList = localPlayList.length > 0 ? localPlayList : inBuiltList;
-const localPlaySong: Song | null = local.getLocalPlaySong();
-
-const state: AudioBarState = {
-  // aoid judging is player null, player must exist
-  player: null as any,
-  isPlaying: false,
-  canPlay: false,
-  currentTime: 0,
-  duration: 0,
-  bufferedTime: 0,
-  isWaiting: false,
-  playList: initList,
-  // 当前播放歌曲
-  song: localPlaySong ? localPlaySong : initList[0],
-  isShowList: false,
-  isShowVolume: false,
-  isShowMessage: false,
-  message: '',
-};
-
-const mutations: MutationTree<AudioBarState> = {
-  [TYPES.SET_PLAYER](s, ele: HTMLAudioElement) {
-    s.player = ele;
-  },
-  [TYPES.SET_ISPLAYING](s, status: boolean) {
-    s.isPlaying = status;
-  },
-  [TYPES.SET_CANPLAY](s, status: boolean) {
-    s.canPlay = status;
-  },
-  [TYPES.SET_CURRENTTIME](s, t: number) {
-    s.currentTime = t;
-  },
-  [TYPES.SET_DURATION](s, t: number) {
-    s.duration = t;
-  },
-  [TYPES.SET_BUFFEREDTIME](s, v: number) {
-    s.bufferedTime = v;
-  },
-  [TYPES.SET_ISWAITING](s, v: boolean) {
-    s.isWaiting = v;
-  },
-  [TYPES.SET_PLAYLIST](s, list: Song[]) {
-    // 设置歌单列表时存储于本地，加入下次事件循环
-    delay(() => local.setLocal(local.KEYS.PLAY_LIST, list), 10);
-    s.playList = list;
-  },
-  [TYPES.SET_SONG](s, v: Song) {
-    // 切换歌曲时存储于本地
-    delay(() => local.setLocal(local.KEYS.PLAY_SONG, v), 10);
-    s.song = v;
-  },
-  [TYPES.SET_ISSHOWLIST](s, v: boolean) {
-    s.isShowList = v;
-  },
-  [TYPES.SET_ISSHOWVOLUME](s, v: boolean) {
-    s.isShowVolume = v;
-  },
-  [TYPES.SET_ISSHOWMESSAGE](s, v: boolean) {
-    s.isShowMessage = v;
-  },
-  [TYPES.SET_MESSAGE](s, v: string) {
-    s.message = v;
-  },
-};
-
-const setterActions: ActionTree<AudioBarState, RootState> = {
+export const setterActions: ActionTree<AudioBarState, RootState> = {
   // get audio DOM
   setPlayer({commit}, ele) {
     commit(TYPES.SET_PLAYER, ele);
@@ -174,7 +75,7 @@ const setterActions: ActionTree<AudioBarState, RootState> = {
   // ---------------------------- setter end
 };
 
-const actions: ActionTree<AudioBarState, RootState> = {
+export const actions: ActionTree<AudioBarState, RootState> = {
   play({commit, state: s}) {
     s.player.play().then((e) => {
       commit(TYPES.SET_ISPLAYING, true);
@@ -307,15 +208,7 @@ const actions: ActionTree<AudioBarState, RootState> = {
           .then((res) => {
             if (!res.failMark) {
               const list: PlayListTrack[] = res.songs;
-              const songL: Song[] = (list || []).map(track2Song);
-              if (songL.length > 0) {
-                // 设置新列表
-                commit(TYPES.SET_PLAYLIST, songL);
-                // 播放第一首
-                dispatch('setSong', songL[0]).then(() => {
-                  dispatch('ctrlAudioLoadAndPlay');
-                });
-              }
+              return (list || []).map(track2Song);
             }
           });
         break;
@@ -326,29 +219,33 @@ const actions: ActionTree<AudioBarState, RootState> = {
           .then((res) => {
             if (!res.failMark) {
               const list: PlayList = res.playlist;
-              const songL: Song[] = (list.tracks || []).map(track2Song);
-              if (songL.length > 0) {
-                // 设置新列表
-                commit(TYPES.SET_PLAYLIST, songL);
-                // 播放第一首
-                dispatch('setSong', songL[0]).then(() => {
-                  dispatch('ctrlAudioLoadAndPlay');
-                });
-              }
+              return (list.tracks || []).map(track2Song);
             }
           });
         break;
       }
     }
-    promise.then(() => {
-      isFetchingPlaylist = false;
-    });
+
+    promise
+      .then(async (songL: Song[]) => {
+        if (songL.length > 0) {
+          // 设置新列表
+          commit(TYPES.SET_PLAYLIST, songL);
+          // 播放第一首
+          dispatch('showMessage', '已开始播放');
+          await dispatch('setSong', songL[0]);
+          await dispatch('ctrlAudioLoadAndPlay');
+        }
+      })
+      .then(() => {
+        isFetchingPlaylist = false;
+      });
   },
   // 添加歌曲到列表
-  addSongToList({commit, state: s}, obj: PlayListTrack | Song) {
+  addSongToList({commit, state: s, dispatch}, obj: PlayListTrack | Song) {
     const isSong = (x: PlayListTrack | Song): x is Song => (x as Song).duration !== undefined;
     const song: Song = isSong(obj) ? obj : track2Song(obj);
-
+    dispatch('showMessage', '已添加到播放列表');
     const {playList} = s;
     if (playList.find((tmpSong) => tmpSong.id === song.id)) {
       // song exists in list
@@ -358,14 +255,11 @@ const actions: ActionTree<AudioBarState, RootState> = {
     }
   },
   // 播放歌曲并加入到列表
-  playANewSong({dispatch}, obj: PlayListTrack | Song) {
-    dispatch('addSongToList', obj)
-      .then(() => {
-        // play
-        dispatch('listSongIdAndPlay', obj.id);
-
-        dispatch('showMessage', '已开始播放');
-      });
+  async playANewSong({dispatch}, obj: PlayListTrack | Song) {
+    dispatch('showMessage', '已开始播放');
+    await dispatch('addSongToList', obj);
+    // play
+    dispatch('listSongIdAndPlay', obj.id);
   },
   // 弹出弹窗并自动关闭
   showMessage({dispatch}, msg: string) {
@@ -382,16 +276,3 @@ const actions: ActionTree<AudioBarState, RootState> = {
     showMessageTimer.promise.catch(() => {/* */});
   },
 };
-
-export const audioBar = {
-  namespaced: true,
-  state,
-  mutations,
-  actions: {
-    ...setterActions,
-    ...actions,
-  },
-};
-
-// audio bar action
-export const ABAction = (name: string) => `audioBar/${name}`;
