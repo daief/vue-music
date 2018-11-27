@@ -23,6 +23,7 @@
           class="songs"
           :items="audioBar.playList"
           :item-height="28"
+          ref="songListScroller"
         >
           <div
             slot-scope="{ item }"
@@ -206,17 +207,14 @@ export default class List extends Vue {
     });
   }
 
-  // TODO (滚动到列表底部的歌曲的BUG) 滚动到当前歌曲
+  // 滚动到当前歌曲
   public scrollToPlayingSong() {
-    // async
-    this.$u.delay(() => {
-      const elSong = document.getElementById(`song-${this.$u.getProp(this.audioBar.song, 'id', 0)}`);
-      if (elSong) {
-        elSong.scrollIntoView({
-          behavior: 'instant',
-        });
-      }
-    }, 10);
+    const id = this.$u.getProp(this.audioBar.song, 'id', 0);
+    const index = this.audioBar.playList.findIndex((s) => s.id === id);
+    const scroller = this.$refs.songListScroller as any;
+    if (scroller && index > -1) {
+      scroller.scrollToItem(index);
+    }
   }
 
   // 歌词滚动事件处理
@@ -275,6 +273,11 @@ export default class List extends Vue {
   @Watch('audioBar.song')
   public onSongChange(val: Song | null) {
     this.fetchLyric(val);
+
+    // 且列表打开状态
+    if (this.audioBar.isShowList) {
+      this.scrollToPlayingSong();
+    }
   }
 
   // 歌曲播放行索引变化
@@ -289,7 +292,6 @@ export default class List extends Vue {
     if (val) {
       // 显示了，1. 滚动到当前歌曲，2. 滚动到当前歌词
       this.scrollLyricToActive();
-      // TDDO bug 元素在底部时整个父级错位了
       this.scrollToPlayingSong();
     }
   }
