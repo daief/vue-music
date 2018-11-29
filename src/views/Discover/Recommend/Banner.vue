@@ -1,7 +1,11 @@
 <template>
   <div class="banner" :style="WholeBgStyle">
     <div class="wrap">
-      <ul class="list">
+      <ul
+        class="list"
+        @mouseover="handleMouseOver"
+        @mouseout="handleMouseOut"
+      >
         <li
           class="item c-p"
           v-for="(item, i) in bannerList" :key="item.imageUrl"
@@ -261,6 +265,8 @@ export default class Recommend extends Vue {
 
   private timer: number = 0;
 
+  private isHoverBanner: boolean = false;
+
   /**
    * 获取 banner 的色调
    */
@@ -312,7 +318,9 @@ export default class Recommend extends Vue {
   public startTimer() {
     window.clearInterval(this.timer);
     this.timer = window.setInterval(() => {
-      this.activeIdx = (this.activeIdx + 1) % this.bannerList.length;
+      if (!this.isHoverBanner) {
+        this.activeIdx = (this.activeIdx + 1) % this.bannerList.length;
+      }
     }, 2700);
   }
 
@@ -344,6 +352,21 @@ export default class Recommend extends Vue {
     }
   }
 
+  /**
+   * mouseover 事件处理
+   */
+  public handleMouseOver() {
+    this.isHoverBanner = true;
+  }
+
+  /**
+   * mouseout 事件处理
+   */
+  public handleMouseOut() {
+    this.isHoverBanner = false;
+    this.startTimer();
+  }
+
   public beforeMount() {
     this.$u.get('/banner').then((res) => {
       if (!res.failMark) {
@@ -358,6 +381,7 @@ export default class Recommend extends Vue {
 
   public beforeDestroy() {
     window.clearInterval(this.timer);
+    this.isHoverBanner = false;
   }
 }
 </script>
