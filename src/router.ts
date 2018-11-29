@@ -30,6 +30,11 @@ export default new Router({
           name: 'discover/playlist',
           component: Home,
         },
+        {
+          path: '/discover/song',
+          name: 'discover/song',
+          component: () => import('./views/Discover/Song/index.vue'),
+        },
       ],
     },
     {
