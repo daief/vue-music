@@ -69,6 +69,7 @@ html, body { height: 100%; }
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: whitesmoke;
   color: #2c3e50;
   height: 100%;
   overflow: hidden;

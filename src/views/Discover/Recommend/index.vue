@@ -2,7 +2,7 @@
   <div class="recommend">
     <banner />
 
-    <div class="body">
+    <div class="body main-content">
       <div class="left">
         <recommend-panel />
         <top-album-panel />

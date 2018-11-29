@@ -1,3 +1,5 @@
+@import './variables.less';
+
 // inline-block span
 .ibs {
   display: inline-block;
@@ -74,4 +76,15 @@
   &-leave-to {
     opacity: 0;
   }
+}
+
+/**
+ * set main content width & center
+ */
+.main-content {
+  box-sizing: content-box;
+  width: @content-width;
+  margin: 0 auto;
+  border-left: #d3d3d3 solid 1px;
+  border-right: #d3d3d3 solid 1px;
 }

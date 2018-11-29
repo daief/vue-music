@@ -1,6 +1,6 @@
 <template>
   <div class="banner" :style="WholeBgStyle">
-    <div class="wrap">
+    <div class="wrap main-content">
       <ul
         class="list"
         @mouseover="handleMouseOver"
@@ -396,11 +396,10 @@ export default class Recommend extends Vue {
   transition: all .3s;
 
   .wrap {
-    width: @content-width;
     height: 100%;
-    margin: 0 auto;
     display: flex;
     position: relative;
+    border: none;
 
     .list {
       list-style: none;
