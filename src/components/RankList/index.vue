@@ -30,9 +30,8 @@
         }"
       >
         <span class="ibs rank fs-16">{{i + 1}}</span>
-        <!-- TODO -->
         <router-link
-          :to="`/song?id=${item.id}`"
+          :to="`/discover/song?id=${item.id}`"
           class="ibs name f-thide"
           :title="item.name"
         >

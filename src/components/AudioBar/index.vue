@@ -34,14 +34,21 @@
 
       <!-- 歌曲图片 -->
       <div class="music-cover">
-        <img class="c-p" :src="`${$u.getProp(audioBar.song, 'album', {}).picUrl}?param=34y34`" alt="">
+        <router-link :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`">
+          <img class="c-p" :src="`${$u.getProp(audioBar.song, 'album', {}).picUrl}?param=34y34`" alt="">
+        </router-link>
       </div>
 
       <!-- 文本、进度条信息 -->
       <div class="center">
         <!-- 信息 -->
         <div class="texts">
-          <span class="ibs c-p-line f-thide fs-12 song">{{$u.getProp(audioBar.song, 'name', '')}}</span>
+          <!-- 歌名 -->
+          <router-link :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`">
+            <span class="ibs c-p-line f-thide fs-12 song">{{$u.getProp(audioBar.song, 'name', '')}}</span>
+          </router-link>
+
+          <!-- 歌手 -->
           <div class="fs-12 f-thide singers">
             <template v-for="(singer, si) in $u.getProp(audioBar.song, 'artists', [])">
               <span class="ibs c-p-line singer" :key="$u.generateKey(si)">{{singer.name}}</span>

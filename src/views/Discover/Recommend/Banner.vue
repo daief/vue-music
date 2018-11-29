@@ -343,7 +343,7 @@ export default class Recommend extends Vue {
     const {$router} = this;
 
     switch (targetType) {
-      case 1: return $router.push(`/dicover/song/${targetId}`);
+      case 1: return $router.push(`/dicover/song?id=${targetId}`);
       case 10: return $router.push(`/dicover/album/${targetId}`);
       case 1004: return $router.push(`/dicover/mv/${targetId}`);
       case 4001: return $router.push(`/activity/${targetId}`);

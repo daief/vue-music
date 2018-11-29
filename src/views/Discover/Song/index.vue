@@ -1,6 +1,6 @@
 <template>
   <div class="song">
-    song
+    song-{{$route.query.id}}
   </div>
 </template>
 
