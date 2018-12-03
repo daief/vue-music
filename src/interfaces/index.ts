@@ -127,6 +127,9 @@ export interface Lyric extends KVAny {
     uptime: number;
     userid: nstr;
   };
+  // TODO 区分轻音乐、无歌词
+  nolyric?: boolean;
+  uncollected?: boolean;
 }
 
 /**

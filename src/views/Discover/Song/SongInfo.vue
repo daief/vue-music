@@ -80,8 +80,17 @@ export default class SongInfo extends Vue {
     const result: string[] = [];
 
     tLrc.length > 0
-      ? lrc.map((item, idx) => result.push(item.content, tLrc[idx].content))
-      : lrc.map((item, idx) => result.push(item.content));
+      // 存在歌词翻译
+      ? lrc.map((item, idx) => {
+        const tLrcItem = tLrc.find((val) => val.millisecond === item.millisecond);
+        result.push(
+          ...(tLrcItem ? [item.content, tLrcItem.content] : [item.content]),
+        );
+      })
+      // 不存在
+      : lrc.map((item, idx) => {
+        result.push(item.content);
+      });
 
     return this.isExpand ? result : result.slice(0, 12);
   }
