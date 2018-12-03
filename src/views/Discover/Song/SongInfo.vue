@@ -83,9 +83,8 @@ export default class SongInfo extends Vue {
       // 存在歌词翻译
       ? lrc.map((item, idx) => {
         const tLrcItem = tLrc.find((val) => val.millisecond === item.millisecond);
-        result.push(
-          ...(tLrcItem ? [item.content, tLrcItem.content] : [item.content]),
-        );
+        result.push(item.content);
+        if (tLrcItem) { result.push(tLrcItem.content); }
       })
       // 不存在
       : lrc.map((item, idx) => {
