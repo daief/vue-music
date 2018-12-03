@@ -256,8 +256,8 @@ export const actions: ActionTree<AudioBarState, RootState> = {
   },
   // 播放歌曲并加入到列表
   async playANewSong({dispatch}, obj: PlayListTrack | Song) {
-    dispatch('showMessage', '已开始播放');
     await dispatch('addSongToList', obj);
+    dispatch('showMessage', '已开始播放');
     // play
     dispatch('listSongIdAndPlay', obj.id);
   },

@@ -130,6 +130,15 @@ export interface Lyric extends KVAny {
 }
 
 /**
+ * 歌词解析结果单元
+ */
+export interface LrcTime {
+  formatTime: string;
+  millisecond: number;
+  content: string;
+}
+
+/**
  * 歌曲 url 接口结果
  */
 export interface SongUrl extends KVAny {

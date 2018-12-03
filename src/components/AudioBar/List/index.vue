@@ -86,14 +86,8 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { AudioBarState, ABAction } from '@/stores/audioBar';
-import { Song, Lyric, DelayResult } from '@/interfaces';
+import { Song, Lyric, DelayResult, LrcTime } from '@/interfaces';
 import ViewSong from '@/components/AudioBar/List/ViewSong/index.vue';
-
-interface LrcTime {
-  formatTime: string;
-  millisecond: number;
-  content: string;
-}
 
 const emptyLyric: Lyric = {
   tlyric: {
@@ -131,13 +125,13 @@ export default class List extends Vue {
   // 获取默认歌词数组
   get LyricArr(): LrcTime[] {
     const {lyric} = this;
-    return this.getLyricArr(lyric ? lyric.lrc.lyric : undefined);
+    return this.$u.getLyricArr(lyric ? lyric.lrc.lyric : undefined);
   }
 
   // 获取翻译歌词数组
   get TLyricArr(): LrcTime[] {
     const {lyric} = this;
-    return this.getLyricArr(lyric && lyric.tlyric ? lyric.tlyric.lyric : undefined);
+    return this.$u.getLyricArr(lyric && lyric.tlyric ? lyric.tlyric.lyric : undefined);
   }
 
   // active 歌词的行
@@ -152,32 +146,6 @@ export default class List extends Vue {
       }
     }
     return -1;
-  }
-
-  // 解析歌词字符串为歌词数组
-  public getLyricArr(lyric: string | undefined): LrcTime[] {
-    const result: LrcTime[] = [];
-
-    (lyric || '').split(/[\n\r]/).map((str) => {
-      const reg = /\[(\d+:\d+\.?\d+)\]/g;
-      const content = str.trim().replace(reg, '');
-      let res: null | string[] = null;
-
-      while (true) {
-        res = reg.exec(str.trim());
-        if (!res) {
-          break;
-        }
-
-        result.push({
-          formatTime: res[1],
-          millisecond: this.$u.format2millisecond(res[1]),
-          content,
-        });
-      }
-    });
-
-    return result.sort((a, b) => a.millisecond - b.millisecond);
   }
 
   // 获取歌词

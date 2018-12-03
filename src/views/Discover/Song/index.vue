@@ -3,13 +3,12 @@
 
     <!-- left -->
     <div class="left">
-      <song-info />
+      <song-info :id="+$route.query.id" />
     </div>
 
     <!-- right -->
     <div class="right">
-      song-{{$route.query.id}}
-      rigth
+      <img class="gif0" src="@/assets/images/0.gif" />
     </div>
   </div>
 </template>
@@ -46,6 +45,12 @@ export default class Song extends Vue {}
 
   .right {
     width: @right-width;
+    padding: 30px 20px 40px 30px;
+
+    .gif0 {
+      display: block;
+      width: 100%;
+    } // .gif0
   } // .left
 } // .song
 </style>

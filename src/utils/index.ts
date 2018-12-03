@@ -1,6 +1,6 @@
 import { instance } from './axios';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { HttpRes, DelayResult } from '@/interfaces';
+import { HttpRes, DelayResult, LrcTime } from '@/interfaces';
 
 export * from './localStorage';
 
@@ -195,4 +195,33 @@ export function delay(func: (...args: any[]) => any, millisecond: number, option
       }
     },
   };
+}
+
+/**
+ * 解析歌词字符串为歌词数组
+ * @param lyric 歌词字符串
+ */
+export function getLyricArr(lyric: string | undefined): LrcTime[] {
+  const result: LrcTime[] = [];
+
+  (lyric || '').split(/[\n\r]/).map((str) => {
+    const reg = /\[(\d+:\d+\.?\d+)\]/g;
+    const content = str.trim().replace(reg, '');
+    let res: null | string[] = null;
+
+    while (true) {
+      res = reg.exec(str.trim());
+      if (!res) {
+        break;
+      }
+
+      result.push({
+        formatTime: res[1],
+        millisecond: format2millisecond(res[1]),
+        content,
+      });
+    }
+  });
+
+  return result.sort((a, b) => a.millisecond - b.millisecond);
 }

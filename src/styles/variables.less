@@ -19,6 +19,12 @@
   background: url(@iPlaybar) repeat-y 0 9999px;
 }
 
+.set-bg(@url, @x, @y) {
+  background-image: url(@url);
+  background-repeat: no-repeat;
+  background-position: @x @y;
+}
+
 // reset tag a
 .set-a(
   @color: #aaa,
