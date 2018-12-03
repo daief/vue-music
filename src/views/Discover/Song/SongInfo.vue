@@ -38,7 +38,7 @@
       <div class="lyrics">
         <p v-for="(line, index) in LyricArr" :key="index" class="line">{{line}}</p>
         <p v-if="LyricArr.length === 0" class="line">纯音乐，无歌词</p>
-        <p v-else class="c-p" @click="isExpand = !isExpand">{{isExpand ? '展开⬇️' : '收起⬆️'}}</p>
+        <p v-else class="c-p" @click="isExpand = !isExpand">{{isExpand ? '收起⬆️' : '展开⬇️'}}</p>
       </div>
     </div>
   </div>
