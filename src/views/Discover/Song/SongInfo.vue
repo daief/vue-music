@@ -13,7 +13,13 @@
     </div>
 
     <div class="right">
-      <h1 class="name">{{$u.getProp(song, 'name', '')}}</h1>
+      <!-- 歌名 -->
+      <div class="name">{{$u.getProp(song, 'name', '')}}</div>
+
+      <!-- 别名 -->
+      <div class="alia fs-14" v-if="$u.getProp(song, 'alia', []).length > 0">
+        {{song.alia[0]}}
+      </div>
 
       <p class="artists">
         歌手：
@@ -216,6 +222,13 @@ export default class SongInfo extends Vue {
         background-position: 0 -463px;
       }
     } // .name
+
+    .alia {
+      margin-left: 64px;
+      line-height: 18px;
+      margin-top: 3px;
+      color: #bababa;
+    } // .alia
 
     .artists, .album {
       color: #999;
