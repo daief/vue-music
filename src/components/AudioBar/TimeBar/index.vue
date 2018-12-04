@@ -69,8 +69,8 @@ export default class TimeBar extends Vue {
 
   // 鼠标移动
   public handleSliderMouseMove(e: MouseEvent) {
-    e.preventDefault();
     if (this.isDragging) {
+      e.preventDefault();
       this.dragX = e.clientX;
     }
   }

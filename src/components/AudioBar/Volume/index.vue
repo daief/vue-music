@@ -55,8 +55,8 @@ export default class Volume extends Vue {
 
   // 鼠标移动
   public handleMouseMove(e: MouseEvent) {
-    e.preventDefault();
     if (this.isDragging) {
+      e.preventDefault();
       this.dragY = e.clientY;
       this.setPlayerVolume(this.ActiveVolume);
     }
