@@ -10,7 +10,9 @@
     <div class="right">
       <img class="gif0" src="@/assets/images/0.gif" />
 
-      <simi-list :id="ID" />
+      <simi-list :id="ID" style="margin-bottom: 40px;" />
+
+      <simi-songs :id="ID" />
     </div>
   </div>
 </template>
@@ -19,11 +21,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import SongInfo from './SongInfo.vue';
 import SimiList from './SimiList.vue';
+import SimiSongs from './SimiSongs.vue';
 
 @Component({
   components: {
     SongInfo,
     SimiList,
+    SimiSongs,
   },
 })
 export default class Song extends Vue {
