@@ -44,7 +44,18 @@
       <div class="lyrics">
         <p v-for="(line, index) in LyricArr" :key="index" class="line">{{line}}</p>
         <p v-if="LyricArr.length === 0" class="line">纯音乐，无歌词</p>
-        <p v-else class="c-p" @click="isExpand = !isExpand">{{isExpand ? '收起⬆️' : '展开⬇️'}}</p>
+        <p v-else class="c-p">
+          <span @click="isExpand = !isExpand">{{isExpand ? '收起⬆️' : '展开⬇️'}}</span>
+        </p>
+        <!-- 歌词作者 -->
+        <p class="lyric-user">
+          <span v-if="!!lyric.lyricUser">
+            贡献歌词：<router-link to="/user">{{lyric.lyricUser.nickname}}</router-link>
+          </span>
+          <span v-if="!!lyric.transUser">
+            贡献翻译：<router-link to="/user">{{lyric.transUser.nickname}}</router-link>
+          </span>
+        </p>
       </div>
     </div>
   </div>
@@ -300,6 +311,18 @@ export default class SongInfo extends Vue {
         color: #333;
         margin: 0;
       }
+
+      .lyric-user {
+        text-align: right;
+        margin-top: 40px;
+        span {
+          margin-left: 10px;
+
+          a {
+            .set-a(#0c73c2, #0c73c2, #0c73c2, underline);
+          }
+        }
+      } // .lyric-user
     } // .lyrics
   } // .right
 } // .song-info

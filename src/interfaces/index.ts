@@ -119,6 +119,14 @@ export interface Lyric extends KVAny {
     version: nstr;
     lyric: string;
   };
+  lyricUser?: {
+    demand?: nstr;
+    id: nstr;
+    nickname: string;
+    status: number;
+    uptime: number;
+    userid: nstr;
+  };
   transUser?: {
     demand?: nstr;
     id: nstr;
