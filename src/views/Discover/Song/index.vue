@@ -10,9 +10,9 @@
     <div class="right">
       <img class="gif0" src="@/assets/images/0.gif" />
 
-      <simi-list :id="ID" style="margin-bottom: 40px;" />
+      <simi-list :id="ID" class="block" />
 
-      <simi-songs :id="ID" />
+      <simi-songs :id="ID" class="block" />
     </div>
   </div>
 </template>
@@ -57,12 +57,17 @@ export default class Song extends Vue {
 
   .right {
     width: @right-width;
-    padding: 30px 20px 40px 30px;
+    padding: 30px 0 40px;
 
     .gif0 {
       display: block;
       width: 100%;
     } // .gif0
+
+    .block {
+      margin: 0 20px;
+      margin-bottom: 40px;
+    }
   } // .left
 } // .song
 </style>
