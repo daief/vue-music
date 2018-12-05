@@ -23,7 +23,7 @@ export default new Router({
         {
           path: '/discover/toplist',
           name: 'discover/toplist',
-          component: Home,
+          component: () => import('./views/Discover/TopList/index.vue'),
         },
         {
           path: '/discover/playlist',
