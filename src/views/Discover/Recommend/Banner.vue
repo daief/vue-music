@@ -289,10 +289,12 @@ export default class Recommend extends Vue {
       });
     };
 
+    const rsArr: string[] = [];
     for (let index = 0; index < list.length; index++) {
       const rs = await getColor(list[index].imageUrl).catch(() => '#fff');
-      this.themeColors[index] = rs;
+      rsArr[index] = rs;
     }
+    this.themeColors = rsArr;
   }
 
   /**
