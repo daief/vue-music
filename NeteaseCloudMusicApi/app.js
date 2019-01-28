@@ -22,9 +22,11 @@ const app = express()
 // CORS
 app.use((req, res, next) => {
     if(req.path !== '/' && !req.path.includes('.')){
+        const domains = ['http://localhost:8080', 'http://daief.github.io', 'https://daief.coding.me']
         res.header({
             'Access-Control-Allow-Credentials': true,
-            'Access-Control-Allow-Origin': req.headers.origin || '*',
+            'Access-Control-Allow-Origin': domains.includes(req.headers.origin) ? req.headers.origin : '',
+            // 'Access-Control-Allow-Origin': req.headers.origin || '*',
             'Access-Control-Allow-Headers': 'X-Requested-With',
             'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
             'Content-Type': 'application/json; charset=utf-8'
@@ -64,7 +66,7 @@ fs.readdirSync(path.join(__dirname, 'module')).reverse().forEach(file => {
     if(!(/\.js$/i.test(file))) return
     let route = (file in special) ? special[file] : '/' + file.replace(/\.js$/i, '').replace(/_/g, '/')
     let question = require(path.join(__dirname, 'module', file))
-    
+
     app.use(route, (req, res) => {
         let query = Object.assign({}, req.query, req.body, {cookie: req.cookies})
         question(query, request)
