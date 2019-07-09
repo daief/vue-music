@@ -6,16 +6,17 @@ node_js:
   - "12"
 script:
   - yarn build
+  - bash ./deploy-to-github.sh
 cache:
   yarn: true
 
-deploy:
-  edge:
-    branch: v1.8.47
-  provider: pages
-  skip_cleanup: true
-  github_token: $GIT_TOKEN
-  keep_history: true
-  local_dir: dist
-  on:
-    branch: master
+# deploy:
+#   edge:
+#     branch: v1.8.47
+#   provider: pages
+#   skip_cleanup: true
+#   github_token: $GIT_TOKEN
+#   keep_history: true
+#   local_dir: dist
+#   on:
+#     branch: master
