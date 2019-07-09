@@ -14,6 +14,6 @@ git push --force --quiet "https://${GIT_TOKEN}@github.com/daief/vue-music.git" m
 
 echo "Done updating gh-pages\n"
 
-else
- echo "Skipped updating gh-pages, because build is not triggered from the master branch."
-fi;
+# else
+#  echo "Skipped updating gh-pages, because build is not triggered from the master branch."
+# fi;
