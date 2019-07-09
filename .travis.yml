@@ -1,0 +1,19 @@
+language: node_js
+env:
+  global:
+    - API_SERVER=https://neteasecloudmusicapi-rdyawwwkoh.now.sh
+node_js:
+  - "8"
+script:
+  - yarn build
+cache:
+  yarn: true
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GIT_TOKEN
+  keep_history: true
+  local_dir: dist
+  on:
+    branch: master
