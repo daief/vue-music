@@ -10,7 +10,7 @@ cd dist
 git init
 git add -f .
 git commit -m "Travis build"
-git push --force --quiet "https://${GITHUB_TOKEN}@github.com/daief/vue-music.git" master:gh-pages > /dev/null
+git push --force --quiet "https://${GIT_TOKEN}@github.com/daief/vue-music.git" master:gh-pages > /dev/null
 
 echo "Done updating gh-pages\n"
 
