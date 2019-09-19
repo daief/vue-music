@@ -1,15 +1,16 @@
 {
   "name": "vue-music",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "start": "yarn workspace NeteaseCloudMusicApi start",
+    "build:dist": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "precommit": "git add .",
     "commit": "git-cz",
-    "now": "yarn workspace NeteaseCloudMusicApi now --regions bru"
+    "now": "now --public --regions bru"
   },
   "dependencies": {
     "@types/lodash": "^4.14.118",
@@ -86,5 +87,8 @@
   },
   "workspaces": [
     "NeteaseCloudMusicApi"
-  ]
+  ],
+  "engines": {
+    "node": ">= 10"
+  }
 }
