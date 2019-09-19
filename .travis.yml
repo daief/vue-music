@@ -5,7 +5,7 @@ env:
 node_js:
   - "12"
 script:
-  - yarn build
+  - yarn build:dist
   - bash ./deploy-to-github.sh
 cache:
   yarn: true

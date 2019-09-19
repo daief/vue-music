@@ -33,6 +33,8 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
     "husky": "^3.0.3",
     "intelli-espower-loader": "^1.0.1",
     "lint-staged": "^9.2.1",
