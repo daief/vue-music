@@ -10,7 +10,8 @@
     "test:unit": "vue-cli-service test:unit",
     "precommit": "git add .",
     "commit": "git-cz",
-    "now": "now -e NODE_ENV=production --public --prod --npm --regions bru"
+    "now": "now -e NODE_ENV=production --public --prod --npm --regions bru",
+    "clone:api": "git clone --branch v3.21.1 git@github.com:Binaryify/NeteaseCloudMusicApi.git --depth=1"
   },
   "dependencies": {
     "@types/lodash": "^4.14.118",
