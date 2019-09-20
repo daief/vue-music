@@ -1,9 +1,13 @@
 FROM node:lts-alpine
 
-WORKDIR /app
-COPY . /app
+ENV NODE_ENV=production
 
-RUN yarn install --production
+WORKDIR /app
+COPY package.json yarn.lock /app/
+COPY NeteaseCloudMusicApi /app/NeteaseCloudMusicApi/
+
+RUN yarn --only=prod --registry=https://registry.npm.taobao.org
+RUN yarn workspaces info
 
 EXPOSE 3000
-CMD ["yarn start"]
+CMD ["yarn", "start"]
