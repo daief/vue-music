@@ -1,0 +1,12 @@
+{
+  "files": [
+    "NeteaseCloudMusicApi/module",
+    "NeteaseCloudMusicApi/public",
+    "NeteaseCloudMusicApi/util",
+    "NeteaseCloudMusicApi/app.js",
+    "NeteaseCloudMusicApi/package.json",
+    ".yarnrc",
+    "server.js",
+    "yarn.lock"
+  ]
+}
