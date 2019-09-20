@@ -1,7 +1,7 @@
 language: node_js
 env:
   global:
-    - API_SERVER=https://neteasecloudmusicapi-rdyawwwkoh.now.sh
+    - API_SERVER=https://vue-music-hsqiwtqcue.now.sh
 node_js:
   - "12"
 script:
