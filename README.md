@@ -1,5 +1,9 @@
 # vue-music
 
+演示地址：<https://daief.tech/vue-music/>
+
+API 服务太久没访问时服务器会被冻结，等待启动需要一点时间，此时会有假数据（部分）作为占位。
+
 ## 介绍
 
 使用 vue、vue-router、vuex，山寨一个网易云音乐的 pc 网页版，仅用于个人学习，借此认识前端模块化编程、单页应用、webpack 资源打包等概念。
