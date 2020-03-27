@@ -1,41 +1,57 @@
 <template>
-  <div class="audio-bar" :class="{unlock}">
+  <div class="audio-bar" :class="{ unlock }">
     <!-- audio -->
     <audio
       id="player"
       crossOrigin="anonymous"
       :src="$u.getProp(songUrl, 'url', '')"
       preload
-			@loadstart="musicLoadStart"
+      @loadstart="musicLoadStart"
       @progress="musicProgress"
-			@durationchange="musicDurationChange"
-			@loadedmetadata="musicMetadata"
-			@canplay="musicCanplay"
+      @durationchange="musicDurationChange"
+      @loadedmetadata="musicMetadata"
+      @canplay="musicCanplay"
       @canplaythrough="musicCanplayThrough"
-			@timeupdate="musicTimeUpdate"
+      @timeupdate="musicTimeUpdate"
       @waiting="musicWaiting"
-			@ended="musicEnded"
-			@error="musicError"
+      @ended="musicEnded"
+      @error="musicError"
     />
 
     <!-- 位置锁定 -->
     <div class="position-lock">
-      <span class="ibs c-p ctr-lock" :class="{unlock}" @click="togglePositionLocked" />
+      <span
+        class="ibs c-p ctr-lock"
+        :class="{ unlock }"
+        @click="togglePositionLocked"
+      />
     </div>
 
     <!-- content -->
     <div class="wrap">
       <!-- 播放、上下首按钮 -->
-			<div class="control-btns">
-				<span @click="handleClickPre" class="ibs c-p ctrl pre"/>
-				<span @click="handleClickTogglePlay" class="ibs c-p ctrl" :class="[audioBar.isPlaying ? 'pause' : 'play']" />
-				<span @click="handleClickNext" class="ibs c-p ctrl next"/>
-			</div>
+      <div class="control-btns">
+        <span @click="handleClickPre" class="ibs c-p ctrl pre" />
+        <span
+          @click="handleClickTogglePlay"
+          class="ibs c-p ctrl"
+          :class="[audioBar.isPlaying ? 'pause' : 'play']"
+        />
+        <span @click="handleClickNext" class="ibs c-p ctrl next" />
+      </div>
 
       <!-- 歌曲图片 -->
       <div class="music-cover">
-        <router-link :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`">
-          <img class="c-p" :src="`${$u.getProp(audioBar.song, 'album', {}).picUrl}?param=34y34`" alt="">
+        <router-link
+          :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`"
+        >
+          <img
+            class="c-p"
+            :src="
+              `${$u.getProp(audioBar.song, 'album', {}).picUrl}?param=34y34`
+            "
+            alt=""
+          />
         </router-link>
       </div>
 
@@ -44,15 +60,27 @@
         <!-- 信息 -->
         <div class="texts">
           <!-- 歌名 -->
-          <router-link :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`">
-            <span class="ibs c-p-line f-thide fs-12 song">{{$u.getProp(audioBar.song, 'name', '')}}</span>
+          <router-link
+            :to="`/discover/song?id=${$u.getProp(audioBar.song, 'id', '')}`"
+          >
+            <span class="ibs c-p-line f-thide fs-12 song">{{
+              $u.getProp(audioBar.song, 'name', '')
+            }}</span>
           </router-link>
 
           <!-- 歌手 -->
           <div class="fs-12 f-thide singers">
-            <template v-for="(singer, si) in $u.getProp(audioBar.song, 'artists', [])">
-              <span class="ibs c-p-line singer" :key="$u.generateKey(si)">{{singer.name}}</span>
-              <span class="ibs" :key="$u.generateKey(si, si)">{{si !== $u.getProp(audioBar.song, 'artists', []).length - 1 ? '/' : null}}</span>
+            <template
+              v-for="(singer, si) in $u.getProp(audioBar.song, 'artists', [])"
+            >
+              <span class="ibs c-p-line singer" :key="$u.generateKey(si)">{{
+                singer.name
+              }}</span>
+              <span class="ibs" :key="$u.generateKey(si, si)">{{
+                si !== $u.getProp(audioBar.song, 'artists', []).length - 1
+                  ? '/'
+                  : null
+              }}</span>
             </template>
           </div>
         </div>
@@ -64,20 +92,25 @@
       <volume />
 
       <!-- loop-type -->
-      <span class="ibs c-p i-loop" :class="loopType" @click="handleClickLoopType"/>
+      <span
+        class="ibs c-p i-loop"
+        :class="loopType"
+        @click="handleClickLoopType"
+      />
 
       <!-- list -->
       <span class="ibs c-p fs-12 i-list" @click="handleToggleShowList">
-        {{audioBar.playList.length}}
-        <span v-show="audioBar.isShowMessage" class="message">{{audioBar.message}}</span>
+        {{ audioBar.playList.length }}
+        <span v-show="audioBar.isShowMessage" class="message">{{
+          audioBar.message
+        }}</span>
       </span>
 
       <transition name="transition-fade">
-        <list v-show="audioBar.isShowList"/>
+        <list v-show="audioBar.isShowList" />
       </transition>
-    </div><!-- wrap -->
-
-
+    </div>
+    <!-- wrap -->
   </div>
 </template>
 
@@ -115,7 +148,7 @@ export default class AudioBar extends Vue {
 
   // methods
   public togglePositionLocked() {
-    const {$u, unlock} = this;
+    const { $u, unlock } = this;
     this.unlock = !unlock;
     this.$u.local.setLocal($u.local.KEYS.UN_LOCK, this.unlock);
     if (this.unlock) {
@@ -136,7 +169,10 @@ export default class AudioBar extends Vue {
 
   public musicDurationChange() {
     // 时长已改变
-    this.$store.dispatch(ABAction('setDuration'), this.audioBar.player.duration);
+    this.$store.dispatch(
+      ABAction('setDuration'),
+      this.audioBar.player.duration,
+    );
   }
 
   public musicMetadata() {
@@ -145,7 +181,7 @@ export default class AudioBar extends Vue {
 
   public musicCanplay() {
     // 可以播放
-    const {$store, audioBar} = this;
+    const { $store, audioBar } = this;
     $store.dispatch(ABAction('setIsWaiting'), false);
     $store.dispatch(ABAction('setCanplay'), true);
     $store.dispatch(ABAction('setPlayerBuffered'));
@@ -161,7 +197,10 @@ export default class AudioBar extends Vue {
 
   public musicTimeUpdate() {
     // 时间改变
-    this.$store.dispatch(ABAction('setCurrentTime'), this.audioBar.player.currentTime);
+    this.$store.dispatch(
+      ABAction('setCurrentTime'),
+      this.audioBar.player.currentTime,
+    );
   }
 
   public musicWaiting() {
@@ -199,14 +238,16 @@ export default class AudioBar extends Vue {
 
   // 上一首
   public handleClickPre() {
-    const {loopType, $store, audioBar} = this;
+    const { loopType, $store, audioBar } = this;
     if (['order', 'one'].includes(loopType)) {
       $store.dispatch(ABAction('listPre'));
     } else if (loopType === 'random') {
       $store.dispatch(ABAction('listRandom'));
     }
 
-    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {play: audioBar.isPlaying});
+    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {
+      play: audioBar.isPlaying,
+    });
   }
 
   public handleClickTogglePlay() {
@@ -215,7 +256,7 @@ export default class AudioBar extends Vue {
 
   // 下一首
   public handleClickNext(e?: MouseEvent, autoNext: boolean = false) {
-    const {loopType, $store, audioBar} = this;
+    const { loopType, $store, audioBar } = this;
     if (autoNext && loopType === 'one') {
       // ended 事件调用，单曲播放
       // do nothing
@@ -225,7 +266,9 @@ export default class AudioBar extends Vue {
       $store.dispatch(ABAction('listRandom'));
     }
 
-    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {play: audioBar.isPlaying});
+    $store.dispatch(ABAction('ctrlAudioLoadAndPlay'), {
+      play: audioBar.isPlaying,
+    });
   }
 
   /**
@@ -233,37 +276,48 @@ export default class AudioBar extends Vue {
    */
   public checkAndFetchSongUrl(song: Song | null) {
     if (song) {
-      const {id} = song;
-      this.$u.get(`/check/music?id=${id}`).then((res) => {
-        // 检查是否可用
-        if (res.failMark) {
-          // 接口状态失败
-          return {failMark: true, success: true};
-        } else {
-          return {success: res.success};
-        }
-      })
-      .then((checkRes) => {
-        if (checkRes.success) {
-          // 成功，通过接口获取 url
-          return this.$u.get(`/song/url?id=${id}`);
-        } else {
-          // 失败
-          return {failMark: true, success: false};
-        }
-      })
-      .then((res) => {
-        // `http://music.163.com/song/media/outer/url?id=${id}.mp3`
-        this.songUrl = !res.failMark && res.data.length > 0 ? res.data[0] : { url: undefined };
-        if (this.songUrl && this.songUrl.url) {
-          // success
-        } else {
-          // 获取 url 失败，无权限等、提示
-          this.$store.dispatch(ABAction('showMessage'), '播放失败，从列表移除。');
-          // TODO 暂时从列表删除处理
-          this.$store.dispatch(ABAction('deleteListSongIdAndPlay'), song.id);
-        }
-      });
+      const { id } = song;
+      this.$u
+        .get(`/check/music?id=${id}`)
+        .then(res => {
+          // 检查是否可用
+          if (res.failMark) {
+            // 接口状态失败
+            return { failMark: true, success: true };
+          } else {
+            return { success: res.success };
+          }
+        })
+        .then(checkRes => {
+          if (checkRes.success) {
+            // 成功，通过接口获取 url
+            return this.$u.get(`/song/url?id=${id}`);
+          } else {
+            // 失败
+            return { failMark: true, success: false };
+          }
+        })
+        .then(res => {
+          // `http://music.163.com/song/media/outer/url?id=${id}.mp3`
+          this.songUrl = (!res.failMark &&
+            res.data.length > 0 &&
+            res.data[0]) || { url: undefined };
+          this.songUrl = {
+            ...this.songUrl,
+            url: this.songUrl!.url.replace(/^https?/i, 'https'),
+          };
+          if (this.songUrl && this.songUrl.url) {
+            // success
+          } else {
+            // 获取 url 失败，无权限等、提示
+            this.$store.dispatch(
+              ABAction('showMessage'),
+              '播放失败，从列表移除。',
+            );
+            // TODO 暂时从列表删除处理
+            this.$store.dispatch(ABAction('deleteListSongIdAndPlay'), song.id);
+          }
+        });
     } else {
       this.songUrl = null;
     }
@@ -287,7 +341,7 @@ export default class AudioBar extends Vue {
 
   @Watch('audioBar.song')
   public onSongChange(val: Song | null, old: Song | null) {
-    if (val && (old && val.id !== old.id)) {
+    if (val && old && val.id !== old.id) {
       // 歌曲切换
       this.checkAndFetchSongUrl(val);
     }
@@ -298,4 +352,3 @@ export default class AudioBar extends Vue {
 <style lang="less" scoped>
 @import './style.less';
 </style>
-

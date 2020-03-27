@@ -3,9 +3,9 @@
  * audioBar store
  */
 
-import {state, AudioBarState} from './state';
-import {mutations} from './mutations';
-import {setterActions, actions} from './actions';
+import { state, AudioBarState } from './state';
+import { mutations } from './mutations';
+import { setterActions, actions } from './actions';
 
 export const audioBar = {
   namespaced: true,
@@ -21,4 +21,4 @@ export const audioBar = {
 export const ABAction = (name: string) => `audioBar/${name}`;
 
 // just for resolving old import
-export type AudioBarState = AudioBarState;
+export { AudioBarState };
